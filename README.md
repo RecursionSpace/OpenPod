@@ -2,6 +2,12 @@
 
 <h1>OpenPod</h1>
 
+[![Code Quality](https://github.com/RecursionSpace/OpenPod/actions/workflows/pylint.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/pylint.yml)
+&nbsp;
+[![Recursion Tests](https://github.com/RecursionSpace/OpenPod/actions/workflows/RecursionTests.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/RecursionTests.yml)
+&nbsp;
+[![Test Installer](https://github.com/RecursionSpace/OpenPod/actions/workflows/TestInstaller.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/TestInstaller.yml)
+
 </div>
 
 ## Table of Contents
