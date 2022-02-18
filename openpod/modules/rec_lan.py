@@ -32,7 +32,7 @@ def monitor_network(last_network_status=5, thread_delay=30.0):
         else:
             network_status = last_network_status
 
-        if settings.Pi:
+        if settings.IS_PI:
             if network_status == 0:
                 rec_gpio.state(settings.LED_STAT, .125, .125)
 

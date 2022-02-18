@@ -33,12 +33,12 @@ import settings
 
 if settings.Pi:
     try:
-        from modules import rec_xbee                      # pylint: disable=C0412
+        from modules import rec_xbee                        # pylint: disable=C0412
     except ModuleNotFoundError as err:
         exception_log.error("%s", err)
 
     try:
-        from modules import rec_gpio
+        from modules import rec_gpio                        # pylint: disable=C0412
     except ModuleNotFoundError as err:
         exception_log.error("%s", err)
 
