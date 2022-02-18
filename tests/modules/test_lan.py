@@ -14,6 +14,9 @@ class TestLan(unittest.TestCase):
     ''' Tests for the lan module '''
 
     def test_monitor_network(self):
+        '''
+        Confirm that the network monitor is running.
+        '''
         with patch('modules.rec_lan.test_network') as mocked_test_network:
             mocked_test_network.return_value = 0
 
