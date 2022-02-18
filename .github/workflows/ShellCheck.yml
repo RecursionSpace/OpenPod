@@ -1,0 +1,19 @@
+name: Script Check
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Shellcheck
+        uses: azohra/shell-linter@latest

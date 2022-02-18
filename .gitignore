@@ -127,3 +127,24 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# ---------------------------------- Custom ---------------------------------- #
+.bash_history
+.bashrc
+.cache/
+.cloud-locale-test.skip
+.gitconfig
+.mysql_history
+.npm/
+.profile
+.selected_editor
+.ssh/
+.vscode/
+HUB_Boot.sh.save
+.python_history
+.gnupg
+
+# ------------------------------- Python tests ------------------------------- #
+.coverage
+
+__pycache__/

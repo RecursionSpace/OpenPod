@@ -1,0 +1,20 @@
+# Continious Deployment - Production
+
+name:  Release - Version & Deploy
+on:
+  push:
+    branches: [ release ]
+
+  workflow_dispatch:
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Release Webhook
+        uses: distributhor/workflow-webhook@v1
+        env:
+          webhook_url: "https://recursion.space/webhooks/github/"
+          webhook_secret: "Y0uR5ecr3t"
