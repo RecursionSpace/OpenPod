@@ -12,7 +12,7 @@ import settings
 
 from modules.rec_log import log_api, hash_data
 
-if settings.Pi:
+if settings.IS_PI:
     from modules import rec_gpio
     from settings import LED_IO
 
@@ -138,7 +138,7 @@ def link_hub():
             json.dump(system_data, file)
             file.truncate()
 
-            if settings.Pi:
+            if settings.IS_PI:
                 rec_gpio.state(LED_IO, 1)
     except OSError as err:
         log_api.error("link_hub - Unable to open file system.json - %s", err)

@@ -3,7 +3,7 @@
 '''Settings file contains "constants" that are unlikely to be changed.'''
 
 DEBUG = True
-PI = False
+IS_PI = False
 
 
 if DEBUG is True:

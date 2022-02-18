@@ -12,7 +12,7 @@ import settings
 
 from modules.rec_log import network_log
 
-if settings.Pi:
+if settings.IS_PI:
     from modules import rec_gpio
 
 
