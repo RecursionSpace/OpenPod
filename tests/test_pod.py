@@ -1,7 +1,9 @@
-import sys
-sys.path.insert(0, "0_1_0/")
+''' Unit test for pod.py '''
 
+import sys
 import unittest
+
+sys.path.insert(0, "openpod/")
 
 # import hub
 

@@ -15,8 +15,10 @@ import sys
 sys.path.insert(0, "0_1_0/")
 
 class TestUpdater(unittest.TestCase):
+    '''Collection of tests.'''
 
     def test_get_current_versions(self):
+        '''Verify that the current versions are returned.'''
         systemJSON = StringIO("""{
                         "serial": "536780dfe639468e8e23fc568006950d",
                         "timezone": "America/New_York",

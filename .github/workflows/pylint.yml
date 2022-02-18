@@ -24,6 +24,6 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint `ls -r|grep .py$|xargs` --disable=import-error,E1101 || pylint-exit --error-fail --warn-fail --convention-fail $?
-        pylint 0_1_0 `ls -r|grep .py$|xargs` --disable=import-error,E1101 || pylint-exit --error-fail --warn-fail --convention-fail $?
+        pylint openpod `ls -r|grep .py$|xargs` --disable=import-error,E1101 || pylint-exit --error-fail --warn-fail --convention-fail $?
 
         pylint tests `ls -r|grep .py$|xargs` --disable=import-error,E1101 || pylint-exit --error-fail --warn-fail --convention-fail $?
