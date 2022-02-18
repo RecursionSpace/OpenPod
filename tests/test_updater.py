@@ -33,4 +33,4 @@ class TestUpdater(unittest.TestCase):
             mock_open.assert_called()
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()

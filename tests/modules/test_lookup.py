@@ -90,7 +90,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
     '''Access Request Tests'''
 
     def setUp(self):
-        self.systemJSON = StringIO(
+        self.system_json = StringIO(
             '''{
                 "serial": "536780dfe639468e8e23fc568006950d",
                 "timezone": "America/New_York",
@@ -117,7 +117,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
                     ]'''
                 )
 
-        self.membersJSON = StringIO(
+        self.members_json = StringIO(
             '''[
                 {
                     "cardNumber": "313233343536373839",
@@ -136,7 +136,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             ]'''
         )
 
-        self.ownersJSON = StringIO(
+        self.owners_json = StringIO(
             '''[
                 {
                     "facility": "3b9fdc97-9649-4c80-8b48-10df647bd032",
@@ -154,7 +154,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             ]'''
         )
 
-        self.permissionsJSON = StringIO(
+        self.permissions_json = StringIO(
             '''[
                 {
                     "id": 1,
@@ -178,7 +178,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
 
         # ----------------------------------- _alt ----------------------------------- #
 
-        self.systemJSON = StringIO(
+        self.system_json = StringIO(
             '''{
                 "serial": "536780dfe639468e8e23fc568006950d",
                 "timezone": "America/New_York",
@@ -205,7 +205,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
                     ]'''
                 )
 
-        self.membersJSON_alt = StringIO(
+        self.members_json_alt = StringIO(
             '''[
                 {
                     "cardNumber": "313233343536373839",
@@ -224,7 +224,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             ]'''
         )
 
-        self.ownersJSON_alt = StringIO(
+        self.owners_json_alt = StringIO(
             '''[
                 {
                     "facility": "3b9fdc97-9649-4c80-8b48-10df647bd032",
@@ -242,7 +242,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             ]'''
         )
 
-        self.permissionsJSON_alt = StringIO(
+        self.permissions_json_alt = StringIO(
             '''[
                 {
                     "id": 1,
@@ -267,11 +267,11 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
     def test_files_opened(self):
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.side_effect = [
-                self.systemJSON,
+                self.system_json,
                 self.nodes_json,         # Opened from conversion function.
-                self.ownersJSON,        # Opened from owner check function.
-                self.membersJSON,       # Opened from get_details function.
-                self.permissionsJSON,   # Opened from get_group_details function.
+                self.owners_json,        # Opened from owner check function.
+                self.members_json,       # Opened from get_details function.
+                self.permissions_json,   # Opened from get_group_details function.
             ]
 
             rec_lookup.access_request(313131, '0011223344556677')
@@ -294,14 +294,14 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
 
     def test_is_owner(self):
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.ownersJSON
+            mock_open.return_value = self.owners_json
 
             owner = rec_lookup.is_owner('30393837363534333231')
             mock_open.assert_called()
             self.assertTrue(owner)
 
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.ownersJSON_alt
+            mock_open.return_value = self.owners_json_alt
 
             owner = rec_lookup.is_owner('99393837363534333231')
             mock_open.assert_called()
@@ -309,14 +309,14 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
 
     def test_get_details(self):
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.membersJSON
+            mock_open.return_value = self.members_json
 
             user = rec_lookup.get_details('313233343536373839')
             mock_open.assert_called()
             self.assertTrue(user['found'])
 
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.membersJSON_alt
+            mock_open.return_value = self.members_json_alt
 
             user = rec_lookup.get_details('993233343536373839')
             mock_open.assert_called()
@@ -324,14 +324,14 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
 
     def test_get_group_details(self):
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.permissionsJSON
+            mock_open.return_value = self.permissions_json
 
             group = rec_lookup.get_group_details(1)
             mock_open.assert_called()
             self.assertTrue(group['found'])
 
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.permissionsJSON_alt
+            mock_open.return_value = self.permissions_json_alt
 
             group = rec_lookup.get_group_details(69)
             mock_open.assert_called()
@@ -340,11 +340,11 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
     def test_access_request_combinations(self):
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.side_effect = [
-                self.systemJSON,
+                self.system_json,
                 self.nodes_json,         # Opened from conversion function.
-                self.ownersJSON,        # Opened from owner check function.
-                self.membersJSON,       # Opened from get_details function.
-                self.permissionsJSON,   # Opened from get_group_details function.
+                self.owners_json,        # Opened from owner check function.
+                self.members_json,       # Opened from get_details function.
+                self.permissions_json,   # Opened from get_group_details function.
             ]
 
             self.assertEqual(
@@ -356,4 +356,4 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()

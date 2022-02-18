@@ -14,8 +14,9 @@ sys.path.insert(0, "0_1_0/")
 class TestAPI(unittest.TestCase):
     '''Collection of tests for the api module'''
 
-
     def test_pull_data_dump(self):
+        '''Test the pull_data_dump function'''
+
         system_json = StringIO("""{
                 "serial": "536780dfe639468e8e23fc568006950d",
                 "timezone": "America/New_York",
