@@ -89,7 +89,7 @@ class TestLookup(unittest.TestCase):
 
             mock_open.assert_called()
 
-class TestLookUpAccessRequest(unittest.TestCase):
+class TestLookUpAccessRequest(unittest.TestCase):           # pylint: disable=R0904
     '''Access Request Tests'''
 
     def setUp(self):

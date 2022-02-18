@@ -7,7 +7,9 @@ from unittest.mock import patch
 from modules import rec_mqtt
 
 
-class DummyMessage:
+class DummyMessage:                                 # pylint: disable=R0903
+    '''Creating a mock response'''
+
     def __init__(self, command):
         self.payload=command
 
@@ -21,7 +23,9 @@ class TestOnMessage(unittest.TestCase):
         Checks that the function calls are correct.
         '''
         with patch('modules.rec_mqtt.rec_api.link_hub') as mock_link:
-            rec_mqtt.on_message('test_client', None, DummyMessage('170'))
+            self.assertTrue(
+                rec_mqtt.on_message('test_client', None, DummyMessage('170'))
+            )
             mock_link.assert_called()
 
         with patch('modules.rec_mqtt.rec_api.pull_data_dump') as mock_pull:

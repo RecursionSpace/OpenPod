@@ -26,4 +26,4 @@ jobs:
         pylint `ls -r|grep .py$|xargs` --disable=import-error,E1101 || pylint-exit --error-fail --warn-fail --convention-fail $?
         pylint openpod `ls -r|grep .py$|xargs` --disable=import-error,E1101 || pylint-exit --error-fail --warn-fail --convention-fail $?
 
-        pylint tests `ls -r|grep .py$|xargs` --disable=import-error,E1101 || pylint-exit --error-fail --warn-fail --convention-fail $?
+        pylint tests `ls -r|grep .py$|xargs` --disable=import-error,E1101,R0801 || pylint-exit --error-fail --warn-fail --convention-fail $?

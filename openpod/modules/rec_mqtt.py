@@ -58,7 +58,7 @@ def on_message(client, userdata, message):
 
         if 0 < int(message.payload) <= 256:
             mqtt_actions[int(message.payload)]()
-            return
+            return True
 
     except ValueError as err:
         mqtt_log.info("Not a single number command. Error: %s", err)
@@ -77,7 +77,7 @@ def on_message(client, userdata, message):
 
         if look_up_responce == 1:
             rec_xbee.transmit(node_mac.group(1), f"{node_command.group(1)}")
-            return
+            return True
 
     except IndexError as err:
         mqtt_log.error("Unable to extract MAC with the following error: %s", err)
