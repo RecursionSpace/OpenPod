@@ -52,6 +52,9 @@ class TestLookup(unittest.TestCase):
         self.nodes_empty_json = StringIO('')
 
     def test_count_matching_mac(self):
+        '''
+        Confirms MAC conflection is counted correctly.
+        '''
         count_result = rec_lookup.count_matching_mac("12345678")
         self.assertEqual(count_result, 0)
 
@@ -86,10 +89,13 @@ class TestLookup(unittest.TestCase):
 
             mock_open.assert_called()
 
-class Test_LookUp_AccessRequest(unittest.TestCase):
+class TestLookUpAccessRequest(unittest.TestCase):
     '''Access Request Tests'''
 
     def setUp(self):
+        '''
+        Collection of JSON used for testing.
+        '''
         self.system_json = StringIO(
             '''{
                 "serial": "536780dfe639468e8e23fc568006950d",
@@ -265,6 +271,9 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
         )
 
     def test_files_opened(self):
+        '''
+        Confirms that all the files are correctly opened and read.
+        '''
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.side_effect = [
                 self.system_json,
@@ -274,10 +283,13 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
                 self.permissions_json,   # Opened from get_group_details function.
             ]
 
-            rec_lookup.access_request(313131, '0011223344556677')
+            self.assertAlmostEqual(rec_lookup.access_request(313131, '0011223344556677'), 2)
             mock_open.assert_called()
 
     def test_mac_to_id(self):
+        '''
+        Confirms that the mac address is converted to the node id.
+        '''
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.return_value = self.nodes_json
 
@@ -293,6 +305,9 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             self.assertEqual(node_id, '9911223344556677')
 
     def test_is_owner(self):
+        '''
+        Confirms that the owner check function returns the correct value.
+        '''
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.return_value = self.owners_json
 
@@ -308,6 +323,9 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             self.assertFalse(owner)
 
     def test_get_details(self):
+        '''
+        Verifies that the correct details are returned.
+        '''
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.return_value = self.members_json
 
@@ -323,6 +341,9 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             self.assertFalse(user['found'])
 
     def test_get_group_details(self):
+        '''
+        Verifies that the correct details are returned.
+        '''
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.return_value = self.permissions_json
 
@@ -338,6 +359,9 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             self.assertFalse(group['found'])
 
     def test_access_request_combinations(self):
+        '''
+        Checks that the access request function returns the correct values.
+        '''
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.side_effect = [
                 self.system_json,

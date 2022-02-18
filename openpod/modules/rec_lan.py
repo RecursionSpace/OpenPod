@@ -71,6 +71,7 @@ def monitor_network(last_network_status=5, thread_delay=30.0):
         network_watch_thread.setName('network_watch_thread')
         network_watch_thread.start()
 
+    return True
 
 def test_network():
     '''

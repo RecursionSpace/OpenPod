@@ -17,6 +17,9 @@ class TestOnMessage(unittest.TestCase):
     '''unit tests for the MQTT module'''
 
     def test_function_calls(self):
+        '''
+        Checks that the function calls are correct.
+        '''
         with patch('modules.rec_mqtt.rec_api.link_hub') as mock_link:
             rec_mqtt.on_message('test_client', None, DummyMessage('170'))
             mock_link.assert_called()

@@ -21,11 +21,13 @@ class TestLan(unittest.TestCase):
             mocked_test_network.return_value = 0
 
             with patch('modules.rec_lan.threading') as mocked_threading:
-                rec_lan.monitor_network()
-
+                self.assertTrue(rec_lan.monitor_network())
                 mocked_threading.Timer.assert_called()
 
     def test_test_network(self):
+        '''
+        Confirms all tests are called properly.
+        '''
         with patch('modules.rec_lan.networked') as mocked_networked:
             mocked_networked.return_value = False
             self.assertEqual(rec_lan.test_network(), 0)
@@ -91,11 +93,11 @@ class TestLan(unittest.TestCase):
 
             with patch('modules.rec_lan.requests.get') as mocked_requests:
                 mocked_requests.return_value.text = "0.0.0.0"
-                PubIP, LocalIP = rec_lan.get_ip()
+                public_ip, local_ip = rec_lan.get_ip()
 
                 self.assertEqual((rec_lan.get_ip())[0], '0.0.0.0')
-                self.assertEqual(PubIP, '0.0.0.0')
-                self.assertEqual(LocalIP, '0.0.0.0')
+                self.assertEqual(public_ip, '0.0.0.0')
+                self.assertNotEqual(local_ip, '127.0.0.1')
 
                 mocked_internet_on.return_value = False
                 self.assertNotEqual((rec_lan.get_ip())[0], '0.0.0.0')
