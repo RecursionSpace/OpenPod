@@ -95,7 +95,7 @@ class TestAPI(unittest.TestCase):
 
             with patch("modules.rec_api.requests.get") as mocked_requests:
                 mocked_requests.return_value.json.return_value = testreturn
-                rec_api.pull_data_dump()
+                self.assertTrue(rec_api.pull_data_dump())
                 mock_open.assert_called()
                 mocked_requests.assert_called()
 

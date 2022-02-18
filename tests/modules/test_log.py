@@ -6,7 +6,7 @@ import unittest
 
 #from modules import rec_lan, rec_api, rec_xbee, rec_log
 
-sys.path.insert(0, "0_1_0/")
+sys.path.insert(0, "openpod/")
 
 class Testlog(unittest.TestCase):
     ''' Tests for the log module '''

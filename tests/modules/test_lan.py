@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 from modules import rec_lan
 
-sys.path.insert(0, "0_1_0/")
+sys.path.insert(0, "openpod/")
 
 
 class TestLan(unittest.TestCase):
@@ -40,18 +40,21 @@ class TestLan(unittest.TestCase):
                 mocked_internet_on.return_value = True
                 self.assertNotEqual(rec_lan.test_network(), 1)
 
-                with patch('modules.rec_lan.recursion_connection') as mocked_Recursion_Connection:
-                    mocked_Recursion_Connection.return_value = False
+                with patch('modules.rec_lan.recursion_connection') as mocked_recursion_connection:
+                    mocked_recursion_connection.return_value = False
                     self.assertEqual(rec_lan.test_network(), 2)
 
-                    mocked_Recursion_Connection.return_value = True
+                    mocked_recursion_connection.return_value = True
                     self.assertEqual(rec_lan.test_network(), 3)
 
         self.assertTrue(mocked_networked.called)
         self.assertTrue(mocked_internet_on.called)
-        self.assertTrue(mocked_Recursion_Connection.called)
+        self.assertTrue(mocked_recursion_connection.called)
 
     def test_networked(self):
+        '''
+        Confirm that the network is active.
+        '''
         with patch('modules.rec_lan.get_ip') as mocked_get_ip:
             mocked_get_ip.return_value = ("127.0.0.1", "127.0.0.1")
             self.assertFalse(rec_lan.networked())
@@ -60,13 +63,19 @@ class TestLan(unittest.TestCase):
             self.assertTrue(rec_lan.networked())
 
     def test_internet_on(self):
+        '''
+        Confirms active internet connection.
+        '''
         self.assertTrue(rec_lan.internet_on())
 
         with patch('modules.rec_lan.requests.get') as mocked_requests:
             mocked_requests.return_value.status_code = None
             self.assertFalse(rec_lan.internet_on())
 
-    def test_Recursion_Connection(self):
+    def test_recursion_connection(self):
+        '''
+        Confirms that the recursion server is reachable.
+        '''
         self.assertTrue(rec_lan.recursion_connection())
 
         with patch('modules.rec_lan.requests.get') as mocked_requests:
@@ -74,6 +83,9 @@ class TestLan(unittest.TestCase):
             self.assertFalse(rec_lan.internet_on())
 
     def test_get_ip(self):
+        '''
+        Verify that the ip address is obtained.
+        '''
         with patch('modules.rec_lan.internet_on') as mocked_internet_on:
             mocked_internet_on.return_value = True
 
@@ -82,6 +94,8 @@ class TestLan(unittest.TestCase):
                 PubIP, LocalIP = rec_lan.get_ip()
 
                 self.assertEqual((rec_lan.get_ip())[0], '0.0.0.0')
+                self.assertEqual(PubIP, '0.0.0.0')
+                self.assertEqual(LocalIP, '0.0.0.0')
 
                 mocked_internet_on.return_value = False
                 self.assertNotEqual((rec_lan.get_ip())[0], '0.0.0.0')

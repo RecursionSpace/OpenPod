@@ -66,6 +66,7 @@ def pull_data_dump():
         responce = permissions_info.json()
         json.dump(responce, file)
 
+    return True
 
 # ---------------------------------------------------------------------------- #
 #                            Set or Update Timezone                            #
