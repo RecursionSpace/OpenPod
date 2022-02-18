@@ -72,7 +72,7 @@ try:
         file.seek(0)
         json.dump(data, file)
         file.truncate()
-except Exception as err:
+except Exception as err:                                # pylint: disable=W0703
     print(err)
 # ------------------------------- TEMP SOLUTION ------------------------------ #
 
@@ -104,10 +104,10 @@ try:
     else:
         rec_log.publog("info", "Facility connection not found, no data to pull.")
         if settings.Pi:
-            rec_gpio.state(settings.LED_IO, 1, 1)    #Slow blink ready to pair to a facility.
+            rec_gpio.state(settings.LED_IO, 1, 1)       # Slow blink ready to pair to a facility.
 
     zip_send() # Send latest log files on boot.
-except Exception as err:
+except Exception as err:                                # pylint: disable=W0703
     rec_log.publog("error", f"Error occured when pulling data: {err}")
 
 

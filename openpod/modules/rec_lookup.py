@@ -134,7 +134,7 @@ def get_group_details(access_group_id):
 # ---------------------------------------------------------------------------- #
 #                                Perform Search                                #
 # ---------------------------------------------------------------------------- #
-def access_request(requested_id, request_node):
+def access_request(requested_id, request_node):         # pylint: disable=R0911
     '''
     Processes access requests.
     request_id - User's ID that is making a request.

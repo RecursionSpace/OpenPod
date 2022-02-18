@@ -9,7 +9,7 @@ import unittest
 from io import StringIO
 from unittest.mock import patch, mock_open, Mock
 
-import hub_updater
+import updater # OpenPod Updater
 
 import sys
 sys.path.insert(0, "0_1_0/")
@@ -28,9 +28,9 @@ class TestUpdater(unittest.TestCase):
                         "facility": "3b9fdc97-9649-4c80-8b48-10df647bd032"
                     }""")
 
-        with patch('hub_updater.open') as mock_open:
+        with patch('updater.open') as mock_open:
             mock_open.side_effect = [systemJSON, systemJSON]
-            hub_updater.current_hub_version()
+            updater.current_hub_version()
             # hub_updater.update_version_name()
             mock_open.assert_called()
 

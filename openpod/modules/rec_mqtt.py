@@ -12,7 +12,7 @@ import paho.mqtt.client as mqtt
 from modules import rec_api, rec_xbee, rec_lookup
 from modules.rec_log import mqtt_log, exception_log, zip_send
 import settings
-import hub_updater
+import updater
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, return_code):
@@ -107,12 +107,12 @@ def mqtt_start_update():
     '''
     mqtt_log.info("UPDATE AVAILABLE - Triggered by the user.")
     try:
-        hub_updater.update_hub()
+        updater.update_hub()
     except RuntimeError as err:
         exception_log.error("Error while updating, atempting as subprocess. %s", err)
         with open('system.json', 'r+', encoding="UTF-8") as file:
             system_data = json.load(file)
-            update_location = f'/opt/RecursionHub/{system_data.CurrentVersion}/hub_updater.py'
+            update_location = f'/opt/RecursionHub/{system_data.CurrentVersion}/updater.py'
             with subprocess.Popen(['sudo', 'python3', f'{update_location}']) as script:
                 print(script)
 

@@ -15,6 +15,7 @@
 ## Table of Contents
 
 - [What is OpenPod?](#what-is-openpod)
+- [Directory Structure](#directory-structure)
 
 
 ## What is OpenPod?
@@ -129,4 +130,14 @@ This file contains a JSON summary of the Pod for debugging purposes. The informa
 	“local_ip” = “xx.xx.xx.xx”,
 
 ]
+```
+
+## Directory Structure
+
+```default
+.
+├── .github             # CI/CD using GitHub Actions and other functions.
+├── tests               # Contains unit testing files.
+└── openpod             # Contains OpenPod functionality.
+    └── modules         # Independent core functions.
 ```

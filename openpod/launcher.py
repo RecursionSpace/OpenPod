@@ -19,7 +19,7 @@ import subprocess
 #                              Check Requirements                              #
 # ---------------------------------------------------------------------------- #
 try:
-    import config
+    import config                                           # pylint: disable=W0611
 except ImportError :
     subprocess.call(['sudo', 'pip3', 'install', 'config'])
 
@@ -33,7 +33,7 @@ import settings
 
 if settings.Pi:
     try:
-        from modules import rec_xbee
+        from modules import rec_xbee                      # pylint: disable=C0412
     except ModuleNotFoundError as err:
         exception_log.error("%s", err)
 
@@ -108,7 +108,7 @@ if settings.Pi:
 #                               Main HUB Program                               #
 # ---------------------------------------------------------------------------- #
 try:
-    import hub
+    import pod                                              # pylint: disable=W0611
 
 except RuntimeError as err:
     exception_log.error("Could not start hub.py with error: %s", err)
