@@ -2,9 +2,10 @@
 Tests MQTT functionality.
 '''
 import unittest
+from unittest.mock import patch
 
 from modules import rec_mqtt
-from unittest.mock import patch, mock_open, Mock
+
 
 class DummyMessage:
     def __init__(self, command):
@@ -13,6 +14,7 @@ class DummyMessage:
     topic='test_hub'
 
 class TestOnMessage(unittest.TestCase):
+    '''unit tests for the MQTT module'''
 
     def test_function_calls(self):
         with patch('modules.rec_mqtt.rec_api.link_hub') as mock_link:

@@ -2,24 +2,22 @@
 Tests for update.py
 '''
 
-import os
-import builtins
+import sys
 import unittest
 
 from io import StringIO
-from unittest.mock import patch, mock_open, Mock
+from unittest.mock import patch
 
 import updater # OpenPod Updater
 
-import sys
-sys.path.insert(0, "0_1_0/")
+sys.path.insert(0, "openpod/")
 
 class TestUpdater(unittest.TestCase):
     '''Collection of tests.'''
 
     def test_get_current_versions(self):
         '''Verify that the current versions are returned.'''
-        systemJSON = StringIO("""{
+        system_json = StringIO("""{
                         "serial": "536780dfe639468e8e23fc568006950d",
                         "timezone": "America/New_York",
                         "CurrentVersion": "0_0_0",
@@ -29,7 +27,7 @@ class TestUpdater(unittest.TestCase):
                     }""")
 
         with patch('updater.open') as mock_open:
-            mock_open.side_effect = [systemJSON, systemJSON]
+            mock_open.side_effect = [system_json, system_json]
             updater.current_hub_version()
             # hub_updater.update_version_name()
             mock_open.assert_called()

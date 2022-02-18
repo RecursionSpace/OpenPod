@@ -2,24 +2,22 @@
 Tests for the lookup module.
 '''
 
-import os
-import pty
-import json
-import logging
+import sys
 import unittest
 
 from io import StringIO
-from unittest.mock import patch, mock_open, Mock
-
-import sys
-sys.path.insert(0, "0_1_0/")
+from unittest.mock import patch
 
 from modules import rec_lookup
 
+sys.path.insert(0, "0_1_0/")
+
+
 class TestLookup(unittest.TestCase):
+    '''Lokup Tests'''
 
     def setUp(self):
-        self.nodesJSON = StringIO(
+        self.nodes_json = StringIO(
                     '''[
                         {
                             "id": 1,
@@ -35,7 +33,7 @@ class TestLookup(unittest.TestCase):
                     ]'''
                 )
 
-        self.nodes_alternativeJSON = StringIO(
+        self.nodes_alternative_json = StringIO(
                     '''[
                         {
                             "id": 1,
@@ -51,7 +49,7 @@ class TestLookup(unittest.TestCase):
                     ]'''
                 )
 
-        self.nodes_emptyJSON = StringIO('')
+        self.nodes_empty_json = StringIO('')
 
     def test_count_matching_mac(self):
         count_result = rec_lookup.count_matching_mac("12345678")
@@ -63,7 +61,7 @@ class TestLookup(unittest.TestCase):
         )
 
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.nodesJSON
+            mock_open.return_value = self.nodes_json
 
             count_result = rec_lookup.count_matching_mac("0011223344556677")
 
@@ -71,7 +69,7 @@ class TestLookup(unittest.TestCase):
             self.assertEqual(count_result, 1)
 
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.nodes_alternativeJSON
+            mock_open.return_value = self.nodes_alternative_json
 
             count_result = rec_lookup.count_matching_mac("0011223344556677")
 
@@ -79,7 +77,7 @@ class TestLookup(unittest.TestCase):
             self.assertEqual(count_result, 0)
 
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.nodes_emptyJSON
+            mock_open.return_value = self.nodes_empty_json
 
             self.assertEqual(
                 rec_lookup.count_matching_mac("0011223344556677"),
@@ -89,6 +87,7 @@ class TestLookup(unittest.TestCase):
             mock_open.assert_called()
 
 class Test_LookUp_AccessRequest(unittest.TestCase):
+    '''Access Request Tests'''
 
     def setUp(self):
         self.systemJSON = StringIO(
@@ -102,7 +101,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             }'''
         )
 
-        self.nodesJSON = StringIO(
+        self.nodes_json = StringIO(
                     '''[
                         {
                             "id": 1,
@@ -190,7 +189,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
             }'''
         )
 
-        self.nodesJSON_alt = StringIO(
+        self.nodes_json_alt = StringIO(
                     '''[
                         {
                             "id": 1,
@@ -269,7 +268,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.side_effect = [
                 self.systemJSON,
-                self.nodesJSON,         # Opened from conversion function.
+                self.nodes_json,         # Opened from conversion function.
                 self.ownersJSON,        # Opened from owner check function.
                 self.membersJSON,       # Opened from get_details function.
                 self.permissionsJSON,   # Opened from get_group_details function.
@@ -280,14 +279,14 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
 
     def test_mac_to_id(self):
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.nodesJSON
+            mock_open.return_value = self.nodes_json
 
             node_id = rec_lookup.mac_to_id('0011223344556677')
             mock_open.assert_called()
             self.assertEqual(node_id, 1)
 
         with patch('modules.rec_lookup.open') as mock_open:
-            mock_open.return_value = self.nodesJSON_alt
+            mock_open.return_value = self.nodes_json_alt
 
             node_id = rec_lookup.mac_to_id('9911223344556677')
             mock_open.assert_called()
@@ -342,7 +341,7 @@ class Test_LookUp_AccessRequest(unittest.TestCase):
         with patch('modules.rec_lookup.open') as mock_open:
             mock_open.side_effect = [
                 self.systemJSON,
-                self.nodesJSON,         # Opened from conversion function.
+                self.nodes_json,         # Opened from conversion function.
                 self.ownersJSON,        # Opened from owner check function.
                 self.membersJSON,       # Opened from get_details function.
                 self.permissionsJSON,   # Opened from get_group_details function.

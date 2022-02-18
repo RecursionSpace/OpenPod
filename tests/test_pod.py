@@ -1,7 +1,7 @@
 ''' Unit test for pod.py '''
 
 import sys
-import unittest
+# import unittest
 
 sys.path.insert(0, "openpod/")
 
