@@ -63,7 +63,7 @@ sudo git clone  --single-branch --branch release https://github.com/RecursionSpa
 # ----------------------------- Setup Enviroment ----------------------------- #
 sudo apt-get install python3.10-venv -y
 sudo python3.10 -m venv /opt/OpenPod/env
-source /opt/OpenPod/env/bin/activate # shellcheck disable=SC1091
+source /opt/OpenPod/env/bin/activate
 sudo pip install --no-input -U -r /opt/OpenPod/requirements.txt --no-cache-dir --no-dependencies
 
 # ---------------------------- Create Directories ---------------------------- #
