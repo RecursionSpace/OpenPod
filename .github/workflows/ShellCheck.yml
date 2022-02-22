@@ -3,10 +3,17 @@ name: Script Check
 on:
   push:
     branches:
+      - '**'
+      - 'master'
+      - '!master-ci'
+      - '!release'
+
+  pull_request:
+    branches:
       - master
-      - main
 
   workflow_dispatch:
+
 
 jobs:
   lint:
