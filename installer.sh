@@ -63,7 +63,7 @@ sudo git clone  --single-branch --branch release https://github.com/RecursionSpa
 # ----------------------------- Setup Enviroment ----------------------------- #
 sudo apt-get install python3.10-venv -y
 sudo python3.10 -m venv /opt/OpenPod/env
-sudo source /opt/OpenPod/env/bin/activate
+source /opt/OpenPod/env/bin/activate
 sudo pip install --no-input -U -r /opt/OpenPod/requirements.txt --no-cache-dir --no-dependencies
 
 # ---------------------------- Create Directories ---------------------------- #
@@ -78,8 +78,22 @@ sudo touch /opt/OpenPod/data/nodes.json
 sudo touch /opt/OpenPod/data/owners.json
 sudo touch /opt/OpenPod/data/permissions.json
 
+# -------------------------------- system.json ------------------------------- #
+sudo touch /opt/OpenPod/system.json
+serial_uuid=$(cat /proc/sys/kernel/random/uuid)
+xbee_uuid=$(cat /proc/sys/kernel/random/uuid)
+sudo echo '{
+    "serial": "'$uuid'",
+    "timezone": "UTC",
+    "XBEE_KY": "'$xbee_uuid'",
+    "XBEE_OP": "0",
+    "url": "'$URL'",
+    "version": "0_0_1",
+    "debug": '$DEBUG'
+}' > /opt/OpenPod/system.json
+
 # --------------------------- Setup OpenPod Service -------------------------- #
-sudo cat <<EOF > /etc/systemd/system/openpod.service
+cat <<EOF > /etc/systemd/system/openpod.service
 [Unit]
 Description=OpenPod
 After=network.target
