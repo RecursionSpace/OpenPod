@@ -21,13 +21,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      # - uses: limitusus/json-syntax-check@v1
+      - uses: limitusus/json-syntax-check@v1
 
       - name: Run Bash Installer
         run: |
           sudo /bin/bash installer.sh
 
-        uses: limitusus/json-syntax-check@v1
+
         env:
           BASE: '/opt/OpenPod/'
         with:
