@@ -1,0 +1,27 @@
+name: Verify Bash Installer
+
+on:
+  push:
+    branches:
+      - '**'
+      - 'master'
+      - '!master-ci'
+      - '!release'
+
+  pull_request:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Bash Installer
+        run: |
+          sudo /bin/bash installer.sh
