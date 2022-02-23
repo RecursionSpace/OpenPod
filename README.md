@@ -2,6 +2,8 @@
 
 # OpenPod
 
+[![End To End Integration](https://github.com/RecursionSpace/OpenPod/actions/workflows/EndToEnd.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/EndToEnd.yml)
+&nbsp;
 [![Code Quality](https://github.com/RecursionSpace/OpenPod/actions/workflows/pylint.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/pylint.yml)
 &nbsp;
 [![Script Check](https://github.com/RecursionSpace/OpenPod/actions/workflows/ShellCheck.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/ShellCheck.yml)
