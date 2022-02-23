@@ -27,7 +27,8 @@ jobs:
           sudo /bin/bash installer.sh
 
       - name: Validate JSON
-        uses: anyone-developer/anyone-validate-json@main
+        uses: limitusus/json-syntax-check@v1
+        env:
+          BASE: '/opt/OpenPod'
         with:
-          file-extension: '.json'
-          read-path: '/opt/OpenPod'
+          pattern: "\\.json$"
