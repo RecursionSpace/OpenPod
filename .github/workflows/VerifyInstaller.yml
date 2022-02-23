@@ -29,6 +29,6 @@ jobs:
       - name: Validate JSON
         uses: limitusus/json-syntax-check@v1
         env:
-          BASE: '/opt/OpenPod'
+          BASE: '/opt/OpenPod/'
         with:
           pattern: "\\.json$"
