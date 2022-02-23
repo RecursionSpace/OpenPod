@@ -30,4 +30,4 @@ jobs:
         uses: anyone-developer/anyone-validate-json@main
         with:
           file-extension: '.json'
-          read-path: '/opt/OpenPod/'
+          read-path: '/opt/OpenPod'
