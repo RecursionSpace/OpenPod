@@ -1,0 +1,42 @@
+name: End To End Integration
+
+on:
+  push:
+    branches:
+      - '**'
+      - 'master'
+      - '!master-ci'
+      - '!release'
+
+  pull_request:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        # with:
+        #   repository: RecursionSpace/RecursionREST
+        #   ref: release
+        #   token: ${{ secrets.RECURSION_SPACE_ACCESS_TOKEN}}
+
+      - name: Setup Server
+        run: |
+          sudo apt-get update -y && sudo apt-get upgrade -y
+          sudo apt install software-properties-common -y
+          sudo add-apt-repository ppa:deadsnakes/ppa
+          sudo apt install python3.10 -y
+          sudo mkdir -p /opt
+          cd /opt
+
+          ssh-agent bash -c 'ssh-add ${{ secrets.RECURSION_SPACE_ACCESS_TOKEN}}; git clone --single-branch --branch release git@github.com:RecursionSpace/RecursionREST.git'
+
+          sudo apt-get install python3.10-venv -y
+          sudo python3.10 -m venv /opt/RecursionSpace/env
+          source /opt/RecursionSpace/env/bin/activate
+          sudo pip install --no-input -U -r /opt/RecursionSpace/requirements.txt --no-cache-dir --no-dependencies
