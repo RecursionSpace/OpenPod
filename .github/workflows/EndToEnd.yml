@@ -41,4 +41,4 @@ jobs:
           source /opt/RecursionSpace/env/bin/activate
           sudo pip install --no-input -U -r /opt/RecursionREST/requirements.txt --no-cache-dir --no-dependencies
 
-          sudo python manage.py migrate --noinput
+          sudo python /opt/RecursionRest/manage.py migrate --noinput
