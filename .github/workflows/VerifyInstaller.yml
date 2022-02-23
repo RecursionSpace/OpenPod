@@ -21,19 +21,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: limitusus/json-syntax-check@v1
-        with:
-          pattern: "\\.json$"
-
 
       - name: Run Bash Installer
         run: |
           sudo /bin/bash installer.sh
+
+      - name: Validate JSON
+      - run: sudo /bin/bash installer.sh
+        uses: limitusus/json-syntax-check@v1
         env:
-          BASE: '/opt/OpenPod/'
-
-
-
-      # - name: Validate JSON
-      #   run: |
-      #     sudo /bin/bash validate.sh
+          BASE: '/opt/OpenPod'
+        with:
+          pattern: "\\.json$"
