@@ -29,4 +29,5 @@ jobs:
       - name: Validate JSON
         uses: docker://orrosenblatt/validate-json-action:latest
         env:
+          INPUT_SCHEMA:
           INPUT_JSONS: /opt/OpenPod/system.json
