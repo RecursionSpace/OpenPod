@@ -26,8 +26,7 @@ jobs:
         run: |
           sudo /bin/bash installer.sh
 
-      - name: Verify System JSON
-        uses: limitusus/json-syntax-check@v1
-        base: "/opt/OpenPod/"
-        with:
-          pattern: "\\.json$"
+      - name: Validate JSON
+        uses: docker://orrosenblatt/validate-json-action:latest
+        env:
+          INPUT_JSONS: /opt/OpenPod/system.json
