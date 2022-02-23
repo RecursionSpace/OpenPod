@@ -63,7 +63,7 @@ sudo apt install python3.10 -y
 set -e # Exit when any command fails.
 sudo mkdir -p /opt
 cd /opt
-sudo git clone  --single-branch --branch release https://github.com/RecursionSpace/OpenPod.git
+sudo git clone --single-branch --branch release https://github.com/RecursionSpace/OpenPod.git
 
 # ----------------------------- Setup Enviroment ----------------------------- #
 sudo apt-get install python3.10-venv -y
