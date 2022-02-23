@@ -27,7 +27,7 @@ jobs:
         run: |
           sudo /bin/bash installer.sh
 
-      - name: Validate JSON
+
         env:
           BASE: '/opt/OpenPod/'
         with:
