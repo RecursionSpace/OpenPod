@@ -25,11 +25,3 @@ jobs:
       - name: Run Bash Installer
         run: |
           sudo /bin/bash installer.sh
-
-      - name: Validate JSON
-      - run: sudo /bin/bash installer.sh
-        uses: limitusus/json-syntax-check@v1
-        env:
-          BASE: '/opt/OpenPod'
-        with:
-          pattern: "\\.json$"
