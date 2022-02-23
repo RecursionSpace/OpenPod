@@ -20,10 +20,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        # with:
-        #   repository: RecursionSpace/RecursionREST
-        #   ref: release
-        #   token: ${{ secrets.RECURSION_SPACE_ACCESS_TOKEN}}
 
       - uses: webfactory/ssh-agent@v0.5.4
         with:
@@ -43,4 +39,6 @@ jobs:
           sudo apt-get install python3.10-venv -y
           sudo python3.10 -m venv /opt/RecursionSpace/env
           source /opt/RecursionSpace/env/bin/activate
-          sudo pip install --no-input -U -r /opt/RecursionSpace/requirements.txt --no-cache-dir --no-dependencies
+          sudo pip install --no-input -U -r /opt/RecursionREST/requirements.txt --no-cache-dir --no-dependencies
+
+          sudo python manage.py migrate --noinput
