@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e # Exit when any command fails.
+
+
 # ---------------------------------------------------------------------------- #
 #                                     Help                                     #
 # ---------------------------------------------------------------------------- #
@@ -13,11 +16,13 @@ Help()
     echo "d     Enable debug mode"
 }
 
+
 # ---------------------------------------------------------------------------- #
 #                                   Defaults                                   #
 # ---------------------------------------------------------------------------- #
 URL="recursion.space"
 DEBUG=0
+
 
 # ---------------------------------------------------------------------------- #
 #                                    Options                                   #
@@ -34,6 +39,7 @@ while getopts ":hud" flags; do
     exit 1 ;;
   esac
 done
+
 
 # ---------------------------------------------------------------------------- #
 #                                   Installer                                  #
@@ -58,7 +64,7 @@ sudo apt install python3.10 -y
 
 # ------------------------------- Clone OpenPod ------------------------------ #
 sudo mkdir -p /opt
-sudo git clone  --single-branch --branch release https://github.com/RecursionSpace/OpenPod.git /opt
+sudo git clone  --single-branch --branch release https://github.com/RecursionSpace/OpenPod.git /opt/
 
 # ----------------------------- Setup Enviroment ----------------------------- #
 sudo apt-get install python3.10-venv -y
@@ -114,3 +120,4 @@ sudo systemctl enable --now openpod.service
 sudo systemctl daemon-reload
 
 echo "OpenPod is now installed"
+exit 0
