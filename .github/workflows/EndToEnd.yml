@@ -25,6 +25,10 @@ jobs:
         #   ref: release
         #   token: ${{ secrets.RECURSION_SPACE_ACCESS_TOKEN}}
 
+      - uses: webfactory/ssh-agent@v0.5.4
+        with:
+            ssh-private-key: ${{ secrets.RECURSION_SPACE_ACCESS_TOKEN}}
+
       - name: Setup Server
         run: |
           sudo apt-get update -y && sudo apt-get upgrade -y
@@ -34,7 +38,7 @@ jobs:
           sudo mkdir -p /opt
           cd /opt
 
-          ssh-agent bash -c 'ssh-add ${{ secrets.RECURSION_SPACE_ACCESS_TOKEN}}; git clone --single-branch --branch release git@github.com:RecursionSpace/RecursionREST.git'
+          git clone --single-branch --branch release git@github.com:RecursionSpace/RecursionREST.git
 
           sudo apt-get install python3.10-venv -y
           sudo python3.10 -m venv /opt/RecursionSpace/env
