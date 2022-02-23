@@ -37,8 +37,8 @@ jobs:
           git clone --single-branch --branch release git@github.com:RecursionSpace/RecursionREST.git
 
           sudo apt-get install python3.10-venv -y
-          sudo python3.10 -m venv /opt/RecursionSpace/env
-          source /opt/RecursionSpace/env/bin/activate
+          sudo python3.10 -m venv /opt/RecursionREST/env
+          source /opt/RecursionREST/env/bin/activate
           sudo pip install --no-input -U -r /opt/RecursionREST/requirements.txt --no-cache-dir --no-dependencies
 
           sudo python /opt/RecursionREST/RecursionREST/manage.py migrate --noinput
