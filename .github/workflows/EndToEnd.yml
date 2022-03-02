@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - '**'
-      - 'master'
       - '!master-ci'
       - '!release'
 
@@ -31,16 +30,15 @@ jobs:
           sudo apt install software-properties-common -y
           sudo add-apt-repository ppa:deadsnakes/ppa
           sudo apt install python3.10 -y
-          sudo mkdir -p /opt
           cd /opt
 
-          git clone --single-branch --branch release git@github.com:RecursionSpace/RecursionREST.git
+          git clone --single-branch --branch master git@github.com:RecursionSpace/RecursionSpace.git
 
           sudo apt-get install python3.10-venv -y
-          sudo python3.10 -m venv /opt/RecursionREST/env
-          source /opt/RecursionREST/env/bin/activate
-          /opt/RecursionREST/env/bin/python3.10 -m pip install --upgrade pip
+          sudo python3.10 -m venv /opt/RecursionSpace/env
+          source /opt/RecursionSpace/env/bin/activate
+          /opt/RecursionSpace/env/bin/python3.10 -m pip install --upgrade pip
 
-          sudo pip install --no-input -U -r /opt/RecursionREST/requirements.txt
+          sudo pip install --no-input -U -r /opt/RecursionSpace/requirements.txt --no-cache-dir
 
-          sudo python /opt/RecursionREST/RecursionREST/manage.py migrate --noinput
+          sudo python /opt/RecursionSpace/manage.py migrate --noinput
