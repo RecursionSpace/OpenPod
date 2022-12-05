@@ -46,7 +46,7 @@ jobs:
 
     - name: Webhook
       if: steps.wait-for-build.outputs.conclusion == 'success'
-      uses: distributhor/workflow-webhook@v1
+      uses: distributhor/workflow-webhook@v3
       env:
         webhook_url: "https://dev.recursion.space/webhooks/github/"
         webhook_secret: "Y0uR5ecr3t"
