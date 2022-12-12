@@ -87,6 +87,11 @@ def update_hub():
     '''
     Main code called to update the hub.
     '''
+    with open("system.json", "r+", encoding="utf-8") as file:
+        data = json.load(file)
+
+    new_version = data['CurrentVersion']
+
     try:
         exception_log.info("Update Started")
         new_version = unzip_update()
@@ -103,7 +108,7 @@ def update_hub():
             json.dump(data, file)
             file.truncate()
 
-    # Relaunch with new program if update was sucessful.
+    # Relaunch with new program if update was successful.
     try:
         # Kill process that should be triggered to re-open by bash script.
         subprocess.call(['pkill', '-f', 'hub.py'])

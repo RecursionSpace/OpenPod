@@ -4,7 +4,7 @@
 
 [![End To End Integration](https://github.com/RecursionSpace/OpenPod/actions/workflows/EndToEnd.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/EndToEnd.yml)
 &nbsp;
-[![Code Quality](https://github.com/RecursionSpace/OpenPod/actions/workflows/pylint.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/pylint.yml)
+[![CI | Pylint](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Pylint.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Pylint.yml)
 &nbsp;
 [![Script Check](https://github.com/RecursionSpace/OpenPod/actions/workflows/ShellCheck.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/ShellCheck.yml)
 &nbsp;
@@ -42,7 +42,7 @@ sudo wget -qO- openpod.recursion.space | bash /dev/stdin [options] [arguments*]
 ```
 
 | Option Flag | Description               | Example                                                                          |
-| :---------: | ------------------------- | -------------------------------------------------------------------------------- |
+|:-----------:|---------------------------|----------------------------------------------------------------------------------|
 |     -h      | Help                      | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -h                     |
 |     -u      | Set Custom URL endpoint   | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -u dev.recursion.space |
 |     -d      | Enable Debug Installation | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -d                     |
@@ -111,7 +111,7 @@ The MQTT protocol is used for server to Pod communication, allowing the Pod to l
 Communication to Pods is accomplished from quick commands represented by a hexadecimal number.
 
 | Command Number | Command               |
-| -------------- | --------------------- |
+|----------------|-----------------------|
 | AA (170)       | Facility ID Available |
 | BA (186)       | Pull User Dump        |
 | CA (202)       | Update Available      |
