@@ -16,7 +16,6 @@ if settings.IS_PI:
     from modules import rec_gpio
 
 
-
 # ------------ Triggers visual indicators based on network status. ----------- #
 def monitor_network(last_network_status=5, thread_delay=30.0):
     '''
@@ -61,7 +60,7 @@ def monitor_network(last_network_status=5, thread_delay=30.0):
         raise RuntimeError('Network monitoring thread has failed.') from err
 
     finally:
-        network_log.debug('Thread timer set for %s second from now.', thread_delay) # DEBUG POINT
+        network_log.debug('Thread timer set for %s second from now.', thread_delay)  # DEBUG POINT
 
         network_watch_thread = threading.Timer(
             thread_delay,
@@ -72,6 +71,7 @@ def monitor_network(last_network_status=5, thread_delay=30.0):
         network_watch_thread.start()
 
     return True
+
 
 def test_network():
     '''
@@ -90,7 +90,7 @@ def test_network():
     if recursion_connection() is False:
         return 2
 
-    #All checks passed and Recursion server is reachable
+    # All checks passed and Recursion server is reachable
     # network_log.info('LAN Check Pass') # This would be called every 10 seconds
     return 3
 
@@ -104,7 +104,7 @@ def networked():
     '''
     local_ip = get_ip()[1]
 
-    if local_ip  == "127.0.0.1":
+    if local_ip == "127.0.0.1":
         return False
 
     return True
@@ -115,17 +115,17 @@ def internet_on():
     Performs requests to known external servers.
     '''
     try:
-        if requests.get('https://recursion.space').status_code == requests.codes.ok:
+        if requests.get('https://recursion.space', timeout=10).status_code == requests.codes.ok:
             return True
     except requests.exceptions.RequestException:
 
         try:
-            if requests.get('https://google.com').status_code == requests.codes.ok:
+            if requests.get('https://google.com', timeout=10).status_code == requests.codes.ok:
                 return True
         except requests.exceptions.RequestException:
 
             try:
-                if requests.get('https://amazon.com').status_code == requests.codes.ok:
+                if requests.get('https://amazon.com', timeout=10).status_code == requests.codes.ok:
                     return True
             except requests.exceptions.RequestException:
 
@@ -139,7 +139,7 @@ def recursion_connection():
     Checks if Recursion.Space is reachable.
     '''
     try:
-        req = requests.get('https://recursion.space')
+        req = requests.get('https://recursion.space', timeout=10)
         if req.status_code == requests.codes.ok:
             return True
 
@@ -171,12 +171,12 @@ def get_ip():
     try:
         local_ip = ([l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2]
 
-        if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)),
-        s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET,
-        socket.SOCK_DGRAM)]][0][1]]) if l][0][0])
+                                  if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)),
+                                                                        s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET,
+                                                                                                                               socket.SOCK_DGRAM)]][0][1]]) if l][0][0])
 
         # network_log.info("Hub's local IP address: {0}".format(local_ip))
-        #Prevent constant log writting since now in loop
+        # Prevent constant log writting since now in loop
 
     except OSError as err:
         network_log.error('Unable to get local IP address with error: %s', err)

@@ -6,7 +6,7 @@ hub_updater.py
 Call the function 'update_hub' to pull the latest update.
 """
 
-#Triggered by the user from the web interface to update the current version.
+# Triggered by the user from the web interface to update the current version.
 
 import re
 import sys
@@ -20,6 +20,7 @@ import requests
 import settings
 
 from modules.rec_log import exception_log
+
 
 def current_hub_version():
     '''
@@ -38,10 +39,11 @@ def update_version_name():
     with open('system.json', 'r', encoding="utf-8") as system_file:
         system_data = json.load(system_file)
 
-    request_response= requests.get(
+    request_response = requests.get(
         f'{settings.RecursionURL}/updatehub/',
-        headers={'Authorization' : f"Token {system_data['Token']}"}
-        )
+        headers={'Authorization': f"Token {system_data['Token']}"},
+        timeout=10
+    )
     response_data = request_response.headers['content-disposition']
     return re.findall("filename=(.+)", response_data)[0]
 
@@ -62,8 +64,6 @@ def download_update():
     urllib.request.install_opener(opener)
     urllib.request.urlretrieve(f'{settings.RecursionURL}/updatehub/', fname)
 
-
-
     # exception_log.info("Update version pulled: %s", re.findall(r"(.+?)(\.[^.]*$|$)", fname)[0][0])
     return re.findall(r"(.+?)(\.[^.]*$|$)", fname)[0][0]
 
@@ -78,7 +78,7 @@ def unzip_update():
     with zipfile.ZipFile(f'{new_version}.zip', 'r') as zip_ref:
         zip_ref.extractall(f'{new_version}/')
 
-    subprocess.call(['rm', f'{new_version}.zip'])    #Cleaning up downloaded file.
+    subprocess.call(['rm', f'{new_version}.zip'])  # Cleaning up downloaded file.
 
     return new_version
 
@@ -93,20 +93,19 @@ def update_hub():
 
     except RuntimeError as err:
         exception_log.error("Unable to pull update with error: %s", err)
-        new_version = current_hub_version()    #If unable to update, just run the current version.
+        new_version = current_hub_version()  # If unable to update, just run the current version.
 
     finally:
         with open("system.json", "r+", encoding="utf-8") as file:
             data = json.load(file)
-            data.update( {"CurrentVersion":new_version} )
+            data.update({"CurrentVersion": new_version})
             file.seek(0)
             json.dump(data, file)
             file.truncate()
 
-
-    #Relaunch with new program if update was sucessful.
+    # Relaunch with new program if update was sucessful.
     try:
-        #Kill process that should be triggered to re-open by bash script.
+        # Kill process that should be triggered to re-open by bash script.
         subprocess.call(['pkill', '-f', 'hub.py'])
         subprocess.call(['pkill', '-f', 'HUB_Launcher.py'])
     except RuntimeError as err:
