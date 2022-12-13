@@ -18,7 +18,6 @@
   - [What is OpenPod?](#what-is-openpod)
   - [Installation](#installation)
 - [Software Design](#software-design)
-  - [OS](#os)
 - [Development](#development)
 - [Initialization](#initialization)
   - [Required Packages](#required-packages)
@@ -34,7 +33,7 @@ The “Pod” is the physical extension of the Recursion.Space system for a faci
 
 ## Installation
 
-OpenPod is designed to communicate with hardware over a local mesh network using [XBee module](https://www.digi.com/products/embedded-systems/digi-xbee/rf-modules/2-4-ghz-rf-modules/xbee3-zigbee-3). While OpenPod can be installed on any computer running Ubuntu, most installations are done on a [Raspberry Pi](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/).
+OpenPod is designed to communicate with hardware over a local mesh network using [XBee module](https://www.digi.com/products/embedded-systems/digi-xbee/rf-modules/2-4-ghz-rf-modules/xbee3-zigbee-3). While OpenPod can be installed on any computer running Ubuntu, most installations are done on a [Raspberry Pi](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/). To prepare a Raspbery Pi for OpenPod checkout the [Pi Setup Guide](docs/pi_setup.md).
 
 For convenience, an installation script as been provided that will download OpenPod and make the necessary system changes to get OpenPod running. This script can be run from the command line using the following command:
 
@@ -71,10 +70,6 @@ The web interface communicates with the Pod via MQTT.
 - Remote control (door unlock)
 
 Each Pod is on its MQTT topic, and the topic is created once the Pod registers with the central system.
-
-## OS
-
-Each Pod is installed with the latest version of Ubuntu, and the systems are tested daily for compatibility with the latest releases. An image of the OS with the code ready for deployment can make a quick installation. 32-bit for Pi3 and 64-bit for 4+
 
 # Development
 
