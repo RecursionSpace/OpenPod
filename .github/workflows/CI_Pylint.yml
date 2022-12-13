@@ -9,10 +9,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.8
+    - name: Set up Python 3.11
       uses: actions/setup-python@v4.3.1
       with:
-        python-version: 3.8
+        python-version: 3.11
 
     - name: Install dependencies
       run: |
@@ -21,9 +21,8 @@ jobs:
         pip install pylint-exit
          if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
 
-    - name: Analysing the code with pylint
+    - name: Analyzing the code with Pylint
       run: |
-        pylint `ls -r|grep .py$|xargs` --disable=import-error,E1101 || pylint-exit --error-fail --warn-fail --convention-fail $?
         pylint openpod `ls -r|grep .py$|xargs` --disable=import-error,E1101 || pylint-exit --error-fail --warn-fail --convention-fail $?
 
         pylint tests `ls -r|grep .py$|xargs` --disable=import-error,E1101,R0801 || pylint-exit --error-fail --warn-fail --convention-fail $?

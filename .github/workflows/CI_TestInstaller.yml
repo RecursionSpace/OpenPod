@@ -12,5 +12,5 @@ jobs:
 
     - name: Run Installer
       run: |
-        sudo chmod +x install.sh
-        sudo ./install.sh
+        sudo chmod +x installer.sh
+        sudo ./installer.sh
