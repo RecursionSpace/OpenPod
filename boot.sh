@@ -1,5 +1,10 @@
 #!/bin/bash
-#Called by the @reboot conjob, will remain running at all times.
+
+# Called by the @reboot conjob, will remain running at all times.
+# Used to be located /opt/OpenPod/boot.sh
+# Required chmod +x /opt/OpenPod/boot.sh
+# Ran with a crontab entry @reboot /opt/OpenPod/boot.sh
+
 
 sleep 30																	#Delay before running to allow all the services to startup.
 

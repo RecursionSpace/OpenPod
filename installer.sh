@@ -45,14 +45,23 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+# ---------------------------- Update System Time ---------------------------- #
+sudo timedatectl set-timezone UTC
+
 # ---------------------------------------------------------------------------- #
 #                                 Dependencies                                 #
 # ---------------------------------------------------------------------------- #
 
-# ---------------------------- Update System Time ---------------------------- #
-sudo timedatectl set-timezone UTC
-sudo apt-get install chrony -y
-sudo chronyd -q
+# ---------------------------------- chrony ---------------------------------- #
+REQUIRED_PKG="chrony"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+if [ "" = "$PKG_OK" ]; then
+    echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
+    sudo apt-get install chrony -y
+    sudo chronyd -q
+else
+    echo "chrony already installed, skipping..."
+fi
 
 # ----------------------------------- unzip ---------------------------------- #
 REQUIRED_PKG="unzip"
@@ -83,6 +92,10 @@ if [ "$pytohn_version" != "3.11" ]; then
 else
     echo "Python 3.11 already installed"
 fi
+
+# ---------------------------------------------------------------------------- #
+#                                    OpenPod                                   #
+# ---------------------------------------------------------------------------- #
 
 # ------------------------------- Clone OpenPod ------------------------------ #
 set -e # Exit when any command fails.

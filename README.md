@@ -20,7 +20,6 @@
 - [Software Design](#software-design)
 - [Development](#development)
 - [Initialization](#initialization)
-  - [Required Packages](#required-packages)
 - [MQTT](#mqtt)
 - [Updates](#updates)
 - [Logging](#logging)
@@ -93,12 +92,6 @@ To launch the software, when the device boots, the launcher configures the syste
 ```bash
 (@reboot (cd /home/ubuntu/RecursionHub &&  sudo python3 HUB_Launcher.py &))
 ```
-
-## Required Packages
-
-Required packages are stored under “Requirements” in the settings.py file.
-
-PyPubSub is used for internal flags and alerts and has a broker-type system that can be subscribed to.
 
 # MQTT
 
