@@ -23,12 +23,15 @@
 - [MQTT](#mqtt)
 - [Updates](#updates)
 - [Logging](#logging)
-  - [Directory Structure](#directory-structure)
+  - [Repository Directory Structure](#repository-directory-structure)
+  - [Deployed Directory Structure](#deployed-directory-structure)
 - [Community and Contributing](#community-and-contributing)
 
 ## What is OpenPod?
 
 The “Pod” is the physical extension of the Recursion.Space system for a facility. The Pod allows for door/egress and equipment control nodes. Additionally, the Pod acts as a local backup in an internet outage for users to continue accessing their facility. The Pod has a direct internet connection then uses a wireless method to communicate with nodes. A single facility can have multiple Pods, but each Pod can only be linked to one facility.
+
+*Note: Versioning follows the [Semantic Versioning 2.0.0 standard](https://semver.org/)*
 
 ## Installation
 
@@ -85,7 +88,7 @@ Pod uses an initializer or “launcher” to configure the system before running
 - Configure start on boot file
 - Creates serial if needed
 - Registers the Pod with the API server
-- Initializes the main program
+- Initializes the main program under [/opt/](https://unix.stackexchange.com/questions/11544/what-is-the-difference-between-opt-and-usr-local)
 
 To launch the software, when the device boots, the launcher configures the system first to run the software in the [background](https://janakiev.com/blog/python-background/) and then creates a script that executes the launch on [startup](https://askubuntu.com/questions/817011/run-python-script-on-os-boot). Working version with a [cronjob](https://www.linuxbabe.com/linux-server/how-to-enable-etcrc-local-with-systemd).
 
@@ -110,11 +113,11 @@ Communication to Pods is accomplished from quick commands represented by a hexad
 
 # Updates
 
-The end-user triggers updates via the web server to run them with minimal interruption. An MQTT message is sent to the Pod to initiate the updating process. The update is a zip file downloaded from the server.
+The end-user triggers updates via the web server to run them with minimal interruption. An MQTT message is sent to the Pod to initiate the updating process. The update is a zip file downloaded from the [server](https://stackoverflow.com/questions/38697529/how-to-return-generated-file-download-with-django-rest-framework).
 
-Download zip file from server and store in the update folder.
-Unzip contents of a zip file
-Run Launcher
+1) Download zip file from server and store in the update folder.
+2) Unzip contents of a zip file
+3) Run Launcher
 
 First, commit and push the latest changes to git to prepare an update. Using WinSCP, download the 0_1_0 folder with the newest code. Rename the downloaded folder to match the latest version number. Zip the folder's CONTENTS, so there is no second directory folder with a matching name inside the zip file folder. Clean up all extra copies of the old folder. Update the latest version name using the recursion admin panel, then update their devices.
 
@@ -132,12 +135,12 @@ The Recursion System uses several logging points to be used both for troubleshoo
 **System.Snapshot** file contains a JSON summary of the Pod for debugging purposes. The information available in this file must also be readily accessible from the server for troubleshooting purposes.
 
 ```json
-[
- “local_ip” = “xx.xx.xx.xx”,
-]
+{
+    "local_ip": "xx.xx.xx.xx",
+}
 ```
 
-## Directory Structure
+## Repository Directory Structure
 
 ```default
 .
@@ -145,6 +148,31 @@ The Recursion System uses several logging points to be used both for troubleshoo
 ├── tests               # Contains unit testing files.
 └── openpod             # Contains OpenPod functionality.
     └── modules         # Independent core functions.
+```
+
+## Deployed Directory Structure
+
+```default
+OpenPod/
+|--------- Version A/
+	|--------- HUB.py
+    |--------- HUB_Launcher.py
+    |--------- HUB_Updater.py
+    |----------settings.py
+    |--------- modules/
+
+|--------- logs/
+	|--------- RecursionLog.log
+	|--------- TransactionLog.log
+
+|--------- data/
+	|-------- dump.json
+	|-------- owners.json
+	|-------- nodes.json
+	|---------permissions.json
+
+|--- system.json
+
 ```
 
 # Community and Contributing
