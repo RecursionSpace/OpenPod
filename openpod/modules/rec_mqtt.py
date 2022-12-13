@@ -15,6 +15,8 @@ import settings
 import updater
 
 # The callback for when the client receives a CONNACK response from the server.
+
+
 def on_connect(client, userdata, flags, return_code):
     '''
     Action taken once a connection has been established.
@@ -32,7 +34,7 @@ def on_connect(client, userdata, flags, return_code):
 
 def on_message(client, userdata, message):
     '''
-    Handles messeges coming in via MQTT.
+    Handles messages coming in via MQTT.
     170 - Pairing un-paired Hub
     186 - Pull New Data
     202 - Install System Update
@@ -84,6 +86,8 @@ def on_message(client, userdata, message):
 
     mqtt_log.error("MQTT did not match action codes. Payload: %s", message.payload)
 
+    return False
+
 
 def mqtt_rx():
     '''
@@ -101,6 +105,7 @@ def mqtt_rx():
     client.connect(f"{settings.RECURSION_DOMAIN}", 1883, 60)
     client.loop_forever()
 
+
 def mqtt_start_update():
     '''
     Called by the MQTT function handler to start an update.
@@ -115,6 +120,7 @@ def mqtt_start_update():
             update_location = f'/opt/RecursionHub/{system_data.CurrentVersion}/updater.py'
             with subprocess.Popen(['sudo', 'python3', f'{update_location}']) as script:
                 print(script)
+
 
 def mqtt_restart_system():
     '''

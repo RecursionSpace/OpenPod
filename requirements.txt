@@ -1,5 +1,6 @@
 config==0.5.1
 GitPython==3.1.29
+paho-mqtt==1.6.1
 pubsub==0.1.2
 PyJWT==2.6.0
 Pypubsub==4.0.3
@@ -7,7 +8,7 @@ pyserial==3.5
 python-crontab==2.6.0
 python-dateutil==2.8.2
 pytimeparse==1.1.8
-pytz>=2022.6
+pytz==2022.6
 requests==2.28.1
 RPi.GPIO==0.7.1
 simplejson==3.18.0
