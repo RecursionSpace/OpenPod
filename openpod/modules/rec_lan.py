@@ -67,7 +67,7 @@ def monitor_network(last_network_status=5, thread_delay=30.0):
             monitor_network,
             [current_network_status, thread_delay]
         )
-        network_watch_thread.setName('network_watch_thread')
+        network_watch_thread.name = 'network_watch_thread'
         network_watch_thread.start()
 
     return True

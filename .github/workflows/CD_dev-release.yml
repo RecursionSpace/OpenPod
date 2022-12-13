@@ -1,7 +1,7 @@
 # Performs the task of merging from master to the dev-release branch.
 # Pings the server to pull an update once the dev-release branch has been merged.
 
-name: Dev Merge & Deploy
+name: CD | Dev Release
 on:
   push:
     branches: [ master ]
