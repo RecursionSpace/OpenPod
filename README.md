@@ -43,11 +43,11 @@ For convenience, an installation script as been provided that will download Open
 sudo wget -qO- openpod.recursion.space | bash /dev/stdin [options] [arguments]
 ```
 
-| Option Flag | Description               | Example                                                                          |
-|:-----------:|---------------------------|----------------------------------------------------------------------------------|
-|     -h      | Help                      | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -h                     |
-|     -u      | Set Custom URL endpoint   | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -u dev.recursion.space |
-|     -d      | Enable Debug Installation | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -d                     |
+| Option Flag | Description               | Example                                                                            |
+|:-----------:|---------------------------|------------------------------------------------------------------------------------|
+|     -h      | Help                      | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -h                       |
+|     -d      | Enable Debug Installation | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -d                       |
+|     -u      | Set Custom URL endpoint   | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -u stage.recursion.space |
 
 \*No supported arguments are currently supported.
 

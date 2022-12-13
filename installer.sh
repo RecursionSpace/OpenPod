@@ -19,8 +19,7 @@ Help()
 # ---------------------------------------------------------------------------- #
 #                                   Defaults                                   #
 # ---------------------------------------------------------------------------- #
-URL="recursion.space"
-DEBUG=0
+DEBUG=0 # -d
 
 
 # ---------------------------------------------------------------------------- #
@@ -31,13 +30,24 @@ while getopts ":hud" flags; do
     h) # display Help
          Help
          exit;;
+    d) # Enable debug mode
+        DEBUG=1 ;;
     u) # Custom URL endpoint
          URL="${OPTARG}";;
-    d) DEBUG=1 ;;
     \?) echo "Invalid option: -${OPTARG}" >&2;
     exit 1 ;;
   esac
 done
+
+if [ $DEBUG -eq 1 ]; then
+    URL='recursion.space'
+elif [ $DEBUG -eq 0 ]; then
+    URL='recursion.space'
+fi
+
+echo "Installing OpenPod with the following options:"
+echo "Debug: $DEBUG"
+echo "URL: $URL"
 
 # -------------------------------- Verify Root ------------------------------- #
 if [ "$EUID" -ne 0 ]
@@ -47,6 +57,7 @@ fi
 
 # ---------------------------- Update System Time ---------------------------- #
 sudo timedatectl set-timezone UTC
+
 
 # ---------------------------------------------------------------------------- #
 #                                 Dependencies                                 #
@@ -138,14 +149,17 @@ echo '{
 # --------------------------- Setup OpenPod Service -------------------------- #
 cat <<EOF > /etc/systemd/system/openpod.service
 [Unit]
-Description=OpenPod
+Description=OpenPod | Recursion.Space
 After=network.target
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple
 User=root
 WorkingDirectory=/opt/OpenPod
+
 ExecStart=/opt/OpenPod/env/bin/python3.11 /opt/OpenPod/OpenPod.py
+
 Restart=always
 RestartSec=10
 
@@ -156,5 +170,5 @@ EOF
 sudo systemctl enable --now openpod.service
 sudo systemctl daemon-reload
 
-echo "OpenPod is now installed"
+echo "- OpenPod is now installed -"
 exit 0
