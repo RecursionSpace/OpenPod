@@ -2,7 +2,7 @@
 
 # OpenPod
 
-[![End To End Integration](https://github.com/RecursionSpace/OpenPod/actions/workflows/EndToEnd.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/EndToEnd.yml)
+[![CI | E2E Integration](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_EndToEnd.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_EndToEnd.yml)
 &nbsp;
 [![CI | Pylint](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Pylint.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Pylint.yml)
 &nbsp;

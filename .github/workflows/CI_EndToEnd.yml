@@ -41,6 +41,6 @@ jobs:
           /opt/RecursionSpace/env/bin/python3.11 -m pip install --upgrade pip
 
           sudo pip install --no-input -U -r /opt/RecursionSpace/requirements.txt --no-cache-dir
-          sudo pip install Django
 
-          sudo python /opt/RecursionSpace/manage.py migrate --noinput
+          cd /opt/RecursionSpace/
+          sudo python manage.py migrate --noinput
