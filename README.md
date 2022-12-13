@@ -2,11 +2,11 @@
 
 # OpenPod
 
-[![CI | E2E Integration](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_EndToEnd.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_EndToEnd.yml)
+[![CI | E2E Integration](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_E2E.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_E2E.yml)
 &nbsp;
 [![CI | Pylint](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Pylint.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Pylint.yml)
 &nbsp;
-[![Script Check](https://github.com/RecursionSpace/OpenPod/actions/workflows/ShellCheck.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/ShellCheck.yml)
+[![CI | Script Check](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_ShellCheck.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_ShellCheck.yml)
 &nbsp;
 [![CI | Build & Test](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Tests.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Tests.yml)
 &nbsp;
@@ -39,7 +39,7 @@ OpenPod is designed to communicate with hardware over a local mesh network using
 For convenience, an installation script as been provided that will download OpenPod and make the necessary system changes to get OpenPod running. This script can be run from the command line using the following command:
 
 ```bash
-sudo wget -qO- openpod.recursion.space | bash /dev/stdin [options] [arguments*]
+sudo wget -qO- openpod.recursion.space | bash /dev/stdin [options] [arguments]
 ```
 
 | Option Flag | Description               | Example                                                                          |
