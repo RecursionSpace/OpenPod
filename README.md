@@ -8,9 +8,9 @@
 &nbsp;
 [![Script Check](https://github.com/RecursionSpace/OpenPod/actions/workflows/ShellCheck.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/ShellCheck.yml)
 &nbsp;
-[![Recursion.Space Tests](https://github.com/RecursionSpace/OpenPod/actions/workflows/RecursionTests.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/RecursionTests.yml)
+[![CI | Build & Test](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Tests.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_Tests.yml)
 &nbsp;
-[![Test Installer](https://github.com/RecursionSpace/OpenPod/actions/workflows/TestInstaller.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/TestInstaller.yml)
+[![CI | Installer](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_TestInstaller.yml/badge.svg)](https://github.com/RecursionSpace/OpenPod/actions/workflows/CI_TestInstaller.yml)
 
 </div>
 

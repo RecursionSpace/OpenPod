@@ -1,4 +1,4 @@
-name: End To End Integration
+name: CI | E2E Integration
 
 on:
   push:
@@ -29,16 +29,18 @@ jobs:
           sudo apt-get update -y && sudo apt-get upgrade -y
           sudo apt install software-properties-common -y
           sudo add-apt-repository ppa:deadsnakes/ppa
-          sudo apt install python3.10 -y
-          cd /opt
+          sudo apt install python3.11 -y
+          cd /opt/
 
-          git clone --single-branch --branch master git@github.com:RecursionSpace/RecursionSpace.git
+          git clone --single-branch --branch release git@github.com:RecursionSpace/RecursionSpace.git
 
-          sudo apt-get install python3.10-venv -y
-          sudo python3.10 -m venv /opt/RecursionSpace/env
+          sudo apt-get install python3.11-venv -y
+          sudo python3.11 -m venv /opt/RecursionSpace/env
           source /opt/RecursionSpace/env/bin/activate
-          /opt/RecursionSpace/env/bin/python3.10 -m pip install --upgrade pip
+
+          /opt/RecursionSpace/env/bin/python3.11 -m pip install --upgrade pip
 
           sudo pip install --no-input -U -r /opt/RecursionSpace/requirements.txt --no-cache-dir
+          sudo pip install Django
 
           sudo python /opt/RecursionSpace/manage.py migrate --noinput
