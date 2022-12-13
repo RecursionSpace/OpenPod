@@ -121,7 +121,7 @@ Communication to Pods is accomplished from quick commands represented by a hexad
 
 # Updates
 
-The end-user triggers updates via the webserver to run them with minimal interruption. An MQTT message is sent to the Pod to initiate the updating process. The update is a zip file downloaded from the server.
+The end-user triggers updates via the web server to run them with minimal interruption. An MQTT message is sent to the Pod to initiate the updating process. The update is a zip file downloaded from the server.
 
 Download zip file from server and store in the update folder.
 Unzip contents of a zip file
@@ -143,7 +143,6 @@ The Recursion System uses several logging points to be used both for troubleshoo
 **System.Snapshot** file contains a JSON summary of the Pod for debugging purposes. The information available in this file must also be readily accessible from the server for troubleshooting purposes.
 
 ```json
-
 [
  “local_ip” = “xx.xx.xx.xx”,
 ]

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Installer for OpenPod, for more information see https://github.com/blokbot-io/OpenBlok/blob/master/install.sh
+
 # ---------------------------------------------------------------------------- #
 #                                     Help                                     #
 # ---------------------------------------------------------------------------- #
@@ -37,27 +39,50 @@ while getopts ":hud" flags; do
   esac
 done
 
+# -------------------------------- Verify Root ------------------------------- #
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root with sudo."
+  exit
+fi
 
 # ---------------------------------------------------------------------------- #
-#                                   Installer                                  #
+#                                 Dependencies                                 #
 # ---------------------------------------------------------------------------- #
-
-# ---------------------- Update Package List and Upgrade --------------------- #
-sudo apt-get update -y && sudo apt-get upgrade -y
 
 # ---------------------------- Update System Time ---------------------------- #
 sudo timedatectl set-timezone UTC
 sudo apt-get install chrony -y
 sudo chronyd -q
 
-# ------------------------- Install Bash Requirements ------------------------ #
-sudo apt-get install jq -y
-sudo apt-get install unzip -y
+# ----------------------------------- unzip ---------------------------------- #
+REQUIRED_PKG="unzip"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+if [ "" = "$PKG_OK" ]; then
+    echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
+    sudo apt-get install unzip -y
+else
+    echo "unzip already installed, skipping..."
+fi
 
-# ---------------------------- Install Python 3.10 --------------------------- #
-sudo apt install software-properties-common -y
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt install python3.10 -y
+# ------------------------------------ jq ------------------------------------ #
+REQUIRED_PKG="jq"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+if [ "" = "$PKG_OK" ]; then
+    echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
+    sudo apt-get install jq -y
+else
+    echo "jq already installed, skipping..."
+fi
+
+# -------------------------------- Python 3.11 ------------------------------- #
+pytohn_version=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
+if [ "$pytohn_version" != "3.11" ]; then
+    sudo apt install software-properties-common -y
+    yes '' | sudo add-apt-repository ppa:deadsnakes/ppa
+    sudo apt-get install python3.1 -y
+else
+    echo "Python 3.11 already installed"
+fi
 
 # ------------------------------- Clone OpenPod ------------------------------ #
 set -e # Exit when any command fails.
@@ -66,8 +91,8 @@ cd /opt
 sudo git clone --single-branch --branch release https://github.com/RecursionSpace/OpenPod.git
 
 # ----------------------------- Setup Enviroment ----------------------------- #
-sudo apt-get install python3.10-venv -y
-sudo python3.10 -m venv /opt/OpenPod/env
+sudo apt-get install python3.11-venv -y
+sudo python3.11 -m venv /opt/OpenPod/env
 source /opt/OpenPod/env/bin/activate
 sudo pip install --no-input -U -r /opt/OpenPod/requirements.txt --no-cache-dir --no-dependencies
 
@@ -107,7 +132,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/opt/OpenPod
-ExecStart=/opt/OpenPod/env/bin/python3.10 /opt/OpenPod/OpenPod.py
+ExecStart=/opt/OpenPod/env/bin/python3.11 /opt/OpenPod/OpenPod.py
 Restart=always
 RestartSec=10
 
