@@ -1,4 +1,4 @@
-name: Script Check
+name: CI | Script Check
 
 on:
   push:

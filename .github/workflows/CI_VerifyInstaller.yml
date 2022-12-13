@@ -1,4 +1,4 @@
-name: Verify Bash Installer
+name: CI | Verify Bash Installer
 
 on:
   push:
