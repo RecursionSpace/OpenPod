@@ -26,6 +26,7 @@
 - [Updates](#updates)
 - [Logging](#logging)
   - [Directory Structure](#directory-structure)
+- [Community and Contributing](#community-and-contributing)
 
 ## What is OpenPod?
 
@@ -157,3 +158,13 @@ The Recursion System uses several logging points to be used both for troubleshoo
 └── openpod             # Contains OpenPod functionality.
     └── modules         # Independent core functions.
 ```
+
+# Community and Contributing
+
+OpenPod is developed by [Recursion.Space](https://recursion.space/) and by users like you. We welcome both pull requests and issues on [GitHub](https://github.com/RecursionSpace/OpenPod). Bug fixes and new protocols are encouraged.
+
+<div align="center">
+
+<a target="_blank" href="https://discord.com/invite/KnFp4jd9AV">![Discord Banner 2](https://discordapp.com/api/guilds/790311269420630079/widget.png?style=banner2)</a>
+
+</div>
