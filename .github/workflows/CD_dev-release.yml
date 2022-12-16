@@ -1,52 +1,51 @@
+name: CD | Dev Release
+
 # Performs the task of merging from master to the dev-release branch.
 # Pings the server to pull an update once the dev-release branch has been merged.
 
-name: CD | Dev Release
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
   workflow_dispatch:
 
 jobs:
-
   merge:
     name: Merge To dev-release
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Wait on check
-      uses: fountainhead/action-wait-for-check@v1.1.0
-      id: wait-for-build
+      - name: Wait on check
+        uses: fountainhead/action-wait-for-check@v1.1.0
+        id: wait-for-build
 
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        checkName: build
-        ref: ${{ github.event.pull_request.head.sha || github.sha }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: build
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-    - name: Create Pull Request
+      - name: Create Pull Request
 
-      if: steps.wait-for-build.outputs.conclusion == 'success'
-      uses: repo-sync/pull-request@v2
-      with:
-        destination_branch: "dev-release"
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.wait-for-build.outputs.conclusion == 'success'
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "dev-release"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Merge master -> dev-release
 
-    - name: Merge master -> dev-release
+        if: steps.wait-for-build.outputs.conclusion == 'success'
+        uses: devmasx/merge-branch@1.4.0
+        with:
+          type: now
+          target_branch: dev-release
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      if: steps.wait-for-build.outputs.conclusion == 'success'
-      uses: devmasx/merge-branch@1.4.0
-      with:
-        type: now
-        target_branch: dev-release
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Webhook
-      if: steps.wait-for-build.outputs.conclusion == 'success'
-      uses: distributhor/workflow-webhook@v3
-      env:
-        webhook_url: "https://dev.recursion.space/webhooks/github/"
-        webhook_secret: "Y0uR5ecr3t"
+      - name: Webhook
+        if: steps.wait-for-build.outputs.conclusion == 'success'
+        uses: distributhor/workflow-webhook@v3
+        env:
+          webhook_url: "https://dev.recursion.space/webhooks/github/"
+          webhook_secret: "Y0uR5ecr3t"
