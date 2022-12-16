@@ -40,7 +40,7 @@ while getopts ":hud" flags; do
 done
 
 if [ $DEBUG -eq 1 ]; then
-    URL='recursion.space'
+    URL='dev.recursion.space'
 elif [ $DEBUG -eq 0 ]; then
     URL='recursion.space'
 fi
