@@ -113,6 +113,7 @@ set -e # Exit when any command fails.
 sudo mkdir -p /opt
 cd /opt
 sudo git clone --single-branch --branch release https://github.com/RecursionSpace/OpenPod.git
+cd OpenPod
 
 # ----------------------------- Setup Enviroment ----------------------------- #
 sudo apt-get install python3.11-venv -y
@@ -136,13 +137,14 @@ sudo touch /opt/OpenPod/data/permissions.json
 sudo touch /opt/OpenPod/system.json
 serial_uuid=$(cat /proc/sys/kernel/random/uuid)
 xbee_uuid=$(cat /proc/sys/kernel/random/uuid)
+openpod_version=$(git rev-parse HEAD)
 echo '{
     "serial": '"'$serial_uuid'"',
     "timezone": "UTC",
     "XBEE_KY": '"'$xbee_uuid'"',
     "XBEE_OP": "0",
     "url": '"'$URL'"',
-    "version": "0_0_1",
+    "version": '"'$openpod_version'"',
     "debug": '"'$DEBUG'"'
 }' > /opt/OpenPod/system.json
 
