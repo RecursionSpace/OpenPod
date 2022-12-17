@@ -51,18 +51,6 @@ if settings.Pi:
 
 
 # ---------------------------------------------------------------------------- #
-#                           Check Network Connection                           #
-# ---------------------------------------------------------------------------- #
-try:
-    rec_lan.monitor_network()  # Monitors the network connection while the program is running.
-
-except RuntimeError as err:
-    exception_log.error("FATAL - Start Network Monitoring - Error: %s", err)
-
-finally:
-    exception_log.debug("Launcher - Exiting Check Network Connection")
-
-# ---------------------------------------------------------------------------- #
 #                         Update version in system.json                        #
 # ---------------------------------------------------------------------------- #
 # Only updates if called by bash script and environmental variable was passed in.
@@ -83,7 +71,7 @@ try:
     rec_log.snapshot(public, local)
 
 except RuntimeError as err:
-    exception_log.error("FAITIAL - Generate Snapshot - Error: %s", err)
+    exception_log.error("FATAL - Generate Snapshot - Error: %s", err)
 
 finally:
     exception_log.debug("Launcher - Exiting Settings for Debugging")

@@ -10,11 +10,9 @@ import requests
 
 import settings
 
+from modules import op_gpio
 from modules.rec_log import log_api, hash_data
 
-if settings.IS_PI:
-    from modules import rec_gpio
-    from settings import LED_IO
 
 # Performs all API calls to the server, functions should be used as a thread.
 
@@ -129,7 +127,7 @@ def register_hub():  # Needs updated!
 # ---------------------------------------------------------------------------- #
 def link_hub():
     '''
-    Assosiate the hub with a space.
+    Associate the Pod with a space.
     '''
     try:
         with open("system.json", "r+", encoding="utf-8") as file:
@@ -146,8 +144,8 @@ def link_hub():
             json.dump(system_data, file)
             file.truncate()
 
-            if settings.IS_PI:
-                rec_gpio.state(LED_IO, 1)
+            op_gpio.ready()
+
     except OSError as err:
         log_api.error("link_hub - Unable to open file system.json - %s", err)
 

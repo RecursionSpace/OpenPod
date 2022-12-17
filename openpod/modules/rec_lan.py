@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-Handles all netwrork related activities for the hub.
+Handles all network related activities for the hub.
 DOES NOT PERFORM KEEPALIVE - SEE rec_api
 '''
 
@@ -10,10 +10,8 @@ import requests
 
 import settings
 
+from modules import op_gpio
 from modules.rec_log import network_log
-
-if settings.IS_PI:
-    from modules import rec_gpio
 
 
 # ------------ Triggers visual indicators based on network status. ----------- #
@@ -21,7 +19,7 @@ def monitor_network(last_network_status=5, thread_delay=30.0):
     '''
     Threaded: Yes
     Checks network connection, then updates visual indicators.
-    Thread delay is extended to up 600 seconds if error occurs. Resets to 10 seconds on sucess.
+    Thread delay is extended to up 600 seconds if error occurs. Resets to 10 seconds on success.
     '''
     try:
         current_network_status = test_network()
@@ -33,16 +31,16 @@ def monitor_network(last_network_status=5, thread_delay=30.0):
 
         if settings.IS_PI:
             if network_status == 0:
-                rec_gpio.state(settings.LED_STAT, .125, .125)
+                op_gpio.no_network()
 
             if network_status == 1:
-                rec_gpio.state(settings.LED_STAT, .25, .25)
+                op_gpio.no_internet()
 
             if network_status == 2:
-                rec_gpio.state(settings.LED_STAT, 1, 1)
+                op_gpio.no_recursion()
 
             if network_status == 3:
-                rec_gpio.state(settings.LED_STAT, 0, 0)
+                op_gpio.networked()
 
         thread_delay = 10
 
@@ -81,7 +79,7 @@ def test_network():
     if networked() is False:
         return 0
 
-    # Recived a IP address that is not 127.0.0.1, but was unable to access the internet.
+    # Received a IP address that is not 127.0.0.1, but was unable to access the internet.
     if internet_on() is False:
         network_log.warning('LAN Check Fail')
         return 1

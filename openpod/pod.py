@@ -16,15 +16,27 @@ from pubsub import pub
 
 import settings
 
-from modules import rec_log, rec_mqtt, rec_xbee, rec_api
-from modules.rec_log import exception_log, zip_send
+from .modules import op_gpio, rec_log, rec_mqtt, rec_xbee, rec_api, rec_lan
+from .modules.rec_log import exception_log, zip_send
 
-if settings.Pi:
-    try:
-        from modules import rec_gpio
-        rec_gpio.state(settings.LED_IO, 1, 0)
-    except ModuleNotFoundError as err:
-        exception_log.error("%s", err)
+# --------------------------- Visualization Threads --------------------------- #
+threading.Thread(target=op_gpio.led_stat_thread).start()
+threading.Thread(target=op_gpio.led_io_thread).start()
+
+op_gpio.initializing()
+
+
+# ---------------------------------------------------------------------------- #
+#                           Check Network Connection                           #
+# ---------------------------------------------------------------------------- #
+try:
+    rec_lan.monitor_network()  # Monitors the network connection while the program is running.
+
+except RuntimeError as err:
+    exception_log.error("FATAL - Start Network Monitoring - Error: %s", err)
+
+finally:
+    exception_log.debug("Launcher - Exiting Check Network Connection")
 
 
 # Not sure if the next section is required.
@@ -92,10 +104,6 @@ rec_api.keepalive()
 MQTTlisten = threading.Thread(target=rec_mqtt.mqtt_rx)
 MQTTlisten.start()
 
-if settings.Pi:
-    led_io_thread = threading.Thread(target=rec_gpio.led_io_thread)
-    led_io_thread.start()
-
 
 # Only pull info if hub has already been paired with a facility.
 try:
@@ -105,12 +113,11 @@ try:
         rec_api.update_time_zone()
     else:
         rec_log.publog("info", "Facility connection not found, no data to pull.")
-        if settings.Pi:
-            rec_gpio.state(settings.LED_IO, 1, 1)       # Slow blink ready to pair to a facility.
+        op_gpio.unregistered()  # Slow blink ready to pair to a facility.
 
     zip_send()  # Send latest log files on boot.
 except Exception as err:                                # pylint: disable=W0703
-    rec_log.publog("error", f"Error occured when pulling data: {err}")
+    rec_log.publog("error", f"Error occurred when pulling data: {err}")
 
 
 rec_log.publog("info", "Recursion system has successfully initiated.")
@@ -120,8 +127,8 @@ def process_xbee_data():
     '''
     Triggered when there is available XBee data.
     '''
-    xbee_frame_info = rec_xbee.receive()  # Reads in recived XBee data.
-    rec_gpio.state(settings.LED_IO, 1)
+    xbee_frame_info = rec_xbee.receive()  # Reads in received XBee data.
+    op_gpio.ready()  # Pod is ready.
     if xbee_frame_info[2] == 0:
         rec_xbee.transmit(xbee_frame_info[0], "30")
     elif xbee_frame_info[2] == 1:
@@ -138,7 +145,7 @@ def process_xbee_data():
 # https://stackoverflow.com/questions/17553543/pyserial-non-blocking-read-loop
 while True:
     if config.XBEE_FLAG:
-        rec_gpio.state(settings.LED_IO, .125, .125)  # Indicate incoming XBee data.
+        op_gpio.incoming_data()  # Pod is receiving XBee data.
         DataProcessing = threading.Thread(target=process_xbee_data)
         DataProcessing.start()
         sleep(.05)
