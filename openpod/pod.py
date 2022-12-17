@@ -63,7 +63,7 @@ begin_xbee.start()
 
 # Register HUB with Recursion
 if not op_config.get('pod_id', False):
-    rec_api.register_hub()
+    rec_api.register_pod()
 
 
 # ------------------------------- TEMP SOLUTION ------------------------------ #

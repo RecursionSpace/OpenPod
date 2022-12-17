@@ -98,16 +98,16 @@ def update_time_zone():
 # ---------------------------------------------------------------------------- #
 #                          Register Hub With Recursion                         #
 # ---------------------------------------------------------------------------- #
-def register_hub():  # Needs updated!
+def register_pod():  # Needs updated!
     '''
-    API to register the hub.
+    API to register the pod.
     '''
     url = f'https://{op_config.get("url")}/hubs/'
     payload_tuples = {'serial': f"{op_config.get('serial')}"}
     output = requests.post(url, payload_tuples, auth=('OwnerA', 'Password@1'), timeout=10)
     responce = output.json()
 
-    log_api.info(f"Hub registration responce: {responce}")
+    log_api.info(f"Pod registration responce: {responce}")
 
     op_config.set_value("pod_id", responce["id"])
     log_api.info(f'Pod registered and assigned pod_id: {responce["id"]}')
