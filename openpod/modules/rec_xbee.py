@@ -6,12 +6,10 @@ Recursion.Space - XBee Module
 import json
 import binascii
 import time
-# import threading
+
 from time import sleep
 import serial
 from pubsub import pub
-
-import settings
 
 from modules import rec_lookup, rec_api
 from modules.rec_log import log_xbee

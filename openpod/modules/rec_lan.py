@@ -153,8 +153,7 @@ def get_ip():
     '''
     if internet_on() is True:
         try:
-            public_ip = requests.get('https://api.ipify.org', verify=False, timeout=10)
-            public_ip = public_ip.content.decode('utf8')
+            public_ip = requests.get('https://api.ipify.org', verify=False, timeout=10).text
 
         except requests.exceptions.RequestException as err:
             public_ip = f'Failed to get public IP with error: {err}'

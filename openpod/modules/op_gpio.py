@@ -13,7 +13,6 @@ try:
     from RPi import GPIO
     GPIO_AVAILABLE = True
 except (RuntimeError, ModuleNotFoundError):
-    print("NOTICE | This device is probably not a Raspberry Pi.")
     GPIO_AVAILABLE = False
 
 try:
