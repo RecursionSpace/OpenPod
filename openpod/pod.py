@@ -7,7 +7,6 @@ Phone: 240-342-6671
 
 import sys
 import os.path  # Allows modules to access from directory above.
-import json
 import threading
 from time import sleep
 import config
