@@ -38,6 +38,8 @@ while getopts ":hud" flags; do
     h) # display Help
          Help
          exit;;
+    b) # Custom branch
+        branch="${OPTARG}";;
     d) # Enable debug mode
         DEBUG=1 ;;
     u) # Custom URL endpoint
@@ -73,6 +75,17 @@ sudo timedatectl set-timezone UTC
 # ---------------------------------------------------------------------------- #
 #                                 Dependencies                                 #
 # ---------------------------------------------------------------------------- #
+
+# ------------------------------ build-essential ----------------------------- #
+# Required to install RPi.GPIO - https://github.com/ynsta/steamcontroller/issues/42
+REQUIRED_PKG="build-essential"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+if [ "" = "$PKG_OK" ]; then
+    echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
+    sudo apt-get install build-essential -y
+else
+    echo "build-essential already installed, skipping..."
+fi
 
 # ---------------------------------- chrony ---------------------------------- #
 REQUIRED_PKG="chrony"

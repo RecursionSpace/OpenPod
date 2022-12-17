@@ -46,7 +46,7 @@ sudo wget -qO- https://openpod.recursion.space | bash /dev/stdin [options] [argu
 |:-----------:|---------------------------|------------------------------------------------------------------------------------|
 |     -h      | Help                      | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -h                       |
 |     -d      | Enable Debug Installation | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -d                       |
-|     -b      | Alternative Branch        | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -b dev                   |
+|     -b      | Alternative Branch        | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -b dev-release           |
 |     -u      | Set Custom URL endpoint   | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -u stage.recursion.space |
 
 \*No supported arguments are currently supported.
