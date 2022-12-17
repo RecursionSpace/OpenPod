@@ -103,7 +103,10 @@ def register_pod():  # Needs updated!
     API to register the pod.
     '''
     url = f'https://{op_config.get("url")}/hubs/'
-    payload_tuples = {'serial': f"{op_config.get('serial')}"}
+    payload_tuples = {
+        'uuid': f"{op_config.get('uuid')}",
+        'serial': f"{op_config.get('serial')}"
+    }
     output = requests.post(url, payload_tuples, auth=('OwnerA', 'Password@1'), timeout=10)
     responce = output.json()
 

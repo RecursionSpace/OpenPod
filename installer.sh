@@ -187,11 +187,13 @@ sudo touch /opt/OpenPod/data/permissions.json
 # -------------------------------- system.json ------------------------------- #
 sudo touch /opt/OpenPod/system.json
 serial_uuid=$(cat /proc/sys/kernel/random/uuid)
+serial=${serial_uuid//-}
 xbee_uuid=$(cat /proc/sys/kernel/random/uuid)
 openpod_version=$(git rev-parse HEAD)
 echo '{
+    "uuid": "'"$serial_uuid"'",
     "debug": '$DEBUG',
-    "serial": "'"$serial_uuid"'",
+    "serial": "'"$serial"'",
     "timezone": "UTC",
     "url": "'"$URL"'",
     "api_url": "'"$API_URL"'",
