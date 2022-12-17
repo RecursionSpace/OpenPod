@@ -169,7 +169,7 @@ cd OpenPod
 # ----------------------------- Setup Enviroment ----------------------------- #
 sudo python3.11 -m venv /opt/OpenPod/env
 source /opt/OpenPod/env/bin/activate
-pip install --no-input -U -r /opt/OpenPod/requirements.txt --no-cache-dir --no-dependencies
+pip install --no-input -U -r /opt/OpenPod/requirements.txt
 
 # ---------------------------- Create Directories ---------------------------- #
 sudo mkdir -p /opt/OpenPod/logs

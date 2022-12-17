@@ -10,4 +10,3 @@ pytz==2022.6
 requests==2.28.1
 RPi.GPIO==0.7.1
 simplejson==3.18.0
-urllib3==1.26.13
