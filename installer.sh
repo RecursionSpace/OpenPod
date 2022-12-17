@@ -27,7 +27,7 @@ Help()
 # ---------------------------------------------------------------------------- #
 #                                   Defaults                                   #
 # ---------------------------------------------------------------------------- #
-DEBUG=0 # -d
+DEBUG=flase # -d
 
 
 # ---------------------------------------------------------------------------- #
@@ -41,7 +41,7 @@ while getopts ":hud" flags; do
     b) # Custom branch
         branch="${OPTARG}";;
     d) # Enable debug mode
-        DEBUG=1 ;;
+        DEBUG=true ;;
     u) # Custom URL endpoint
          URL="${OPTARG}";;
     \?) echo "Invalid option: -${OPTARG}" >&2;
@@ -49,10 +49,10 @@ while getopts ":hud" flags; do
   esac
 done
 
-if [ $DEBUG -eq 1 ]; then
+if [ $DEBUG ]; then
     branch='dev-release'
     URL='dev.recursion.space'
-elif [ $DEBUG -eq 0 ]; then
+elif [ ! $DEBUG ]; then
     branch='release'
     URL='recursion.space'
 fi
@@ -129,13 +129,13 @@ else
 fi
 
 # -------------------------------- Python-Dev -------------------------------- #
-REQUIRED_PKG="python3-dev"
+REQUIRED_PKG="python3.11-dev"
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
 if [ "" = "$PKG_OK" ]; then
     echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
-    sudo apt-get install python3-dev -y
+    sudo apt-get install python3.11-dev -y
 else
-    echo "python3-dev already installed, skipping..."
+    echo "python3.11-dev already installed, skipping..."
 fi
 
 # ------------------------ Python Virtual Environment ------------------------ #
@@ -185,13 +185,13 @@ serial_uuid=$(cat /proc/sys/kernel/random/uuid)
 xbee_uuid=$(cat /proc/sys/kernel/random/uuid)
 openpod_version=$(git rev-parse HEAD)
 echo '{
-    "serial": '"'$serial_uuid'"',
+    "serial": "$serial_uuid",
     "timezone": "UTC",
     "XBEE_KY": '"'$xbee_uuid'"',
     "XBEE_OP": "0",
     "url": '"'$URL'"',
     "version": '"'$openpod_version'"',
-    "debug": '"'$DEBUG'"'
+    "debug": $DEBUG
 }' > /opt/OpenPod/system.json
 
 # --------------------------- Setup OpenPod Service -------------------------- #

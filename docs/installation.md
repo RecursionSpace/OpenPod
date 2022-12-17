@@ -1,4 +1,7 @@
-# Initialization
+## Installer
+
+
+## Initialization
 
 Pod uses an initializer or “launcher” to configure the system before running the main code. The launcher performs the following tasks before running the main program:
 
@@ -16,5 +19,3 @@ To launch the software, when the device boots, the launcher configures the syste
 ```bash
 (@reboot (cd /home/ubuntu/RecursionHub &&  sudo python3 HUB_Launcher.py &))
 ```
-
-## Installer
