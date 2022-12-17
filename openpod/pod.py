@@ -14,8 +14,6 @@ import config
 import requests
 from pubsub import pub
 
-import settings
-
 from modules import op_config, op_gpio, rec_log, rec_mqtt, rec_xbee, rec_api, rec_lan
 from modules.rec_log import exception_log, zip_send
 
@@ -70,7 +68,7 @@ if not op_config.get('pod_id', False):
 
 # ------------------------------- TEMP SOLUTION ------------------------------ #
 try:
-    URL = f'{settings.RecursionURL}/obtaintoken/{op_config.get("serial")}/'
+    URL = f'https://{op_config.get("url")}/obtaintoken/{op_config.get("serial")}/'
     r = requests.get(URL, timeout=10)
 
     if r.status_code == 201:
@@ -85,12 +83,8 @@ except Exception as err:                                # pylint: disable=W0703
     print(err)
 # ------------------------------- TEMP SOLUTION ------------------------------ #
 
-if settings.DEBUG:
+if op_config.get('debug', False):
     rec_log.publog("debug", "*** DEBUG Enabled ***")
-if settings.Pi:
-    rec_log.publog("debug", "*** PI TRUE ***")
-if not settings.Pi:
-    rec_log.publog("debug", "*** PI FALSE ***")
 
 rec_log.publog("info", f"Version: {Version}")
 

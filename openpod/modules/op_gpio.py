@@ -4,7 +4,6 @@
 Module manages raspberry pi gpio functionality.
 '''
 
-import json
 from time import sleep
 
 import config
