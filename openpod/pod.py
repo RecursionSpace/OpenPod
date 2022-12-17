@@ -16,8 +16,8 @@ from pubsub import pub
 
 import settings
 
-from .modules import op_gpio, rec_log, rec_mqtt, rec_xbee, rec_api, rec_lan
-from .modules.rec_log import exception_log, zip_send
+from modules import op_gpio, rec_log, rec_mqtt, rec_xbee, rec_api, rec_lan
+from modules.rec_log import exception_log, zip_send
 
 # --------------------------- Visualization Threads --------------------------- #
 threading.Thread(target=op_gpio.led_stat_thread).start()

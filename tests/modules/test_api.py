@@ -63,41 +63,45 @@ class TestAPI(unittest.TestCase):
             }""")
 
         testreturn = [{
-                "cardNumber": "3132323637373936",
-                "access_group": 7,
-                "phone_number": "2403426671",
-                "address": "123 America Ln",
-                "city": "USA City",
-                "state": "PA",
-                "zip_code": " 1234567",
-                "username": "GenericMember2",
-                "first_name": "Gener",
-                "last_name": "Mem",
-                "email": "member@email.com",
-                "restricted_nodes": []
-            }, {
-                "cardNumber": "33",
-                "access_group": 5,
-                "phone_number": "2403426671",
-                "address": "",
-                "city": "",
-                "state": "",
-                "zip_code": "",
-                "username": "GenericMember3",
-                "first_name": "Generic",
-                "last_name": "Member3",
-                "email": "generic@email.com",
-                "restricted_nodes": ["123", "shdfhethetbe"]
-            }]
+            "cardNumber": "3132323637373936",
+            "access_group": 7,
+            "phone_number": "2403426671",
+            "address": "123 America Ln",
+            "city": "USA City",
+            "state": "PA",
+            "zip_code": " 1234567",
+            "username": "GenericMember2",
+            "first_name": "Gener",
+            "last_name": "Mem",
+            "email": "member@email.com",
+            "restricted_nodes": []
+        }, {
+            "cardNumber": "33",
+            "access_group": 5,
+            "phone_number": "2403426671",
+            "address": "",
+            "city": "",
+            "state": "",
+            "zip_code": "",
+            "username": "GenericMember3",
+            "first_name": "Generic",
+            "last_name": "Member3",
+            "email": "generic@email.com",
+            "restricted_nodes": ["123", "shdfhethetbe"]
+        }]
 
-        with patch('modules.rec_api.open') as mock_open:
-            mock_open.side_effect  = [system_json, testdata2, testdata3, testdata4, testdata5]
+        with patch('modules.op_gpio.open') as mock_system:
+            mock_system.side_effect = [system_json]
 
-            with patch("modules.rec_api.requests.get") as mocked_requests:
-                mocked_requests.return_value.json.return_value = testreturn
-                self.assertTrue(rec_api.pull_data_dump())
-                mock_open.assert_called()
-                mocked_requests.assert_called()
+            with patch('modules.rec_api.open') as mock_open:
+                mock_open.side_effect = [system_json, testdata2, testdata3, testdata4, testdata5]
+
+                with patch("modules.rec_api.requests.get") as mocked_requests:
+                    mocked_requests.return_value.json.return_value = testreturn
+                    self.assertTrue(rec_api.pull_data_dump())
+                    mock_open.assert_called()
+                    mocked_requests.assert_called()
+
 
 if __name__ == '__main__':
     unittest.main()
