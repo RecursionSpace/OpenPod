@@ -40,7 +40,7 @@ OpenPod is designed to communicate with hardware over a local mesh network using
 For convenience, an installation script as been provided that will download OpenPod and make the necessary system changes to get OpenPod running. This script can be run from the command line using the following command:
 
 ```bash
-sudo wget -qO- openpod.recursion.space | bash /dev/stdin [options] [arguments]
+sudo wget -qO- https://openpod.recursion.space | bash /dev/stdin [options] [arguments]
 ```
 
 | Option Flag | Description               | Example                                                                            |

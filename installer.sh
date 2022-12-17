@@ -2,6 +2,14 @@
 
 # Installer for OpenPod, for more information see https://github.com/blokbot-io/OpenBlok/blob/master/install.sh
 
+
+# ---------------------------------------------------------------------------- #
+#                                Disable Prompts                               #
+# ---------------------------------------------------------------------------- #
+export DEBIAN_FRONTEND=noninteractive
+sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
+
+
 # ---------------------------------------------------------------------------- #
 #                                     Help                                     #
 # ---------------------------------------------------------------------------- #
@@ -99,14 +107,27 @@ pytohn_version=$(python3 -c 'import sys; print(".".join(map(str, sys.version_inf
 if [ "$pytohn_version" != "3.11" ]; then
     sudo apt install software-properties-common -y
     yes '' | sudo add-apt-repository ppa:deadsnakes/ppa
-    sudo apt-get install python3.1 -y
+    sudo apt-get install python3.11 -y
 else
     echo "Python 3.11 already installed"
+fi
+
+# ------------------------ Python Virtual Environment ------------------------ #
+REQUIRED_PKG="python3.11-venv"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+if [ "" = "$PKG_OK" ]; then
+    echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
+    sudo apt-get install python3.11-venv -y
+else
+    echo "python3.11-venv already installed, skipping..."
 fi
 
 # ---------------------------------------------------------------------------- #
 #                                    OpenPod                                   #
 # ---------------------------------------------------------------------------- #
+
+# -------------------------- Clear Previous Install -------------------------- #
+sudo rm -rf /opt/OpenPod
 
 # ------------------------------- Clone OpenPod ------------------------------ #
 set -e # Exit when any command fails.
@@ -116,7 +137,6 @@ sudo git clone --single-branch --branch release https://github.com/RecursionSpac
 cd OpenPod
 
 # ----------------------------- Setup Enviroment ----------------------------- #
-sudo apt-get install python3.11-venv -y
 sudo python3.11 -m venv /opt/OpenPod/env
 source /opt/OpenPod/env/bin/activate
 sudo pip install --no-input -U -r /opt/OpenPod/requirements.txt --no-cache-dir --no-dependencies
