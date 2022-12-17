@@ -52,9 +52,11 @@ done
 if [ $DEBUG ]; then
     branch='dev-release'
     URL='dev.recursion.space'
+    API_URL='dev.api.recursion.space'
 elif [ ! $DEBUG ]; then
     branch='release'
     URL='recursion.space'
+    API_URL='api.recursion.space'
 fi
 
 echo "Installing OpenPod with the following options:"
@@ -185,13 +187,14 @@ serial_uuid=$(cat /proc/sys/kernel/random/uuid)
 xbee_uuid=$(cat /proc/sys/kernel/random/uuid)
 openpod_version=$(git rev-parse HEAD)
 echo '{
-    "serial": "$serial_uuid",
+    "serial": "'$serial_uuid'",
     "timezone": "UTC",
     "XBEE_KY": '"'$xbee_uuid'"',
     "XBEE_OP": "0",
     "url": '"'$URL'"',
+    "api_url": "'$API_URL'",
     "version": '"'$openpod_version'"',
-    "debug": $DEBUG
+    "debug": '$DEBUG'
 }' > /opt/OpenPod/system.json
 
 # --------------------------- Setup OpenPod Service -------------------------- #
