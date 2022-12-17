@@ -16,10 +16,14 @@ except (RuntimeError, ModuleNotFoundError):
     print("NOTICE | This device is probably not a Raspberry Pi.")
     GPIO_AVAILABLE = False
 
-with open('/opt/OpenPod/system.json', 'r', encoding="UTF-8") as system_file:
-    system = json.load(system_file)
-LED_IO = system['GPIO']['LED_IO']
-LED_STAT = system['GPIO']['LED_STAT']
+try:
+    with open('/opt/OpenPod/system.json', 'r', encoding="UTF-8") as system_file:
+        system = json.load(system_file)
+    LED_IO = system['GPIO']['LED_IO']
+    LED_STAT = system['GPIO']['LED_STAT']
+except FileNotFoundError:
+    LED_IO = 0
+    LED_STAT = 0
 
 
 if GPIO_AVAILABLE:
