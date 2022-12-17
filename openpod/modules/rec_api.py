@@ -8,9 +8,7 @@ import json
 import threading
 import requests
 
-import settings
-
-from modules import op_gpio
+from modules import op_config, op_gpio
 from modules.rec_log import log_api, hash_data
 
 
@@ -30,7 +28,7 @@ def pull_data_dump():
 
     # ----------------------------- Pull Member Data ----------------------------- #
     with open("/opt/RecursionHub/data/dump.json", "w", encoding="utf-8") as file:
-        member_info = requests.get(f'{settings.RECURSION_API_URL}/v1/members', headers={
+        member_info = requests.get(f'https://{op_config.get("api_url")}/v1/members', headers={
             'Authorization': f'Token {system_data["Token"]}'
         }, timeout=10)
 
@@ -39,7 +37,7 @@ def pull_data_dump():
 
     # --------------------------- Pull Operator(s) Data -------------------------- #
     with open("/opt/RecursionHub/data/owners.json", "w", encoding="utf-8") as file:
-        operators_info = requests.get(f'{settings.RECURSION_API_URL}/v1/operators', headers={
+        operators_info = requests.get(f'https://{op_config.get("api_url")}/v1/operators', headers={
             'Authorization': f'Token {system_data["Token"]}'
         }, timeout=10)
 
@@ -49,7 +47,7 @@ def pull_data_dump():
     # -------------------------------- Nodes Data -------------------------------- #
     with open("/opt/RecursionHub/data/nodes.json", "w", encoding="utf-8") as file:
         nodes_info = requests.get(
-            f'{settings.RECURSION_API_URL}/v1/nodes',
+            f'https://{op_config.get("api_url")}/v1/nodes',
             headers={'Authorization': f'Token {system_data["Token"]}'},
             timeout=10
         )
@@ -60,7 +58,7 @@ def pull_data_dump():
     # ----------------------------- Pull Permissions ----------------------------- #
     with open("/opt/RecursionHub/data/permissions.json", "w", encoding="utf-8") as file:
         permissions_info = requests.get(
-            f'{settings.RECURSION_API_URL}/v1/permissions',
+            f'https://{op_config.get("api_url")}/v1/permissions',
             headers={'Authorization': f'Token {system_data["Token"]}'},
             timeout=10
         )
@@ -82,7 +80,7 @@ def update_time_zone():
     with open("system.json", "r+", encoding="utf-8") as file:
         system_data = json.load(file)
         spaces_info = requests.get(
-            f'{settings.RECURSION_API_URL}/v1/spaces',
+            f'https://{op_config.get("api_url")}/v1/spaces',
             headers={'Authorization': f'Token {system_data["Token"]}'},
             timeout=10
         )
@@ -107,7 +105,7 @@ def register_hub():  # Needs updated!
     with open('system.json', 'r', encoding="utf-8") as system_file:
         system_config = json.load(system_file)
 
-    url = settings.RecursionURL+'/hubs/'
+    url = f'https://{op_config.get("url")}/hubs/'
     payload_tuples = {'serial': f"{system_config['serial']}"}
     output = requests.post(url, payload_tuples, auth=('OwnerA', 'Password@1'), timeout=10)
     responce = output.json()
@@ -133,7 +131,7 @@ def link_hub():
         with open("system.json", "r+", encoding="utf-8") as file:
             system_data = json.load(file)
 
-            hubs_info = requests.get(f'{settings.RECURSION_API_URL}/v1/hubs', headers={
+            hubs_info = requests.get(f'https://{op_config.get("api_url")}/v1/hubs', headers={
                 'Authorization': f'Token {system_data["Token"]}'
             }, timeout=10)
 
@@ -168,7 +166,7 @@ def pair_node(node_mac):
 
     # ------------------------------ API /v1/nodes/ ------------------------------ #
     requests.post(
-        f'{settings.RECURSION_API_URL}/v1/nodes',
+        f'https://{op_config.get("api_url")}/v1/nodes',
         data=post_content,
         headers={'Authorization': f'Token {system_config["Token"]}'}, timeout=10
     )
@@ -189,7 +187,7 @@ def keepalive():
 
         if 'facility' in system_data:
             requests.get(
-                f'''{settings.RecursionURL}/hub/keepalive/'''
+                f'''https://{op_config.get("url")}/hub/keepalive/'''
                 f'''{system_data["serial"]}/'''
                 f'''{system_data["CurrentVersion"]}/'''
                 f'''{hash_data()["combined"]}/''',
@@ -199,7 +197,7 @@ def keepalive():
 
         else:
             requests.get(
-                f'''{settings.RecursionURL}/hub/keepalive/'''
+                f'''https://{op_config.get("url")}/hub/keepalive/'''
                 f'''{system_data["serial"]}/'''
                 f'''{system_data["CurrentVersion"]}/''',
                 headers={'Authorization': f'Token {system_data["Token"]}'},
@@ -242,7 +240,7 @@ def access_log(card_number, action, result, node, facility):
         ]
 
         requests.post(
-            f'{settings.RecursionURL}/accesslog/',
+            f'https://{op_config.get("url")}/accesslog/',
             data=payload,
             headers={'Authorization': f'Token {system_config["Token"]}'},
             timeout=10
