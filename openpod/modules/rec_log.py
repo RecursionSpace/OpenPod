@@ -212,14 +212,14 @@ def snapshot(public, local):
 
 def dump_diagnostics():
     '''
-    Send the summary of setting to Recurson.Space
+    Send the summary of setting to Recursion.Space
     '''
     with open('/opt/OpenPod/logs/System.Snapshot', 'r', encoding="UTF-8") as snapshot_file:
         if op_config.get('api_token', False):
             payload = json.load(snapshot_file)
 
             try:
-                requests.put(f'{settings.RecursionURL}/v1/diagnostics/',
+                requests.put(f'https://{op_config.get("url")}/v1/diagnostics/',
                              json={"snapshot": payload},
                              headers={'Authorization': f"Token {op_config.get('api_token')}"},
                              timeout=10
@@ -256,7 +256,7 @@ def zip_send():
 
             with open(zip_file, 'rb') as zip_file_logs:
                 requests.post(
-                    f'{settings.RecursionURL}/files/upload/external/hublogs/',
+                    f'https://{op_config.get("url")}/files/upload/external/hublogs/',
                     files={"file": zip_file_logs},
                     headers={'Authorization': f'Token {op_config.get("api_token")}'},
                     timeout=10

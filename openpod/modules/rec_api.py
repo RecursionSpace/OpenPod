@@ -21,15 +21,12 @@ from modules.rec_log import log_api, hash_data
 
 def pull_data_dump():
     '''
-    Request updated infromation from the server.
+    Request updated information from the server.
     '''
-    with open('system.json', 'r+', encoding="utf-8") as file:
-        system_data = json.load(file)
-
     # ----------------------------- Pull Member Data ----------------------------- #
     with open("/opt/OpenPod/data/dump.json", "w", encoding="utf-8") as file:
         member_info = requests.get(f'https://{op_config.get("api_url")}/v1/members', headers={
-            'Authorization': f'Token {system_data["Token"]}'
+            'Authorization': f'Token {op_config.get("api_token")}'
         }, timeout=10)
 
         responce = member_info.json()
@@ -38,7 +35,7 @@ def pull_data_dump():
     # --------------------------- Pull Operator(s) Data -------------------------- #
     with open("/opt/OpenPod/data/owners.json", "w", encoding="utf-8") as file:
         operators_info = requests.get(f'https://{op_config.get("api_url")}/v1/operators', headers={
-            'Authorization': f'Token {system_data["Token"]}'
+            'Authorization': f'Token {op_config.get("api_token")}'
         }, timeout=10)
 
         responce = operators_info.json()
@@ -48,7 +45,7 @@ def pull_data_dump():
     with open("/opt/OpenPod/data/nodes.json", "w", encoding="utf-8") as file:
         nodes_info = requests.get(
             f'https://{op_config.get("api_url")}/v1/nodes',
-            headers={'Authorization': f'Token {system_data["Token"]}'},
+            headers={'Authorization': f'Token {op_config.get("api_token")}'},
             timeout=10
         )
 
@@ -59,7 +56,7 @@ def pull_data_dump():
     with open("/opt/OpenPod/data/permissions.json", "w", encoding="utf-8") as file:
         permissions_info = requests.get(
             f'https://{op_config.get("api_url")}/v1/permissions',
-            headers={'Authorization': f'Token {system_data["Token"]}'},
+            headers={'Authorization': f'Token {op_config.get("api_token")}'},
             timeout=10
         )
 
@@ -77,22 +74,16 @@ def update_time_zone():
     '''
     API call to set the HUB timezone with the user selected option.
     '''
-    with open("system.json", "r+", encoding="utf-8") as file:
-        system_data = json.load(file)
-        spaces_info = requests.get(
-            f'https://{op_config.get("api_url")}/v1/spaces',
-            headers={'Authorization': f'Token {system_data["Token"]}'},
-            timeout=10
-        )
+    spaces_info = requests.get(
+        f'https://{op_config.get("api_url")}/v1/spaces',
+        headers={'Authorization': f'Token {op_config.get("api_token")}'},
+        timeout=10
+    )
 
-        responce = spaces_info.json()
+    responce = spaces_info.json()[0]
 
-        system_data.update({"timezone": responce[0]["timezone"]})
-        file.seek(0)
-        json.dump(system_data, file)
-        file.truncate()
-
-        log_api.info("Facility time zone set to: %s", responce[0]["timezone"])
+    op_config.set_value("timezone", responce["timezone"])
+    log_api.info("Facility time zone set to: %s", responce["timezone"])
 
 
 # ---------------------------------------------------------------------------- #
@@ -175,7 +166,7 @@ def keepalive():
                 f'''{op_config.get("serial")}/'''
                 f'''{op_config.get("version")}/'''
                 f'''{hash_data()["combined"]}/''',
-                headers={'Authorization': f'Token {op_config.get("Token")}'},
+                headers={'Authorization': f'Token {op_config.get("api_token")}'},
                 timeout=10
             )
 
@@ -184,7 +175,7 @@ def keepalive():
                 f'''https://{op_config.get("url")}/hub/keepalive/'''
                 f'''{op_config.get("serial")}/'''
                 f'''{op_config.get("version")}/''',
-                headers={'Authorization': f'Token {op_config.get("Token")}'},
+                headers={'Authorization': f'Token {op_config.get("api_token")}'},
                 timeout=10
             )
 
