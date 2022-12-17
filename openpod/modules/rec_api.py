@@ -175,28 +175,25 @@ def pair_node(node_mac):
 # ---------------------------------------------------------------------------- #
 def keepalive():
     '''
-    Pings Recursion.Space as an indicator that the hub is wtill active.
+    Pings Recursion.Space as an indicator that the hub is still active.
     '''
     try:
-        with open('system.json', 'r', encoding="utf-8") as system_file:
-            system_data = json.load(system_file)
-
-        if 'facility' in system_data:
+        if op_config.get("space", False):
             requests.get(
                 f'''https://{op_config.get("url")}/hub/keepalive/'''
-                f'''{system_data["serial"]}/'''
-                f'''{system_data["CurrentVersion"]}/'''
+                f'''{op_config.get("serial")}/'''
+                f'''{op_config.get("version")}/'''
                 f'''{hash_data()["combined"]}/''',
-                headers={'Authorization': f'Token {system_data["Token"]}'},
+                headers={'Authorization': f'Token {op_config.get("Token")}'},
                 timeout=10
             )
 
         else:
             requests.get(
                 f'''https://{op_config.get("url")}/hub/keepalive/'''
-                f'''{system_data["serial"]}/'''
-                f'''{system_data["CurrentVersion"]}/''',
-                headers={'Authorization': f'Token {system_data["Token"]}'},
+                f'''{op_config.get("serial")}/'''
+                f'''{op_config.get("version")}/''',
+                headers={'Authorization': f'Token {op_config.get("Token")}'},
                 timeout=10
             )
 
