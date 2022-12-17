@@ -15,6 +15,8 @@ from modules import rec_api
 from modules.rec_log import exception_log
 
 # --------------------------- Count Matching Nodes --------------------------- #
+
+
 def count_matching_mac(rx_source):
     '''
     Checks to see if the mac address being paired has been seen before by the system.
@@ -27,7 +29,7 @@ def count_matching_mac(rx_source):
 
     match_counter = 0
     try:
-        with open("/opt/RecursionHub/data/nodes.json", "r", encoding="utf-8") as node_file:
+        with open("/opt/OpenPod/data/nodes.json", "r", encoding="utf-8") as node_file:
             for data in json.load(node_file):
                 if data['mac'] == rx_source:
                     match_counter += 1
@@ -46,18 +48,20 @@ def count_matching_mac(rx_source):
 # ---------------------------------------------------------------------------- #
 #                            Convert MAC to Node ID                            #
 # ---------------------------------------------------------------------------- #
+
+
 def mac_to_id(mac_address):
     '''
     Returns the id for the node that belongs to the mac address.
     '''
-    with open('/opt/RecursionHub/data/nodes.json', 'r', encoding="utf-8") as nodes_file:
+    with open('/opt/OpenPod/data/nodes.json', 'r', encoding="utf-8") as nodes_file:
         nodes_dump = json.load(nodes_file)
 
     for node in nodes_dump:
         if node['mac'] == mac_address:
             return node['id']
 
-    #Defaults if the nodes has not been added yet.
+    # Defaults if the nodes has not been added yet.
     return mac_address
 
 
@@ -69,7 +73,7 @@ def is_owner(lookup_id):
     Checks if the ID matches to an owner.
     Returns True or False
     '''
-    with open("/opt/RecursionHub/data/owners.json", "r", encoding="utf-8") as owner_file:
+    with open("/opt/OpenPod/data/owners.json", "r", encoding="utf-8") as owner_file:
         owner_file = json.load(owner_file)
 
     for owner in owner_file:
@@ -86,7 +90,7 @@ def get_details(card_id):
     '''
     Checks if user exsists, if yes, returns details.
     '''
-    with open("/opt/RecursionHub/data/dump.json", "r", encoding="utf-8") as member_file:
+    with open("/opt/OpenPod/data/dump.json", "r", encoding="utf-8") as member_file:
         member_file = json.load(member_file)
 
     for user in member_file:
@@ -108,7 +112,7 @@ def get_group_details(access_group_id):
     Returns the detils of group for a user.
     access_group_id is an integer
     '''
-    with open("/opt/RecursionHub/data/permissions.json", "r", encoding="utf-8") as permissions_file:
+    with open("/opt/OpenPod/data/permissions.json", "r", encoding="utf-8") as permissions_file:
         permissions_file = json.load(permissions_file)
 
     for group in permissions_file:
@@ -152,9 +156,9 @@ def access_request(requested_id, request_node):         # pylint: disable=R0911
         threading.Thread(
             target=rec_api.access_log,
             args=(
-                    requested_id, "Requested access",
-                    "Owner Allowed", reference_node, system_info['facility']
-                )
+                requested_id, "Requested access",
+                "Owner Allowed", reference_node, system_info['facility']
+            )
         ).start()
 
         return 1
@@ -171,9 +175,9 @@ def access_request(requested_id, request_node):         # pylint: disable=R0911
         threading.Thread(
             target=rec_api.access_log,
             args=(
-                    requested_id, "Requested access",
-                    "User not found", reference_node, system_info['facility']
-                )
+                requested_id, "Requested access",
+                "User not found", reference_node, system_info['facility']
+            )
         ).start()
         return 2
 
@@ -182,9 +186,9 @@ def access_request(requested_id, request_node):         # pylint: disable=R0911
         threading.Thread(
             target=rec_api.access_log,
             args=(
-                    requested_id, "Requested access",
-                    "Manually Restricted", reference_node, system_info['facility']
-                )
+                requested_id, "Requested access",
+                "Manually Restricted", reference_node, system_info['facility']
+            )
         ).start()
         return 2
 
@@ -194,9 +198,9 @@ def access_request(requested_id, request_node):         # pylint: disable=R0911
         threading.Thread(
             target=rec_api.access_log,
             args=(
-                    requested_id, "Requested access",
-                    "Group Not Found", reference_node, system_info['facility']
-                )
+                requested_id, "Requested access",
+                "Group Not Found", reference_node, system_info['facility']
+            )
         ).start()
         return 2
 
@@ -204,8 +208,8 @@ def access_request(requested_id, request_node):         # pylint: disable=R0911
     if reference_node not in group["allowedNodes"]:
         # Node Not Allowed
         threading.Thread(
-        target=rec_api.access_log,
-        args=(
+            target=rec_api.access_log,
+            args=(
                 requested_id, "Requested access",
                 "No node permission", reference_node, system_info['facility']
             )
@@ -214,13 +218,13 @@ def access_request(requested_id, request_node):         # pylint: disable=R0911
 
     # 24/7 Override
     if group.get("twenty_four_seven", False):
-        print ("Group has 24/7 access.")
+        print("Group has 24/7 access.")
         threading.Thread(
             target=rec_api.access_log,
             args=(
-                    requested_id, "Requested access",
-                    "Allowed", reference_node, system_info['facility']
-                )
+                requested_id, "Requested access",
+                "Allowed", reference_node, system_info['facility']
+            )
         ).start()
         return 1
 
@@ -230,9 +234,9 @@ def access_request(requested_id, request_node):         # pylint: disable=R0911
         threading.Thread(
             target=rec_api.access_log,
             args=(
-                    requested_id, "Requested access",
-                    "Now Allowed Day", reference_node, system_info['facility']
-                )
+                requested_id, "Requested access",
+                "Now Allowed Day", reference_node, system_info['facility']
+            )
         ).start()
         return 2
 
@@ -245,9 +249,9 @@ def access_request(requested_id, request_node):         # pylint: disable=R0911
         threading.Thread(
             target=rec_api.access_log,
             args=(
-                    requested_id, "Requested access",
-                    "Allowed", reference_node, system_info['facility']
-                )
+                requested_id, "Requested access",
+                "Allowed", reference_node, system_info['facility']
+            )
         ).start()
         return 1
 
@@ -255,8 +259,8 @@ def access_request(requested_id, request_node):         # pylint: disable=R0911
     threading.Thread(
         target=rec_api.access_log,
         args=(
-                requested_id, "Requested access",
-                "Not Allowed Time", reference_node, system_info['facility']
-            )
+            requested_id, "Requested access",
+            "Not Allowed Time", reference_node, system_info['facility']
+        )
     ).start()
     return 2

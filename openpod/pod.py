@@ -69,16 +69,11 @@ if not op_config.get('pod_id', False):
 # ------------------------------- TEMP SOLUTION ------------------------------ #
 try:
     URL = f'https://{op_config.get("url")}/pod/obtaintoken/{op_config.get("serial")}/'
-    r = requests.get(URL, timeout=10)
+    response = requests.get(URL, timeout=10)
 
-    if r.status_code == 201:
-        print(f"Hub Toekn: {r.text}")
-        with open("/opt/RecursionHub/system.json", "r+", encoding="UTF-8") as file:
-            data = json.load(file)
-        data.update({"Token": f"{r.text}"})
-        file.seek(0)
-        json.dump(data, file)
-        file.truncate()
+    if response.status_code == 201:
+        op_config.set_value("api_token", response.text)
+
 except Exception as err:                                # pylint: disable=W0703
     print(err)
 # ------------------------------- TEMP SOLUTION ------------------------------ #

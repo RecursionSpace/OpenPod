@@ -32,5 +32,5 @@ def set_value(key, value):
 
     with open(SYSTEM_FILE, 'w', encoding="UTF-8") as system_file:
         system_file.seek(0)
-        json.dump(system, system_file)
+        json.dump(system, system_file, indent=4)
         system_file.truncate()

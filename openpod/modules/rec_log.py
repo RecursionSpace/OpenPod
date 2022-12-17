@@ -14,7 +14,7 @@ import requests
 import simplejson as json
 # https://stackoverflow.com/questions/21663800/python-make-a-list-generator-json-serializable
 
-# from modules import rec_lan
+from modules import op_config
 
 import settings
 
@@ -44,7 +44,7 @@ if settings.DEBUG:
     exception_log.setLevel(logging.DEBUG)
 
 try:
-    exception_log_file = logging.FileHandler('/opt/RecursionHub/logs/exception.log', mode='a')
+    exception_log_file = logging.FileHandler('/opt/OpenPod/logs/exception.log', mode='a')
 except FileNotFoundError:
     exception_log_file = logging.FileHandler('tests/exception.log', mode='a')  # CI Testing
 
@@ -59,7 +59,7 @@ if settings.DEBUG:
     log_api.setLevel(logging.DEBUG)
 
 try:
-    log_api_file = logging.FileHandler('/opt/RecursionHub/logs/api.log', mode='a')
+    log_api_file = logging.FileHandler('/opt/OpenPod/logs/api.log', mode='a')
 except FileNotFoundError:
     log_api_file = logging.FileHandler('tests/api.log', mode='a')  # CI Testing
 
@@ -74,7 +74,7 @@ if settings.DEBUG:
     network_log.setLevel(logging.DEBUG)
 
 try:
-    network_log_file = logging.FileHandler('/opt/RecursionHub/logs/network.log', mode='a')
+    network_log_file = logging.FileHandler('/opt/OpenPod/logs/network.log', mode='a')
 except FileNotFoundError:
     network_log_file = logging.FileHandler('tests/network.log', mode='a')  # CI Testing
 
@@ -89,7 +89,7 @@ if settings.DEBUG:
     log_xbee.setLevel(logging.DEBUG)
 
 try:
-    xbee_log_file = logging.FileHandler('/opt/RecursionHub/logs/xbee.log', mode='a')
+    xbee_log_file = logging.FileHandler('/opt/OpenPod/logs/xbee.log', mode='a')
 except FileNotFoundError:
     xbee_log_file = logging.FileHandler('tests/xbee.log', mode='a')  # CI Testing
 
@@ -104,7 +104,7 @@ if settings.DEBUG:
     mqtt_log.setLevel(logging.DEBUG)
 
 try:
-    mqtt_log_file = logging.FileHandler('/opt/RecursionHub/logs/mqtt.log', mode='a')
+    mqtt_log_file = logging.FileHandler('/opt/OpenPod/logs/mqtt.log', mode='a')
 except FileNotFoundError:
     mqtt_log_file = logging.FileHandler('tests/mqtt.log', mode='a')  # CI Testing
 
@@ -118,7 +118,7 @@ mqtt_log.addHandler(console)
 logfile = logging.getLogger('standardlog')
 
 try:
-    fileHandler = logging.FileHandler('/opt/RecursionHub/logs/RecursionLog.log', mode='a')
+    fileHandler = logging.FileHandler('/opt/OpenPod/logs/RecursionLog.log', mode='a')
 except FileNotFoundError:
     fileHandler = logging.FileHandler('tests/RecursionLog.log', mode='a')  # For CI
 
@@ -134,7 +134,7 @@ logfile.addHandler(console)
 transaction = logging.getLogger('transaction')
 
 try:
-    fileH = logging.FileHandler('/opt/RecursionHub/logs/TransactionLog.log', mode='a')
+    fileH = logging.FileHandler('/opt/OpenPod/logs/TransactionLog.log', mode='a')
 except FileNotFoundError:
     fileH = logging.FileHandler('tests/TransactionLog.log', mode='a')  # For CI
 
@@ -180,7 +180,7 @@ def snapshot(public, local):
     system_data = {}
     # public, local = rec_lan.get_ip()
 
-    with open('/opt/RecursionHub/system.json', 'r', encoding="UTF-8") as system_file:
+    with open('/opt/OpenPod/system.json', 'r', encoding="UTF-8") as system_file:
         system_json_file = json.load(system_file)
 
         system_data["system_json"] = system_json_file
@@ -198,7 +198,7 @@ def snapshot(public, local):
 
         system_data['pip'] = freeze.freeze()
 
-    with open('/opt/RecursionHub/logs/System.Snapshot', 'w', encoding="UTF-8") as snapshot_file:
+    with open('/opt/OpenPod/logs/System.Snapshot', 'w', encoding="UTF-8") as snapshot_file:
         snapshot_file.seek(0)
         json.dump(system_data, snapshot_file, iterable_as_array=True)
         snapshot_file.truncate()
@@ -214,17 +214,14 @@ def dump_diagnostics():
     '''
     Send the summary of setting to Recurson.Space
     '''
-    with open('system.json', 'r+', encoding="UTF-8") as system_file:
-        system_config = json.load(system_file)
-
-    with open('/opt/RecursionHub/logs/System.Snapshot', 'r', encoding="UTF-8") as snapshot_file:
-        if 'Token' in system_config:
+    with open('/opt/OpenPod/logs/System.Snapshot', 'r', encoding="UTF-8") as snapshot_file:
+        if op_config.get('api_token', False):
             payload = json.load(snapshot_file)
 
             try:
                 requests.put(f'{settings.RecursionURL}/v1/diagnostics/',
                              json={"snapshot": payload},
-                             headers={'Authorization': f"Token {system_config['Token']}"},
+                             headers={'Authorization': f"Token {op_config.get('api_token')}"},
                              timeout=10
                              )
 
@@ -236,22 +233,19 @@ def dump_diagnostics():
 
 def zip_send():
     '''
-    Zip all log files togeather and send to Recursion.Space
+    Zip all log files together and send to Recursion.Space
     '''
     try:
-        with open('system.json', 'r', encoding="UTF-8") as file:
-            system_data = json.load(file)
-
-        zip_file = f'/opt/RecursionHub/logs/{system_data["serial"]}_logs.zip'
+        zip_file = f'/opt/OpenPod/logs/{op_config.get("serial")}_logs.zip'
 
         with ZipFile(zip_file, 'w') as zip_logs:
-            zip_logs.write('/opt/RecursionHub/logs/System.Snapshot', 'system_snapshot.txt')
-            zip_logs.write('/opt/RecursionHub/logs/network.log', 'network.log')
-            zip_logs.write('/opt/RecursionHub/logs/xbee.log', 'xbee.log')
-            zip_logs.write('/opt/RecursionHub/logs/mqtt.log', 'mqtt.log')
-            zip_logs.write('/opt/RecursionHub/logs/exception.log', 'exception.log')
-            zip_logs.write('/opt/RecursionHub/logs/RecursionLog.log', 'RecursionLog.log')
-            zip_logs.write('/opt/RecursionHub/logs/TransactionLog.log', 'TransactionLog.log')
+            zip_logs.write('/opt/OpenPod/logs/System.Snapshot', 'system_snapshot.txt')
+            zip_logs.write('/opt/OpenPod/logs/network.log', 'network.log')
+            zip_logs.write('/opt/OpenPod/logs/xbee.log', 'xbee.log')
+            zip_logs.write('/opt/OpenPod/logs/mqtt.log', 'mqtt.log')
+            zip_logs.write('/opt/OpenPod/logs/exception.log', 'exception.log')
+            zip_logs.write('/opt/OpenPod/logs/RecursionLog.log', 'RecursionLog.log')
+            zip_logs.write('/opt/OpenPod/logs/TransactionLog.log', 'TransactionLog.log')
 
             zip_logs.close()
 
@@ -264,7 +258,7 @@ def zip_send():
                 requests.post(
                     f'{settings.RecursionURL}/files/upload/external/hublogs/',
                     files={"file": zip_file_logs},
-                    headers={'Authorization': f'Token {system_data["Token"]}'},
+                    headers={'Authorization': f'Token {op_config.get("api_token")}'},
                     timeout=10
                 )
 
@@ -286,22 +280,22 @@ def hash_data():
     Produce a hash of the available data to compare with the data on Recursion.Space
     '''
     try:
-        with open("/opt/RecursionHub/data/dump.json", "rb") as dump_file:
+        with open("/opt/OpenPod/data/dump.json", "rb") as dump_file:
             dump_hash = hashlib.md5(
                 dump_file.read()
             ).hexdigest()
 
-        with open("/opt/RecursionHub/data/nodes.json", "rb") as nodes_file:
+        with open("/opt/OpenPod/data/nodes.json", "rb") as nodes_file:
             nodes_hash = hashlib.md5(
                 nodes_file.read()
             ).hexdigest()
 
-        with open("/opt/RecursionHub/data/owners.json", "rb") as owners_file:
+        with open("/opt/OpenPod/data/owners.json", "rb") as owners_file:
             owners_hash = hashlib.md5(
                 owners_file.read()
             ).hexdigest()
 
-        with open("/opt/RecursionHub/data/permissions.json", "rb") as perm_file:
+        with open("/opt/OpenPod/data/permissions.json", "rb") as perm_file:
             permissions_hash = hashlib.md5(
                 perm_file.read()
             ).hexdigest()

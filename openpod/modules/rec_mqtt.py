@@ -9,7 +9,7 @@ import json
 import subprocess
 import paho.mqtt.client as mqtt
 
-from modules import rec_api, rec_xbee, rec_lookup
+from modules import op_config, rec_api, rec_xbee, rec_lookup
 from modules.rec_log import mqtt_log, exception_log, zip_send
 import settings
 import updater
@@ -91,10 +91,10 @@ def on_message(client, userdata, message):
 
 def mqtt_rx():
     '''
-    Esablish a connection to the Recursion.Space MQTT broker
+    Establish a connection to the Recursion.Space MQTT broker
     Define what happens when the following actions occur:
     - Connection to the MQTT broker is made.
-    - A message is recived.
+    - A message is received.
     '''
     mqtt_log.info('Connecting to MQTT broker')
 
@@ -115,11 +115,9 @@ def mqtt_start_update():
         updater.update_hub()
     except RuntimeError as err:
         exception_log.error("Error while updating, atempting as subprocess. %s", err)
-        with open('system.json', 'r+', encoding="UTF-8") as file:
-            system_data = json.load(file)
-            update_location = f'/opt/RecursionHub/{system_data.CurrentVersion}/updater.py'
-            with subprocess.Popen(['sudo', 'python3', f'{update_location}']) as script:
-                print(script)
+        update_location = f'/opt/OpenPod/{op_config.get("version")}/updater.py'
+        with subprocess.Popen(['sudo', 'python3', f'{update_location}']) as script:
+            print(script)
 
 
 def mqtt_restart_system():

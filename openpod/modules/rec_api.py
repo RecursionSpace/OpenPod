@@ -27,7 +27,7 @@ def pull_data_dump():
         system_data = json.load(file)
 
     # ----------------------------- Pull Member Data ----------------------------- #
-    with open("/opt/RecursionHub/data/dump.json", "w", encoding="utf-8") as file:
+    with open("/opt/OpenPod/data/dump.json", "w", encoding="utf-8") as file:
         member_info = requests.get(f'https://{op_config.get("api_url")}/v1/members', headers={
             'Authorization': f'Token {system_data["Token"]}'
         }, timeout=10)
@@ -36,7 +36,7 @@ def pull_data_dump():
         json.dump(responce, file)
 
     # --------------------------- Pull Operator(s) Data -------------------------- #
-    with open("/opt/RecursionHub/data/owners.json", "w", encoding="utf-8") as file:
+    with open("/opt/OpenPod/data/owners.json", "w", encoding="utf-8") as file:
         operators_info = requests.get(f'https://{op_config.get("api_url")}/v1/operators', headers={
             'Authorization': f'Token {system_data["Token"]}'
         }, timeout=10)
@@ -45,7 +45,7 @@ def pull_data_dump():
         json.dump(responce, file)
 
     # -------------------------------- Nodes Data -------------------------------- #
-    with open("/opt/RecursionHub/data/nodes.json", "w", encoding="utf-8") as file:
+    with open("/opt/OpenPod/data/nodes.json", "w", encoding="utf-8") as file:
         nodes_info = requests.get(
             f'https://{op_config.get("api_url")}/v1/nodes',
             headers={'Authorization': f'Token {system_data["Token"]}'},
@@ -56,7 +56,7 @@ def pull_data_dump():
         json.dump(responce, file)
 
     # ----------------------------- Pull Permissions ----------------------------- #
-    with open("/opt/RecursionHub/data/permissions.json", "w", encoding="utf-8") as file:
+    with open("/opt/OpenPod/data/permissions.json", "w", encoding="utf-8") as file:
         permissions_info = requests.get(
             f'https://{op_config.get("api_url")}/v1/permissions',
             headers={'Authorization': f'Token {system_data["Token"]}'},
@@ -124,21 +124,15 @@ def link_hub():
     Associate the Pod with a space.
     '''
     try:
-        with open("system.json", "r+", encoding="utf-8") as file:
-            system_data = json.load(file)
+        hubs_info = requests.get(f'https://{op_config.get("api_url")}/v1/hubs', headers={
+            'Authorization': f'Token {op_config.get("api_token")}'
+        }, timeout=10)
 
-            hubs_info = requests.get(f'https://{op_config.get("api_url")}/v1/hubs', headers={
-                'Authorization': f'Token {system_data["Token"]}'
-            }, timeout=10)
+        responce = hubs_info.json()
 
-            responce = hubs_info.json()
+        op_config.set_value("space", responce[0]["facility"])
 
-            system_data.update({"facility": responce[0]["facility"]})
-            file.seek(0)
-            json.dump(system_data, file)
-            file.truncate()
-
-            op_gpio.ready()
+        op_gpio.ready()
 
     except OSError as err:
         log_api.error("link_hub - Unable to open file system.json - %s", err)
@@ -151,20 +145,17 @@ def pair_node(node_mac):
     '''
     Link a new node with the hub.
     '''
-    with open('system.json', 'r+', encoding="utf-8") as system_file:
-        system_config = json.load(system_file)
-
     post_content = [
         ('mac', node_mac),
-        ('hub', system_config['pod_id']),
-        ('facility', system_config['facility'])
+        ('hub', op_config.get('pod_id')),
+        ('facility', op_config.get("space"))
     ]
 
     # ------------------------------ API /v1/nodes/ ------------------------------ #
     requests.post(
         f'https://{op_config.get("api_url")}/v1/nodes',
         data=post_content,
-        headers={'Authorization': f'Token {system_config["Token"]}'}, timeout=10
+        headers={'Authorization': f'Token {op_config.get("api_token")}'}, timeout=10
     )
 
     pull_data_dump()
@@ -221,9 +212,6 @@ def access_log(card_number, action, result, node, facility):
     Access request logging to Recursion.Space
     '''
     try:
-        with open('system.json', 'r+', encoding="utf-8") as system_file:
-            system_config = json.load(system_file)
-
         payload = [
             ('cardNumber', card_number),
             ('action', action),
@@ -235,7 +223,7 @@ def access_log(card_number, action, result, node, facility):
         requests.post(
             f'https://{op_config.get("url")}/accesslog/',
             data=payload,
-            headers={'Authorization': f'Token {system_config["Token"]}'},
+            headers={'Authorization': f'Token {op_config.get("api_token")}'},
             timeout=10
         )
 
