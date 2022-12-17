@@ -24,6 +24,7 @@ Help()
     echo "d     Enable debug mode"
 }
 
+# TO FIX: ARGS VS OPTS
 
 # ---------------------------------------------------------------------------- #
 #                                   Defaults                                   #
@@ -51,7 +52,7 @@ while getopts ":hbdu" flags; do
 done
 
 if [ $DEBUG ]; then
-    BRANCH='dev-release'
+    BRANCH='master'
     URL='dev.recursion.space'
     API_URL='dev.api.recursion.space'
 elif [ ! $DEBUG ]; then
