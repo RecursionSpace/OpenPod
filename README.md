@@ -19,7 +19,6 @@
   - [Installation](#installation)
 - [Software Design](#software-design)
 - [Development](#development)
-- [Initialization](#initialization)
 - [MQTT](#mqtt)
 - [Updates](#updates)
 - [Logging](#logging)
@@ -47,6 +46,7 @@ sudo wget -qO- https://openpod.recursion.space | bash /dev/stdin [options] [argu
 |:-----------:|---------------------------|------------------------------------------------------------------------------------|
 |     -h      | Help                      | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -h                       |
 |     -d      | Enable Debug Installation | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -d                       |
+|     -b      | Alternative Branch        | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -b dev                   |
 |     -u      | Set Custom URL endpoint   | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -u stage.recursion.space |
 
 \*No supported arguments are currently supported.
@@ -76,25 +76,6 @@ Each Pod is on its MQTT topic, and the topic is created once the Pod registers w
 # Development
 
 Pod software development is done on a DigitalOcean hosted server. It is then transferred to the physical hardware running the system and tested before going into production.
-
-# Initialization
-
-Pod uses an initializer or “launcher” to configure the system before running the main code. The launcher performs the following tasks before running the main program:
-
-- Update & Upgrade the OS
-- [Sync Clock](https://vitux.com/keep-your-clock-sync-with-internet-time-servers-in-ubuntu/)
-- Installs program required packages
-- Check for required files, create them if missing
-- Configure start on boot file
-- Creates serial if needed
-- Registers the Pod with the API server
-- Initializes the main program under [/opt/](https://unix.stackexchange.com/questions/11544/what-is-the-difference-between-opt-and-usr-local)
-
-To launch the software, when the device boots, the launcher configures the system first to run the software in the [background](https://janakiev.com/blog/python-background/) and then creates a script that executes the launch on [startup](https://askubuntu.com/questions/817011/run-python-script-on-os-boot). Working version with a [cronjob](https://www.linuxbabe.com/linux-server/how-to-enable-etcrc-local-with-systemd).
-
-```bash
-(@reboot (cd /home/ubuntu/RecursionHub &&  sudo python3 HUB_Launcher.py &))
-```
 
 # MQTT
 

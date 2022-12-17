@@ -48,13 +48,16 @@ while getopts ":hud" flags; do
 done
 
 if [ $DEBUG -eq 1 ]; then
+    branch='dev-release'
     URL='dev.recursion.space'
 elif [ $DEBUG -eq 0 ]; then
+    branch='release'
     URL='recursion.space'
 fi
 
 echo "Installing OpenPod with the following options:"
 echo "Debug: $DEBUG"
+echo "Branch: $branch"
 echo "URL: $URL"
 
 # -------------------------------- Verify Root ------------------------------- #
@@ -133,13 +136,13 @@ sudo rm -rf /opt/OpenPod
 set -e # Exit when any command fails.
 sudo mkdir -p /opt
 cd /opt
-sudo git clone --single-branch --branch release https://github.com/RecursionSpace/OpenPod.git
+sudo git clone --single-branch --branch $branch https://github.com/RecursionSpace/OpenPod.git
 cd OpenPod
 
 # ----------------------------- Setup Enviroment ----------------------------- #
 sudo python3.11 -m venv /opt/OpenPod/env
 source /opt/OpenPod/env/bin/activate
-sudo pip install --no-input -U -r /opt/OpenPod/requirements.txt --no-cache-dir --no-dependencies
+pip install --no-input -U -r /opt/OpenPod/requirements.txt --no-cache-dir --no-dependencies
 
 # ---------------------------- Create Directories ---------------------------- #
 sudo mkdir -p /opt/OpenPod/logs
