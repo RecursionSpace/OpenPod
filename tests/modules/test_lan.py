@@ -92,7 +92,7 @@ class TestLan(unittest.TestCase):
             mocked_internet_on.return_value = True
 
             with patch('modules.rec_lan.requests.get') as mocked_requests:
-                mocked_requests.return_value.text = "0.0.0.0"
+                mocked_requests.return_value.content = "0.0.0.0"
                 public_ip, local_ip = rec_lan.get_ip()
 
                 self.assertEqual((rec_lan.get_ip())[0], '0.0.0.0')
@@ -101,6 +101,7 @@ class TestLan(unittest.TestCase):
 
                 mocked_internet_on.return_value = False
                 self.assertNotEqual((rec_lan.get_ip())[0], '0.0.0.0')
+
 
 if __name__ == '__main__':
     unittest.main()

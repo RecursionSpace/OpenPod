@@ -142,11 +142,12 @@ def configure_xbee():
 
 
 def listing():
-    '''Function to handling incoming serial info'''
+    '''
+    Function to handling incoming serial info
+    '''
     while True:
-        if settings.Pi:
-            if ser.in_waiting != 0:
-                pub.sendMessage('xbee_rx')
+        if ser.in_waiting != 0:
+            pub.sendMessage('xbee_rx')
         sleep(.01)  # Allows CPU time for other threads.
 
 
