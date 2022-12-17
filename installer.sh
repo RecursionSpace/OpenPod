@@ -34,13 +34,13 @@ DEBUG=flase # -d
 # ---------------------------------------------------------------------------- #
 #                                    Options                                   #
 # ---------------------------------------------------------------------------- #
-while getopts ":hud" flags; do
+while getopts ":hbdu" flags; do
   case "${flags}" in
     h) # display Help
          Help
          exit;;
     b) # Custom branch
-        branch="${OPTARG}";;
+        BRANCH="${OPTARG}";;
     d) # Enable debug mode
         DEBUG=true ;;
     u) # Custom URL endpoint
@@ -51,18 +51,18 @@ while getopts ":hud" flags; do
 done
 
 if [ $DEBUG ]; then
-    branch='dev-release'
+    BRANCH='dev-release'
     URL='dev.recursion.space'
     API_URL='dev.api.recursion.space'
 elif [ ! $DEBUG ]; then
-    branch='release'
+    BRANCH='release'
     URL='recursion.space'
     API_URL='api.recursion.space'
 fi
 
 echo "Installing OpenPod with the following options:"
 echo "Debug: $DEBUG"
-echo "Branch: $branch"
+echo "Branch: $BRANCH"
 echo "URL: $URL"
 echo "API_URL: $API_URL"
 
@@ -163,7 +163,7 @@ sudo rm -rf /opt/OpenPod
 set -e # Exit when any command fails.
 sudo mkdir -p /opt
 cd /opt
-sudo git clone --single-branch --branch $branch https://github.com/RecursionSpace/OpenPod.git
+sudo git clone --single-branch --branch $BRANCH https://github.com/RecursionSpace/OpenPod.git
 cd OpenPod
 
 # ----------------------------- Setup Enviroment ----------------------------- #
