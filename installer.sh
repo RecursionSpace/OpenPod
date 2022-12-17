@@ -63,6 +63,7 @@ echo "Installing OpenPod with the following options:"
 echo "Debug: $DEBUG"
 echo "Branch: $branch"
 echo "URL: $URL"
+echo "API_URL: $API_URL"
 
 # -------------------------------- Verify Root ------------------------------- #
 if [ "$EUID" -ne 0 ]
@@ -187,14 +188,20 @@ serial_uuid=$(cat /proc/sys/kernel/random/uuid)
 xbee_uuid=$(cat /proc/sys/kernel/random/uuid)
 openpod_version=$(git rev-parse HEAD)
 echo '{
+    "debug": '$DEBUG',
     "serial": "'$serial_uuid'",
     "timezone": "UTC",
-    "XBEE_KY": '"'$xbee_uuid'"',
-    "XBEE_OP": "0",
-    "url": '"'$URL'"',
+    "url": "'$URL'",
     "api_url": "'$API_URL'",
-    "version": '"'$openpod_version'"',
-    "debug": '$DEBUG'
+    "XBEE": {
+        "KY": "'$xbee_uuid'",
+        "OP": "0"
+    },
+    "GPIO": {
+        "LED_IO": 23,
+        "LED_STAT": 17
+    },
+    "version": "'$openpod_version'"
 }' > /opt/OpenPod/system.json
 
 # --------------------------- Setup OpenPod Service -------------------------- #
