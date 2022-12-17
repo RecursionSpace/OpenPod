@@ -128,6 +128,16 @@ else
     echo "Python 3.11 already installed"
 fi
 
+# -------------------------------- Python-Dev -------------------------------- #
+REQUIRED_PKG="python3-dev"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+if [ "" = "$PKG_OK" ]; then
+    echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
+    sudo apt-get install python3-dev -y
+else
+    echo "python3-dev already installed, skipping..."
+fi
+
 # ------------------------ Python Virtual Environment ------------------------ #
 REQUIRED_PKG="python3.11-venv"
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
