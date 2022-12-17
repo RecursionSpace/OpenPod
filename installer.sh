@@ -19,6 +19,7 @@ Help()
     echo "OpenPod instalation script"
     echo
     echo "h     Display this help"
+    echo "b     Set custom branch for OpenPod"
     echo "u     Set custom URL for OpenPod"
     echo "d     Enable debug mode"
 }
@@ -189,19 +190,19 @@ xbee_uuid=$(cat /proc/sys/kernel/random/uuid)
 openpod_version=$(git rev-parse HEAD)
 echo '{
     "debug": '$DEBUG',
-    "serial": "'$serial_uuid'",
+    "serial": "'"$serial_uuid"'",
     "timezone": "UTC",
-    "url": "'$URL'",
-    "api_url": "'$API_URL'",
+    "url": "'"$URL"'",
+    "api_url": "'"$API_URL"'",
     "XBEE": {
-        "KY": "'$xbee_uuid'",
+        "KY": "'"$xbee_uuid"'",
         "OP": "0"
     },
     "GPIO": {
         "LED_IO": 23,
         "LED_STAT": 17
     },
-    "version": "'$openpod_version'"
+    "version": "'"$openpod_version"'"
 }' > /opt/OpenPod/system.json
 
 # --------------------------- Setup OpenPod Service -------------------------- #

@@ -10,14 +10,13 @@
 - Pulls configuration files from server.
 - Launches main program
 '''
+# pylint: skip-file
 
 import sys
 import json
 import threading
 import subprocess
 
-
-import config
 
 # ---------------------------------------------------------------------------- #
 #                              Check Requirements                              #
