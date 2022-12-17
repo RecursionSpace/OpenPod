@@ -16,7 +16,7 @@ from pubsub import pub
 
 import settings
 
-from modules import op_gpio, rec_log, rec_mqtt, rec_xbee, rec_api, rec_lan
+from modules import op_config, op_gpio, rec_log, rec_mqtt, rec_xbee, rec_api, rec_lan
 from modules.rec_log import exception_log, zip_send
 
 # --------------------------- Visualization Threads --------------------------- #
@@ -39,11 +39,9 @@ except RuntimeError as err:
 # Not sure if the next section is required.
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
-with open('/opt/OpenPod/system.json', 'r+', encoding="utf-8") as system_file:
-    systemConfig = json.load(system_file)
-Version = systemConfig['version']
+Version = op_config.get('version', None)
 
-# Inserts path to refrence then starts importing modules.
+# Inserts path to reference then starts importing modules.
 sys.path.insert(0, f"./{Version}")
 sys.path.insert(1, f"./{Version}/modules")
 sys.path.append("..")
@@ -66,13 +64,13 @@ begin_xbee.start()
 
 
 # Register HUB with Recursion
-if not systemConfig.get('HUBid', False):
+if not op_config.get('pod_id', False):
     rec_api.register_hub()
 
 
 # ------------------------------- TEMP SOLUTION ------------------------------ #
 try:
-    URL = f'{settings.RecursionURL}/obtaintoken/{systemConfig["serial"]}/'
+    URL = f'{settings.RecursionURL}/obtaintoken/{op_config.get("serial")}/'
     r = requests.get(URL, timeout=10)
 
     if r.status_code == 201:
@@ -104,7 +102,7 @@ MQTTlisten.start()
 
 # Only pull info if hub has already been paired with a facility.
 try:
-    if 'facility' in systemConfig:
+    if op_config.get('space', False):
         rec_log.publog("info", "Pulling any missing data.")
         rec_api.pull_data_dump()
         rec_api.update_time_zone()

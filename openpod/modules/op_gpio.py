@@ -9,20 +9,17 @@ from time import sleep
 
 import config
 
+from modules import op_config
+
 try:
     from RPi import GPIO
     GPIO_AVAILABLE = True
 except (RuntimeError, ModuleNotFoundError):
     GPIO_AVAILABLE = False
 
-try:
-    with open('/opt/OpenPod/system.json', 'r', encoding="UTF-8") as system_file:
-        system = json.load(system_file)
-    LED_IO = system['GPIO']['LED_IO']
-    LED_STAT = system['GPIO']['LED_STAT']
-except FileNotFoundError:
-    LED_IO = 0
-    LED_STAT = 0
+
+LED_IO = op_config.get('GPIO', {}).get('LED_IO', 23)
+LED_STAT = op_config.get('GPIO', {}).get('LED_STAT', 17)
 
 
 if GPIO_AVAILABLE:
