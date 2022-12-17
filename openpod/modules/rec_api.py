@@ -102,22 +102,15 @@ def register_hub():  # Needs updated!
     '''
     API to register the hub.
     '''
-    with open('system.json', 'r', encoding="utf-8") as system_file:
-        system_config = json.load(system_file)
-
     url = f'https://{op_config.get("url")}/hubs/'
-    payload_tuples = {'serial': f"{system_config['serial']}"}
+    payload_tuples = {'serial': f"{op_config.get('serial')}"}
     output = requests.post(url, payload_tuples, auth=('OwnerA', 'Password@1'), timeout=10)
     responce = output.json()
 
-    log_api.info("Hub registration responce: %s", responce)
+    log_api.info(f"Hub registration responce: {responce}")
 
-    with open("/opt/RecursionHub/system.json", "r+", encoding="utf-8") as file:
-        data = json.load(file)
-        data.update({"HUBid": responce["id"]})
-        file.seek(0)
-        json.dump(data, file)
-        log_api.info("Hub registered and assigned HUBid: %s", responce["id"])
+    op_config.set_value("pod_id", responce["id"])
+    log_api.info(f'Pod registered and assigned pod_id: {responce["id"]}')
 
 
 # ---------------------------------------------------------------------------- #
@@ -160,7 +153,7 @@ def pair_node(node_mac):
 
     post_content = [
         ('mac', node_mac),
-        ('hub', system_config['HUBid']),
+        ('hub', system_config['pod_id']),
         ('facility', system_config['facility'])
     ]
 

@@ -16,3 +16,21 @@ def get(key, default=None):
         system = {}
 
     return system.get(key, default)
+
+
+def set_value(key, value):
+    '''
+    Set a value in the system configuration file.
+    '''
+    try:
+        with open(SYSTEM_FILE, 'r', encoding="UTF-8") as system_file:
+            system = json.load(system_file)
+    except FileNotFoundError:
+        system = {}
+
+    system[key] = value
+
+    with open(SYSTEM_FILE, 'w', encoding="UTF-8") as system_file:
+        system_file.seek(0)
+        json.dump(system, system_file)
+        system_file.truncate()
