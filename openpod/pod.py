@@ -68,7 +68,7 @@ if not op_config.get('pod_id', False):
 
 # ------------------------------- TEMP SOLUTION ------------------------------ #
 try:
-    URL = f'https://{op_config.get("url")}/obtaintoken/{op_config.get("serial")}/'
+    URL = f'https://{op_config.get("url")}/pod/obtaintoken/{op_config.get("serial")}/'
     r = requests.get(URL, timeout=10)
 
     if r.status_code == 201:
