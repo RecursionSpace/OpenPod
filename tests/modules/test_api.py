@@ -90,7 +90,7 @@ class TestAPI(unittest.TestCase):
             "restricted_nodes": ["123", "shdfhethetbe"]
         }]
 
-        with patch('modules.op_gpio.open') as mock_system:
+        with patch('modules.rec_api.op_gpio.open') as mock_system:
             mock_system.side_effect = [system_json]
 
             with patch('modules.rec_api.open') as mock_open:

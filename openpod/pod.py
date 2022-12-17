@@ -33,18 +33,15 @@ try:
     rec_lan.monitor_network()  # Monitors the network connection while the program is running.
 
 except RuntimeError as err:
-    exception_log.error("FATAL - Start Network Monitoring - Error: %s", err)
-
-finally:
-    exception_log.debug("Launcher - Exiting Check Network Connection")
+    exception_log.error(f"FATAL - Start Network Monitoring - Error: {err}")
 
 
 # Not sure if the next section is required.
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
-with open('/opt/RecursionHub/system.json', 'r+', encoding="utf-8") as system_file:
+with open('/opt/OpenPod/system.json', 'r+', encoding="utf-8") as system_file:
     systemConfig = json.load(system_file)
-Version = systemConfig['CurrentVersion']
+Version = systemConfig['version']
 
 # Inserts path to refrence then starts importing modules.
 sys.path.insert(0, f"./{Version}")
