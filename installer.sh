@@ -208,6 +208,9 @@ echo '{
     "version": "'"$openpod_version"'"
 }' > /opt/OpenPod/system.json
 
+# --------------------------- Create Version Folder -------------------------- #
+sudo cp -a /opt/OpenPod/openpod/. /opt/OpenPod/"$openpod_version"/
+
 # --------------------------- Setup OpenPod Service -------------------------- #
 cat <<EOF > /etc/systemd/system/openpod.service
 [Unit]
