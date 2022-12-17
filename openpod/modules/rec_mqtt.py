@@ -11,7 +11,6 @@ import paho.mqtt.client as mqtt
 
 from modules import op_config, rec_api, rec_xbee, rec_lookup
 from modules.rec_log import mqtt_log, exception_log, zip_send
-import settings
 import updater
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -102,7 +101,7 @@ def mqtt_rx():
     client.on_connect = on_connect
     client.on_message = on_message
 
-    client.connect(f"{settings.RECURSION_DOMAIN}", 1883, 60)
+    client.connect(f"{op_config.get('url')}", 1883, 60)
     client.loop_forever()
 
 
