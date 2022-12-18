@@ -225,7 +225,7 @@ Type=simple
 User=root
 WorkingDirectory=/opt/OpenPod
 
-ExecStart=/opt/OpenPod/env/bin/python3.11 /opt/OpenPod/OpenPod.py
+ExecStart=/opt/OpenPod/env/bin/python3.11 /opt/OpenPod/openpod/pod.py
 
 Restart=always
 RestartSec=10
