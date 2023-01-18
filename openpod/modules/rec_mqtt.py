@@ -113,7 +113,7 @@ def mqtt_start_update():
     '''
     mqtt_log.info("UPDATE AVAILABLE - Triggered by the user.")
     try:
-        updater.update_hub()
+        updater.update_pod()
     except RuntimeError as err:
         exception_log.error("Error while updating, atempting as subprocess. %s", err)
         update_location = f'/opt/OpenPod/{op_config.get("version")}/updater.py'

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Recursion.Space
-hub_updater.py
+updater.py
 
 Call the function 'update_hub' to pull the latest update.
 """
@@ -9,104 +9,53 @@ Call the function 'update_hub' to pull the latest update.
 # Triggered by the user from the web interface to update the current version.
 
 import re
+import os
 import sys
-import json
 import zipfile
 import subprocess
 
 import urllib.request
 import requests
 
-import settings
-
+from modules import op_config
 from modules.rec_log import exception_log
 
 
-def current_hub_version():
+def update_pod():
     '''
-    Reades the curent version number from the system file.
+    Steps through the update process.
     '''
-    with open('system.json', 'r', encoding="utf-8") as system_file:
-        system_data = json.load(system_file)
-
-    return system_data['CurrentVersion']
-
-
-def update_version_name():
-    '''
-    Fetches the new version number available from the server.
-    '''
-    with open('system.json', 'r', encoding="utf-8") as system_file:
-        system_data = json.load(system_file)
-
-    request_response = requests.get(
-        f'{settings.RecursionURL}/updatehub/',
-        headers={'Authorization': f"Token {system_data['Token']}"},
-        timeout=10
-    )
-    response_data = request_response.headers['content-disposition']
-    return re.findall("filename=(.+)", response_data)[0]
-
-
-def download_update():
-    '''
-    This will request the file and download it.
-    - Fiest gets the name of the file for the update.
-
-    https://stackoverflow.com/questions/45247983/urllib-urlretrieve-with-custom-header
-    '''
-    with open('system.json', 'r+', encoding="utf-8") as system_file:
-        system_data = json.load(system_file)
-
-    fname = update_version_name()
-    opener = urllib.request.build_opener()
-    opener.addheaders = [('Authorization', f"Token {system_data['Token']}")]
-    urllib.request.install_opener(opener)
-    urllib.request.urlretrieve(f'{settings.RecursionURL}/updatehub/', fname)
-
-    # exception_log.info("Update version pulled: %s", re.findall(r"(.+?)(\.[^.]*$|$)", fname)[0][0])
-    return re.findall(r"(.+?)(\.[^.]*$|$)", fname)[0][0]
-
-
-def unzip_update():
-    '''
-    Extracts the contents of the zip file.
-    Removed the .zip file.
-    '''
-    new_version = download_update()
-
-    with zipfile.ZipFile(f'{new_version}.zip', 'r') as zip_ref:
-        zip_ref.extractall(f'{new_version}/')
-
-    subprocess.call(['rm', f'{new_version}.zip'])  # Cleaning up downloaded file.
-
-    return new_version
-
-
-def update_hub():
-    '''
-    Main code called to update the hub.
-    '''
-    with open("system.json", "r+", encoding="utf-8") as file:
-        data = json.load(file)
-
-    new_version = data['CurrentVersion']
-
     try:
-        exception_log.info("Update Started")
-        new_version = unzip_update()
+        # Get the latest version file.
+        request_response = requests.get(
+            f"{op_config.get('api_url')}/updatehub/",
+            headers={'Authorization': f"Token {op_config.get('api_token')}"},
+            timeout=10
+        )
+
+        response_data = request_response.headers['content-disposition']
+        latest_version_file = re.findall("filename=(.+)", response_data)[0]
+
+        # Download the latest version file.
+        opener = urllib.request.build_opener()
+        opener.addheaders = [('Authorization', f"Token {op_config.get('api_token')}")]
+        urllib.request.install_opener(opener)
+        urllib.request.urlretrieve(f"{op_config.get('api_url')}/updatehub/", latest_version_file)
+
+        new_version = re.findall(r"(.+?)(\.[^.]*$|$)", latest_version_file)[0][0]
+
+        with zipfile.ZipFile(f'{new_version}.zip', 'r') as zip_ref:
+            zip_ref.extractall(f'{new_version}/')
+
+        # Update the version number in the config file.
+        op_config.set('version', new_version)
+
+        # Remove the zip file.
+        if os.path.exists(f'{new_version}.zip'):
+            os.remove(f'{new_version}.zip')
 
     except RuntimeError as err:
         exception_log.error("Unable to pull update with error: %s", err)
-        new_version = current_hub_version()  # If unable to update, just run the current version.
-
-    finally:
-        with open("system.json", "r+", encoding="utf-8") as file:
-            data = json.load(file)
-            data.update({"CurrentVersion": new_version})
-            file.seek(0)
-            json.dump(data, file)
-            file.truncate()
 
     # Relaunch with new program if update was successful.
     try:

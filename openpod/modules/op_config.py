@@ -1,4 +1,18 @@
-''' Configuration loader for OpenPod '''
+'''
+Configuration loader for OpenPod
+
+Expected JSON format:
+{
+    "uuid": str,
+    "debug": bool,
+    "serial": str,
+    "timezone": str,
+    "url": str,
+    "api_url": str,
+    "version": str,
+    "api_token": str,
+}
+'''
 
 import json
 

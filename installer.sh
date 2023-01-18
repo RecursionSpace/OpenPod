@@ -52,7 +52,7 @@ while getopts ":hbdu" flags; do
 done
 
 if [ $DEBUG ]; then
-    BRANCH='master'
+    BRANCH='dev-release'
     URL='dev.recursion.space'
     API_URL='dev.api.recursion.space'
 elif [ ! $DEBUG ]; then
