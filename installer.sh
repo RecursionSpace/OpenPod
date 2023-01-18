@@ -62,10 +62,10 @@ elif [ ! $DEBUG ]; then
 fi
 
 echo "Installing OpenPod with the following options:"
-echo "Debug: $DEBUG"
-echo "Branch: $BRANCH"
-echo "URL: $URL"
-echo "API_URL: $API_URL"
+echo "Debug   | $DEBUG"
+echo "Branch  | $BRANCH"
+echo "URL     | $URL"
+echo "API_URL | $API_URL"
 
 # -------------------------------- Verify Root ------------------------------- #
 if [ "$EUID" -ne 0 ]
@@ -76,7 +76,7 @@ fi
 # --------------------------------- SSH User --------------------------------- #
 echo "Verifying SSH user 'openpod'"
 
-if [[ ! $(id -u pod > /dev/null 2>&1) ]]; then
+if [[ ! $(id -u openpod > /dev/null 2>&1) ]]; then
     echo "Creating user 'openpod'"
     useradd -m -s /bin/bash openpod
     usermod -aG sudo openpod
@@ -175,6 +175,7 @@ fi
 
 # -------------------------- Clear Previous Install -------------------------- #
 sudo rm -rf /opt/OpenPod
+sudo systemctl stop openpod.service
 
 # ------------------------------- Clone OpenPod ------------------------------ #
 set -e # Exit when any command fails.

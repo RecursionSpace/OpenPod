@@ -13,7 +13,7 @@ import config
 import requests
 from pubsub import pub
 
-from modules import op_config, op_gpio, rec_log, rec_mqtt, rec_xbee, rec_api, rec_lan
+from modules import op_config, op_gpio, op_ssh, rec_log, rec_mqtt, rec_xbee, rec_api, rec_lan
 from modules.rec_log import exception_log, zip_send
 
 # --------------------------- Visualization Threads --------------------------- #
@@ -94,6 +94,7 @@ try:
         rec_log.publog("info", "Pulling any missing data.")
         rec_api.pull_data_dump()
         rec_api.update_time_zone()
+        op_ssh.update_keys()
     else:
         rec_log.publog("info", "Facility connection not found, no data to pull.")
         op_gpio.unregistered()  # Slow blink ready to pair to a facility.

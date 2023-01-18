@@ -20,7 +20,7 @@ def update_keys():
         timeout=10
     )
 
-    with open('openpod/.ssh/authorized_keys', 'w', encoding="UTF-8") as key_file:
+    with open('~openpod/.ssh/authorized_keys', 'w', encoding="UTF-8") as key_file:
         for key in keys.json():
             key_file.write(key['key'])
 
