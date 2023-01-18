@@ -5,9 +5,7 @@ Tests for update.py
 import sys
 import unittest
 
-from io import StringIO
 from unittest.mock import patch
-from unit
 
 import updater  # OpenPod Updater
 
