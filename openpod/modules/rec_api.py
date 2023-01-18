@@ -97,7 +97,7 @@ def register_pod():  # Needs updated!
     output = requests.post(url, payload_tuples, auth=('OwnerA', 'Password@1'), timeout=10)
     response = output.json()
 
-    log_api.info(f"Pod registration responce: {response}")
+    log_api.info(f"Pod registration response: {response}")
 
     op_config.set_value("pod_id", response["id"])
     log_api.info(f'Pod registered and assigned pod_id: {response["id"]}')
@@ -111,9 +111,11 @@ def link_hub():
     Associate the Pod with a space.
     '''
     try:
-        hubs_info = requests.get(f'https://{op_config.get("api_url")}/v1/hubs', headers={
-            'Authorization': f'Token {op_config.get("api_token")}'
-        }, timeout=10)
+        hubs_info = requests.get(
+            f'https://{op_config.get("api_url")}/v1/hubs',
+            headers={'Authorization': f'Token {op_config.get("api_token")}'},
+            timeout=10
+        )
 
         response = hubs_info.json()
 

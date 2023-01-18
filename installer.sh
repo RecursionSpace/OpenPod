@@ -83,7 +83,7 @@ if ! id -u "openpod" >/dev/null 2>&1; then
     mkdir -p ~openpod/.ssh/ && touch ~openpod/.ssh/authorized_keys
     echo "openpod    ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers > /dev/null
 else
-    echo "User 'pod' already exists, skipping..."
+    echo "User 'openpod' already exists, skipping..."
     mkdir -p ~openpod/.ssh/ && touch ~openpod/.ssh/authorized_keys
 fi
 
