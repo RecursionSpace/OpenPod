@@ -9,7 +9,7 @@ import json
 import subprocess
 import paho.mqtt.client as mqtt
 
-from modules import op_config, rec_api, rec_xbee, rec_lookup
+from modules import op_config, op_ssh, rec_api, rec_xbee, rec_lookup
 from modules.rec_log import mqtt_log, exception_log, zip_send
 import updater
 
@@ -34,12 +34,13 @@ def on_connect(client, userdata, flags, return_code):
 def on_message(client, userdata, message):
     '''
     Handles messages coming in via MQTT.
-    170 - Pairing un-paired Hub
-    186 - Pull New Data
-    202 - Install System Update
-    218 - Timezone Change
-    234 - Reboot Hub (Soft restart)
-    250  - Zip & Send Logs
+    170 (AA) - Pairing un-paired Hub
+    171 (AB) - Pull SSH Keys
+    186 (BA) - Pull New Data
+    202 (CA) - Install System Update
+    218 (DA) - Timezone Change
+    234 (EA) - Reboot Hub (Soft restart)
+    250 (FA) - Zip & Send Logs
 
     Node Command - xxxxxxxxxxxxxxxx_##
     '''
@@ -50,6 +51,7 @@ def on_message(client, userdata, message):
     try:
         mqtt_actions = {
             170: rec_api.link_hub,
+            171: op_ssh.update_keys,
             186: rec_api.pull_data_dump,
             202: mqtt_start_update,
             218: rec_api.update_time_zone,

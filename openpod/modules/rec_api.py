@@ -2,6 +2,7 @@
 
 '''
 Handles API calls with Recursion.Space
+Performs all API calls to the server, functions should be used as a thread.
 '''
 
 import json
@@ -12,13 +13,9 @@ from modules import op_config, op_gpio
 from modules.rec_log import log_api, hash_data
 
 
-# Performs all API calls to the server, functions should be used as a thread.
-
 # ---------------------------------------------------------------------------- #
 #                      Request Update For All Information                      #
 # ---------------------------------------------------------------------------- #
-
-
 def pull_data_dump():
     '''
     Request updated information from the server.
@@ -29,8 +26,8 @@ def pull_data_dump():
             'Authorization': f'Token {op_config.get("api_token")}'
         }, timeout=10)
 
-        responce = member_info.json()
-        json.dump(responce, file)
+        response = member_info.json()
+        json.dump(response, file)
 
     # --------------------------- Pull Operator(s) Data -------------------------- #
     with open("/opt/OpenPod/data/owners.json", "w", encoding="utf-8") as file:
@@ -38,8 +35,8 @@ def pull_data_dump():
             'Authorization': f'Token {op_config.get("api_token")}'
         }, timeout=10)
 
-        responce = operators_info.json()
-        json.dump(responce, file)
+        response = operators_info.json()
+        json.dump(response, file)
 
     # -------------------------------- Nodes Data -------------------------------- #
     with open("/opt/OpenPod/data/nodes.json", "w", encoding="utf-8") as file:
@@ -49,8 +46,8 @@ def pull_data_dump():
             timeout=10
         )
 
-        responce = nodes_info.json()
-        json.dump(responce, file)
+        response = nodes_info.json()
+        json.dump(response, file)
 
     # ----------------------------- Pull Permissions ----------------------------- #
     with open("/opt/OpenPod/data/permissions.json", "w", encoding="utf-8") as file:
@@ -60,16 +57,15 @@ def pull_data_dump():
             timeout=10
         )
 
-        responce = permissions_info.json()
-        json.dump(responce, file)
+        response = permissions_info.json()
+        json.dump(response, file)
 
     return True
+
 
 # ---------------------------------------------------------------------------- #
 #                            Set or Update Timezone                            #
 # ---------------------------------------------------------------------------- #
-
-
 def update_time_zone():
     '''
     API call to set the HUB timezone with the user selected option.
@@ -80,10 +76,10 @@ def update_time_zone():
         timeout=10
     )
 
-    responce = spaces_info.json()[0]
+    response = spaces_info.json()[0]
 
-    op_config.set_value("timezone", responce["timezone"])
-    log_api.info("Facility time zone set to: %s", responce["timezone"])
+    op_config.set_value("timezone", response["timezone"])
+    log_api.info("Facility time zone set to: %s", response["timezone"])
 
 
 # ---------------------------------------------------------------------------- #
@@ -99,12 +95,12 @@ def register_pod():  # Needs updated!
         'serial': f"{op_config.get('serial')}"
     }
     output = requests.post(url, payload_tuples, auth=('OwnerA', 'Password@1'), timeout=10)
-    responce = output.json()
+    response = output.json()
 
-    log_api.info(f"Pod registration responce: {responce}")
+    log_api.info(f"Pod registration responce: {response}")
 
-    op_config.set_value("pod_id", responce["id"])
-    log_api.info(f'Pod registered and assigned pod_id: {responce["id"]}')
+    op_config.set_value("pod_id", response["id"])
+    log_api.info(f'Pod registered and assigned pod_id: {response["id"]}')
 
 
 # ---------------------------------------------------------------------------- #
@@ -119,9 +115,9 @@ def link_hub():
             'Authorization': f'Token {op_config.get("api_token")}'
         }, timeout=10)
 
-        responce = hubs_info.json()
+        response = hubs_info.json()
 
-        op_config.set_value("space", responce[0]["facility"])
+        op_config.set_value("space", response[0]["facility"])
 
         op_gpio.ready()
 

@@ -73,6 +73,20 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+# --------------------------------- SSH User --------------------------------- #
+echo "Verifying SSH user 'openpod'"
+
+if [[ ! $(id -u pod > /dev/null 2>&1) ]]; then
+    echo "Creating user 'openpod'"
+    useradd -m -s /bin/bash openpod
+    usermod -aG sudo openpod
+    mkdir -p ~openpod/.ssh/ && touch ~openpod/.ssh/authorized_keys
+    echo "openpod    ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers > /dev/null
+else
+    echo "User 'pod' already exists, skipping..."
+    mkdir -p ~openpod/.ssh/ && touch ~openpod/.ssh/authorized_keys
+fi
+
 # ---------------------------- Update System Time ---------------------------- #
 sudo timedatectl set-timezone UTC
 
