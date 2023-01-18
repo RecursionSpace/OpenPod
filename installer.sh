@@ -76,7 +76,7 @@ fi
 # --------------------------------- SSH User --------------------------------- #
 echo "Verifying SSH user 'openpod'"
 
-if [[ ! $(id -u openpod > /dev/null 2>&1) ]]; then
+if ! id -u "openpod" >/dev/null 2>&1; then
     echo "Creating user 'openpod'"
     useradd -m -s /bin/bash openpod
     usermod -aG sudo openpod

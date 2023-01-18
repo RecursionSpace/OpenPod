@@ -3,6 +3,7 @@ openpod | modules | op_ssh.py
 Configuration for SSH
 '''
 
+import os
 import requests
 
 from modules import op_config
@@ -20,7 +21,8 @@ def update_keys():
         timeout=10
     )
 
-    with open('~openpod/.ssh/authorized_keys', 'w', encoding="UTF-8") as key_file:
+    key_file_path = os.path.expanduser('~openpod/.ssh/authorized_keys')
+    with open(key_file_path, 'w', encoding="UTF-8") as key_file:
         for key in keys.json():
             key_file.write(key['key'])
 
