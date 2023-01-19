@@ -173,7 +173,7 @@ def transaction_log(level, note):
 
 
 # ------ Captures wide range of system settings for debugging purposes. ------ #
-def snapshot(public, local):
+def snapshot(public_ip, local_ip):
     '''
     Create a JSON summary of system settings and status.
     '''
@@ -184,15 +184,13 @@ def snapshot(public, local):
 
         system_data["system_json"] = system_json_file
 
-        system_data["DEBUG"] = f"{settings.DEBUG}"
+        system_data["PI"] = f"{settings.IS_PI}"
 
-        system_data["PI"] = f"{settings.Pi}"
+        system_data['ip']["local"] = local_ip
 
-        system_data["local_ip"] = local
+        system_data['ip']["public"] = public_ip
 
-        system_data["public_ip"] = public
-
-        if 'facility' in system_json_file:
+        if 'space' in system_json_file:
             system_data["DataHash"] = hash_data()
 
         system_data['pip'] = freeze.freeze()
