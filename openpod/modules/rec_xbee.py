@@ -3,7 +3,6 @@
 Recursion.Space - XBee Module
 '''
 
-import json
 import binascii
 import time
 
