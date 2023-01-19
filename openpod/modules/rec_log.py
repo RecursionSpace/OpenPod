@@ -14,7 +14,7 @@ import requests
 import simplejson as json
 # https://stackoverflow.com/questions/21663800/python-make-a-list-generator-json-serializable
 
-from modules import op_config, rec_lan
+from modules import op_config
 
 import settings
 
