@@ -46,10 +46,10 @@ def receive():
         log_xbee.info('Device %s is connecting to network', rx_source)
         # rx_data = rx_data[30:(len(rx_data)-2)]
 
-        lookup_responce = rec_lookup.count_matching_mac(rx_source)
+        lookup_response = rec_lookup.count_matching_mac(rx_source)
         # for Responce in MySQL_Responce:
-        log_xbee.info('Returned %s matches for MAC addressed.', lookup_responce)
-        if lookup_responce == 0:
+        log_xbee.info('Returned %s matches for MAC addressed.', lookup_response)
+        if lookup_response == 0:
 
             if len(rx_source) == 16:
                 rec_api.pair_node(rx_source)
