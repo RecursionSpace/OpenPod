@@ -173,12 +173,11 @@ def transaction_log(level, note):
 
 
 # ------ Captures wide range of system settings for debugging purposes. ------ #
-def snapshot():
+def snapshot(public, local):
     '''
     Create a JSON summary of system settings and status.
     '''
     system_data = {}
-    public, local = rec_lan.get_ip()
 
     with open('/opt/OpenPod/system.json', 'r', encoding="UTF-8") as system_file:
         system_json_file = json.load(system_file)

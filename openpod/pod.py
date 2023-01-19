@@ -118,7 +118,8 @@ if op_config.get('XBEE').get('OP', False) is False:
 #                          Logs Settings For Debugging                         #
 # ---------------------------------------------------------------------------- #
 try:
-    rec_log.snapshot()
+    public_ip, local_ip = rec_lan.get_ip()
+    rec_log.snapshot(public_ip, local_ip)
 except RuntimeError as err:
     exception_log.error("FATAL - Generate Snapshot - Error: %s", err)
 
