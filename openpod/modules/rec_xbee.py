@@ -11,7 +11,7 @@ from time import sleep
 import serial
 from pubsub import pub
 
-from modules import rec_lookup, rec_api
+from modules import rec_lookup, rec_api, op_config
 from modules.rec_log import log_xbee
 
 
@@ -190,31 +190,25 @@ def xbee_info():
     if rx_data != 1:
         configure_xbee()
 
-    with open("system.json", "r+", encoding="UTF-8") as file:
-        data = json.load(file)
+    sleep(1)            # No characters sent for 1 second (Guard Times)
+    ser.write(b'+++')   # Enters AT Command Mode
+    sleep(1)            # No characters sent for 1 second (Guard Times)
 
-        sleep(1)            # No characters sent for 1 second (Guard Times)
-        ser.write(b'+++')   # Enters AT Command Mode
-        sleep(1)            # No characters sent for 1 second (Guard Times)
+    ser.readline()      # Clear buffer
 
-        ser.readline()      # Clear buffer
+    ser.write(b'ATOP\r')    # Read the operating 64-bit PAN ID.
 
-        ser.write(b'ATOP\r')    # Read the operating 64-bit PAN ID.
+    sleep(.1)
+    try:
+        rx_data = ser.read_until(expected='\r').decode()    # Read buffer until carriage return
+        rx_data = str(rx_data.rstrip())
+    except TypeError as err:
+        log_xbee.error("XBee ATOP command error: %s", err)
 
-        sleep(.1)
-        try:
-            rx_data = ser.read_until(expected='\r').decode()    # Read buffer until carriage return
-            rx_data = str(rx_data.rstrip())
-        except TypeError as err:
-            log_xbee.error("XBee ATOP command error: %s", err)
+    op_config.set_nested_value(['XBEE', 'OP'], rx_data)
 
-        data.update({"XBEE_OP": rx_data})
-        file.seek(0)
-        json.dump(data, file)
-        file.truncate()
-
-        ser.write(b'ATCN\r')    # Exit Command Mode
-        ser.readline()          # Clear buffer
+    ser.write(b'ATCN\r')    # Exit Command Mode
+    ser.readline()          # Clear buffer
 
     xbee_network_discovery()
 

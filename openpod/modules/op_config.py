@@ -48,3 +48,21 @@ def set_value(key, value):
         system_file.seek(0)
         json.dump(system, system_file, indent=4)
         system_file.truncate()
+
+
+def set_nested_value(keys, value):
+    '''
+    Set a nested value in the system configuration file.
+    '''
+    try:
+        with open(SYSTEM_FILE, 'r', encoding="UTF-8") as system_file:
+            system = json.load(system_file)
+    except FileNotFoundError:
+        system = {}
+
+    system[keys[0]][keys[1]] = value
+
+    with open(SYSTEM_FILE, 'w', encoding="UTF-8") as system_file:
+        system_file.seek(0)
+        json.dump(system, system_file, indent=4)
+        system_file.truncate()

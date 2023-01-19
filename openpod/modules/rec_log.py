@@ -14,7 +14,7 @@ import requests
 import simplejson as json
 # https://stackoverflow.com/questions/21663800/python-make-a-list-generator-json-serializable
 
-from modules import op_config
+from modules import op_config, rec_lan
 
 import settings
 
@@ -173,12 +173,12 @@ def transaction_log(level, note):
 
 
 # ------ Captures wide range of system settings for debugging purposes. ------ #
-def snapshot(public, local):
+def snapshot():
     '''
     Create a JSON summary of system settings and status.
     '''
     system_data = {}
-    # public, local = rec_lan.get_ip()
+    public, local = rec_lan.get_ip()
 
     with open('/opt/OpenPod/system.json', 'r', encoding="UTF-8") as system_file:
         system_json_file = json.load(system_file)

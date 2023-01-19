@@ -216,7 +216,7 @@ echo '{
     "api_url": "'"$API_URL"'",
     "XBEE": {
         "KY": "'"$xbee_uuid"'",
-        "OP": "0"
+        "OP": false
     },
     "GPIO": {
         "LED_IO": 23,

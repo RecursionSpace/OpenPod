@@ -104,6 +104,25 @@ except Exception as err:                                # pylint: disable=W0703
     rec_log.publog("error", f"Error occurred when pulling data: {err}")
 
 
+# ---------------------------------------------------------------------------- #
+#                              XBee Configuration                              #
+# ---------------------------------------------------------------------------- #
+if op_config.get('XBEE').get('OP', False) is False:
+    try:
+        rec_xbee.xbee_info()
+    except UnboundLocalError as err:
+        exception_log.error("Unable to capture XBee info - Error: %s", err)
+
+
+# ---------------------------------------------------------------------------- #
+#                          Logs Settings For Debugging                         #
+# ---------------------------------------------------------------------------- #
+try:
+    rec_log.snapshot()
+except RuntimeError as err:
+    exception_log.error("FATAL - Generate Snapshot - Error: %s", err)
+
+
 rec_log.publog("info", "Recursion system has successfully initiated.")
 
 
