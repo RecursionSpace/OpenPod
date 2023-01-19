@@ -28,7 +28,7 @@ def update_pod():
     try:
         # Get the latest version file.
         request_response = requests.get(
-            f"{op_config.get('url')}/updatehub/",
+            f"https://{op_config.get('url')}/updatehub/",
             headers={'Authorization': f"Token {op_config.get('api_token')}"},
             timeout=10
         )
@@ -40,7 +40,8 @@ def update_pod():
         opener = urllib.request.build_opener()
         opener.addheaders = [('Authorization', f"Token {op_config.get('api_token')}")]
         urllib.request.install_opener(opener)
-        urllib.request.urlretrieve(f"{op_config.get('url')}/updatehub/", latest_version_file)
+        urllib.request.urlretrieve(
+            f"https://{op_config.get('url')}/updatehub/", latest_version_file)
 
         new_version = re.findall(r"(.+?)(\.[^.]*$|$)", latest_version_file)[0][0]
 
