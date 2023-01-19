@@ -186,6 +186,8 @@ def snapshot(public_ip, local_ip):
 
         system_data["PI"] = f"{settings.IS_PI}"
 
+        system_data['ip'] = {}
+
         system_data['ip']["local"] = local_ip
 
         system_data['ip']["public"] = public_ip
