@@ -112,31 +112,30 @@ def configure_xbee():
     '''
     log_xbee.info("Configuring XBee for first time use")
 
-    with open('system.json', 'r', encoding="UTF-8") as file:
-        system_data = json.load(file)
+    xbee_config = op_config.get('XBEE')
 
-        # Sequence of commands to configure a new XBee, sent in transparent mode.
-        param_config = [
-            b'ATCE1\r',  # Enable Cordinator
-            b'ATAP1\r',  # Enable API Mode
-            b'ATAO1\r',  # Set Output Mode To Explicit
-            b'ATEE1\r',  # Enable Security
-            b'ATEO2\r',  # Enable Trust Center
-            f'ATKY{system_data["XBEE_KY"]}'.encode(),  # Set Encryption Key
-            b'ATAC\r',  # Apply Queued Changes
-            b'ATCN\r',  # Exit Command Mode
-        ]
+    # Sequence of commands to configure a new XBee, sent in transparent mode.
+    param_config = [
+        b'ATCE1\r',  # Enable Cordinator
+        b'ATAP1\r',  # Enable API Mode
+        b'ATAO1\r',  # Set Output Mode To Explicit
+        b'ATEE1\r',  # Enable Security
+        b'ATEO2\r',  # Enable Trust Center
+        f'ATKY{xbee_config.get("KY")}'.encode(),  # Set Encryption Key
+        b'ATAC\r',  # Apply Queued Changes
+        b'ATCN\r',  # Exit Command Mode
+    ]
 
-        ser.write(b'+++')  # Enter Command Mode
-        sleep(1)
-        print(ser.readline())
-        for command in param_config:
-            ser.write(command)
-            rx_data = ser.read_until(expected='\r').decode()  # Reads buffer until carriage return.
-            rx_data = str(rx_data.rstrip())
-            log_xbee.info("Initial XBee Configuration TX: %s - RX: %s", command, rx_data)
+    ser.write(b'+++')  # Enter Command Mode
+    sleep(1)
+    print(ser.readline())
+    for command in param_config:
+        ser.write(command)
+        rx_data = ser.read_until(expected='\r').decode()  # Reads buffer until carriage return.
+        rx_data = str(rx_data.rstrip())
+        log_xbee.info("Initial XBee Configuration TX: %s - RX: %s", command, rx_data)
 
-        sleep(10)
+    sleep(10)
 
 
 def listing():
