@@ -25,6 +25,7 @@ jobs:
       - name: Run Bash Installer
         run: |
           sudo /bin/bash installer.sh
+          sudo systemd-analyze verify openpod.service
 
       # - name: Validate JSON
       #   uses: limitusus/json-syntax-check@v1

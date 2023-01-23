@@ -194,8 +194,11 @@ sudo mkdir -p /opt/OpenPod/logs
 sudo mkdir -p /opt/OpenPod/data
 
 # ------------------------------- Create Files ------------------------------- #
+# Log Location
 sudo touch /opt/OpenPod/logs/RecursionLog.log
 sudo touch /opt/OpenPod/logs/System.Snapshot
+
+# Data Location
 sudo touch /opt/OpenPod/data/dump.json
 sudo touch /opt/OpenPod/data/nodes.json
 sudo touch /opt/OpenPod/data/owners.json
@@ -227,6 +230,7 @@ echo '{
 
 # --------------------------- Create Version Folder -------------------------- #
 sudo cp -a /opt/OpenPod/openpod/. /opt/OpenPod/versions/"$openpod_version"/
+sudo rm -rf /opt/OpenPod/openpod
 
 # --------------------------- Setup OpenPod Service -------------------------- #
 cat <<EOF > /etc/systemd/system/openpod.service
@@ -240,8 +244,8 @@ Type=simple
 User=root
 WorkingDirectory=/opt/OpenPod
 
-ExecStart   =   /bin/bash -c 'VERSION=$(jq \'.version\' /opt/OpenPod/system.json | xargs) \
-                /opt/OpenPod/env/bin/python3.11 /opt/OpenPod/versions/${VERSION}/pod.py
+ExecStart   =   /bin/bash -c "exec /opt/OpenPod/env/bin/python3.11 \
+                /opt/OpenPod/versions/$(jq '.version' /opt/OpenPod/system.json | xargs)/pod.py"
 
 Restart=always
 RestartSec=10
