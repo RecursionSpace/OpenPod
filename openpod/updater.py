@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""
-Recursion.Space
-updater.py
+'''
+OpenPod | updater.py
 
-Call the function 'update_hub' to pull the latest update.
-"""
+Grabs the latest version of OpenPod from GitHub and updates the current version.
+'''
 
 # Triggered by the user from the web interface to update the current version.
 
