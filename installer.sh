@@ -226,7 +226,7 @@ echo '{
 }' > /opt/OpenPod/system.json
 
 # --------------------------- Create Version Folder -------------------------- #
-sudo cp -a /opt/OpenPod/openpod/. /opt/OpenPod/"$openpod_version"/
+sudo cp -a /opt/OpenPod/openpod/. /opt/OpenPod/versions/"$openpod_version"/
 
 # --------------------------- Setup OpenPod Service -------------------------- #
 cat <<EOF > /etc/systemd/system/openpod.service
@@ -240,7 +240,8 @@ Type=simple
 User=root
 WorkingDirectory=/opt/OpenPod
 
-ExecStart=/opt/OpenPod/env/bin/python3.11 /opt/OpenPod/openpod/pod.py
+ExecStart   =   /bin/bash -c 'VERSION=$(jq \'.version\' /opt/OpenPod/system.json | xargs) \
+                /opt/OpenPod/env/bin/python3.11 /opt/OpenPod/versions/${VERSION}/pod.py
 
 Restart=always
 RestartSec=10

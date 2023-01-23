@@ -6,8 +6,6 @@
 # Ran with a crontab entry @reboot /opt/OpenPod/boot.sh
 
 
-sleep 30																	#Delay before running to allow all the services to startup.
-
 while :
 do
 	ethChecks=0																#Variable to store the number of delays waiting on an internet connection.
