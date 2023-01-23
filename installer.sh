@@ -229,6 +229,7 @@ echo '{
 }' > /opt/OpenPod/system.json
 
 # --------------------------- Create Version Folder -------------------------- #
+mkdir -p /opt/OpenPod/versions/"$openpod_version"
 sudo cp -a /opt/OpenPod/openpod/. /opt/OpenPod/versions/"$openpod_version"/
 sudo rm -rf /opt/OpenPod/openpod
 
