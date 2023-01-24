@@ -42,12 +42,12 @@ def update_pod():
 
         # Extract the zip file.
         with zipfile.ZipFile(f"{latest_version['hash']}.zip", 'r') as zip_ref:
-            zip_ref.extractall(f"{latest_version['hash']}/")
+            zip_ref.extractall()
 
         # Copy the files to the root directory.
         os.makedirs(f"/opt/OpenPod/versions/{latest_version['hash']}/", exist_ok=True)
         shutil.move(
-            f"{latest_version['hash']}/OpenPod-{latest_version['hash']}/",
+            f"OpenPod-{latest_version['hash']}/OpenPod-{latest_version['hash']}/OpenPod/",
             f"/opt/OpenPod/versions/{latest_version['hash']}/"
         )
 
