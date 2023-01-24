@@ -92,7 +92,7 @@ jobs:
 
           git checkout dev-release
 
-          git merge -X theirs master-ci --a
+          git merge -X theirs master-ci
 
           rm -rf LICENSE
           rm -rf README.md
