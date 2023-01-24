@@ -84,7 +84,7 @@ jobs:
           git config user.email github-actions@github.com
           git fetch origin
 
-          git checkout dev-release
+          git checkout master-ci
           git pull -X theirs origin master-ci
 
           rm -rf LICENSE
