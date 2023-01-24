@@ -83,9 +83,7 @@ jobs:
 
           git pull origin dev-release
 
-          git checkout dev-release
-
-          git merge -X theirs origin/master-ci
+          git merge master-ci
 
           rm -rf LICENSE
           rm -rf README.md
