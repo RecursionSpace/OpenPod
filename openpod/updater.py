@@ -47,12 +47,14 @@ def update_pod():
         # Copy the files to the root directory.
         os.makedirs(f"/opt/OpenPod/versions/{latest_version['hash']}/", exist_ok=True)
         shutil.move(
-            f"OpenPod-{latest_version['hash']}/OpenPod/",
+            f"OpenPod-{latest_version['hash']}/openpod/",
             f"/opt/OpenPod/versions/{latest_version['hash']}/"
         )
 
     except RuntimeError as err:
         exception_log.error("Unable to pull update with error: %s", err)
+    except FileNotFoundError as err:
+        exception_log.error("Unable to find file with error: %s", err)
 
     else:
         # Update the version number in the config file.
@@ -66,4 +68,4 @@ def update_pod():
 
         shutil.rmtree(f"OpenPod-{latest_version['hash']}/", ignore_errors=True)
 
-        sys.exit()  # Force OpenPod to restart.
+        os.system("sudo systemctl restart openpod.service")
