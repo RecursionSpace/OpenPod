@@ -47,7 +47,7 @@ def update_pod():
         # Copy the files to the root directory.
         os.makedirs(f"/opt/OpenPod/versions/{latest_version['hash']}/", exist_ok=True)
         shutil.move(
-            f"OpenPod-{latest_version['hash']}/OpenPod-{latest_version['hash']}/OpenPod/",
+            f"OpenPod-{latest_version['hash']}/OpenPod/",
             f"/opt/OpenPod/versions/{latest_version['hash']}/"
         )
 
@@ -64,6 +64,6 @@ def update_pod():
         if os.path.exists(f"{latest_version['hash']}.zip"):
             os.remove(f"{latest_version['hash']}.zip")
 
-        shutil.rmtree(f"{latest_version['hash']}/", ignore_errors=True)
+        shutil.rmtree(f"OpenPod-{latest_version['hash']}/", ignore_errors=True)
 
         sys.exit()  # Force OpenPod to restart.
