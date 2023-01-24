@@ -90,6 +90,9 @@ jobs:
 
           git rm installer.sh
 
+          git add installer.sh
+          git commit -m "Remove installer.sh"
+
           git checkout dev-release
 
           git merge -X theirs master-ci
