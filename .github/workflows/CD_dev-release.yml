@@ -78,22 +78,22 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git fetch origin
 
           git checkout dev-release
-          git pull origin dev-release --rebase
-          git merge -X theirs origin/master-ci
+          git pull origin dev-release
+
+          git merge origin/master-ci
 
           rm -rf LICENSE
           rm -rf README.md
           rm -rf docs
           rm -rf tests
-          rm -rf installer.sh
 
           git add .
 
-          git diff-index --quiet HEAD || git commit -m "Sanitize dev-release"
-          git push origin dev-release --force
+          git diff-index --quiet HEAD || git commit -m "Merge master-ci into dev-release and remove unnecessary files"
+
+          git push origin dev-release
 
       - name: Webhook
         uses: distributhor/workflow-webhook@v3
