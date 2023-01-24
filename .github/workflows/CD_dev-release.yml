@@ -44,12 +44,7 @@ jobs:
           target_branch: master-ci
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Webhook
-        if: steps.wait-for-build.outputs.conclusion == 'success'
-        uses: distributhor/workflow-webhook@v3
-        env:
-          webhook_url: "https://dev.recursion.space/webhooks/github/"
-          webhook_secret: "Y0uR5ecr3t"
+
 
   # master-ci -> dev-release
   sanitize:
@@ -78,6 +73,7 @@ jobs:
           fetch-depth: 0
 
       - name: Remove Bloat
+        id: remove-bloat
         if: steps.wait-for-merge.outputs.conclusion == 'success'
         run: |
           git config user.name github-actions
@@ -97,3 +93,10 @@ jobs:
 
           git diff-index --quiet HEAD || git commit -m "Sanitize dev-release"
           git push origin dev-release --force
+
+      - name: Webhook
+        if: steps.remove-bloat.outputs.conclusion == 'success'
+        uses: distributhor/workflow-webhook@v3
+        env:
+          webhook_url: "https://dev.recursion.space/webhooks/github/"
+          webhook_secret: "Y0uR5ecr3t"
