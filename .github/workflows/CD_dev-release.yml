@@ -84,7 +84,7 @@ jobs:
 
           git ls-files -d | xargs git checkout --
 
-          git pull origin dev-release --rebase
+          git pull origin dev-release --rebase --autostash
 
           git merge -X theirs origin/master-ci
 
