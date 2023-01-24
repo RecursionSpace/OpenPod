@@ -184,13 +184,10 @@ def keepalive():
         log_api.error("Keepalive OSError: %s", err)
 
     finally:
-
-        try:
-            log_api.debug('Keepalive check again in 30 seconds from now.')  # DEBUG POINT
-            threading.Timer(30.0, keepalive).start()
-
-        except RuntimeError as err:
-            log_api.error("Keepalive thread RuntimeError: %s", err)
+        log_api.debug('Heartbeat check again in 30 seconds from now.')  # DEBUG POINT
+        heartbeat_thread = threading.Timer(30.0, keepalive)
+        heartbeat_thread.daemon = True
+        heartbeat_thread.start()
 
 
 # ---------------------------------------------------------------------------- #
