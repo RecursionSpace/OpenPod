@@ -83,13 +83,14 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git fetch origin
-          git checkout master-ci
-          git pull -X theirs origin master-ci
+
           git checkout dev-release
+          git pull -X theirs origin master-ci
 
           rm -rf LICENSE
           rm -rf README.md
           rm -rf docs
+          rm -rf tests
 
           git add .
 
