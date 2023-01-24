@@ -81,11 +81,11 @@ jobs:
 
           git checkout dev-release
 
-          git pull origin dev-release --rebase --autostash
+          git pull origin dev-release
 
           git checkout dev-release
 
-          git merge -X theirs master-ci
+          git merge -X theirs origin/master-ci
 
           rm -rf LICENSE
           rm -rf README.md
@@ -96,7 +96,7 @@ jobs:
           git add .
 
           git diff-index --quiet HEAD || git commit -m "Sanitize dev-release"
-          git push origin dev-release --force
+          git push origin dev-release
 
       - name: Webhook
         uses: distributhor/workflow-webhook@v3
