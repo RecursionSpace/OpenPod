@@ -80,10 +80,9 @@ jobs:
           git config user.email github-actions@github.com
 
           git checkout dev-release
-
           git pull origin dev-release
 
-          git merge master-ci
+          git merge origin/master-ci
 
           rm -rf LICENSE
           rm -rf README.md
@@ -93,7 +92,8 @@ jobs:
 
           git add .
 
-          git diff-index --quiet HEAD || git commit -m "Sanitize dev-release"
+          git diff-index --quiet HEAD || git commit -m "Merge master-ci into dev-release and remove unnecessary files"
+
           git push origin dev-release
 
       - name: Webhook
