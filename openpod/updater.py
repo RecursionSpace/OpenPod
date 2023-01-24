@@ -8,9 +8,9 @@ Grabs the latest version of OpenPod from GitHub and updates the current version.
 # Triggered by the user from the web interface to update the current version.
 
 import os
-import sys
 import shutil
 import zipfile
+from distutils.dir_util import copy_tree
 
 import urllib.request
 import requests
@@ -46,9 +46,10 @@ def update_pod():
 
         # Copy the files to the root directory.
         os.makedirs(f"/opt/OpenPod/versions/{latest_version['hash']}/", exist_ok=True)
-        shutil.move(
-            f"OpenPod-{latest_version['hash']}/openpod/",
-            f"/opt/OpenPod/versions/{latest_version['hash']}/"
+
+        copy_tree(
+            f"OpenPod-{latest_version['hash']}/openpod",
+            f"/opt/OpenPod/versions/{latest_version['hash']}"
         )
 
     except RuntimeError as err:
@@ -58,8 +59,8 @@ def update_pod():
 
     else:
         # Update the version number in the config file.
-        op_config.set('version', latest_version['version'])
-        op_config.set(['OpenPod', 'commit'], latest_version['hash'])
+        op_config.set_value('version', latest_version['version'])
+        op_config.set_nested_value(['OpenPod', 'commit'], latest_version['hash'])
 
     finally:
         # Clean Up
