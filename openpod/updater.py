@@ -10,7 +10,6 @@ Grabs the latest version of OpenPod from GitHub and updates the current version.
 import os
 import shutil
 import zipfile
-from distutils.dir_util import copy_tree
 
 import urllib.request
 import requests
@@ -47,9 +46,10 @@ def update_pod():
         # Copy the files to the root directory.
         os.makedirs(f"/opt/OpenPod/versions/{latest_version['hash']}/", exist_ok=True)
 
-        copy_tree(
+        shutil.copytree(
             f"OpenPod-{latest_version['hash']}/openpod",
-            f"/opt/OpenPod/versions/{latest_version['hash']}"
+            f"/opt/OpenPod/versions/{latest_version['hash']}",
+            dirs_exist_ok=True
         )
 
     except RuntimeError as err:
