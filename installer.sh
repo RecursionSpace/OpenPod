@@ -251,8 +251,8 @@ Type=simple
 User=root
 WorkingDirectory=/opt/OpenPod
 
-ExecStart   =   /bin/bash -c "exec /opt/OpenPod/env/bin/python3.11 \
-                /opt/OpenPod/versions/$(jq '.version' /opt/OpenPod/system.json | xargs)/pod.py"
+ExecStart   =   /bin/bash -c "exec /opt/OpenPod/env/bin/python3.11 \\
+                /opt/OpenPod/versions/\$(jq '.version' /opt/OpenPod/system.json | xargs)/pod.py"
 
 Restart=always
 RestartSec=10
