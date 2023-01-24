@@ -30,7 +30,7 @@ Help()
 #                                   Defaults                                   #
 # ---------------------------------------------------------------------------- #
 DEBUG=flase # -d
-
+REPO='https://github.com/RecursionSpace/OpenPod'
 
 # ---------------------------------------------------------------------------- #
 #                                    Options                                   #
@@ -63,6 +63,7 @@ fi
 
 echo "Installing OpenPod with the following options:"
 echo "Debug   | $DEBUG"
+echo "Repo    | $REPO"
 echo "Branch  | $BRANCH"
 echo "URL     | $URL"
 echo "API_URL | $API_URL"
@@ -181,7 +182,7 @@ sudo systemctl stop openpod.service
 set -e # Exit when any command fails.
 sudo mkdir -p /opt
 cd /opt
-sudo git clone --single-branch --branch $BRANCH https://github.com/RecursionSpace/OpenPod.git
+sudo git clone --single-branch --branch $BRANCH "${REPO}".git
 cd OpenPod
 
 # ----------------------------- Setup Enviroment ----------------------------- #
@@ -225,7 +226,12 @@ echo '{
         "LED_IO": 23,
         "LED_STAT": 17
     },
-    "version": "'"$openpod_version"'"
+    "version": "'"$openpod_version"'",
+    "OpenPod": {
+        "repo": "'"$REPO"'",
+        "branch": "'"$BRANCH"'",
+        "commit": "'"$openpod_version"'"
+    }
 }' > /opt/OpenPod/system.json
 
 # --------------------------- Create Version Folder -------------------------- #

@@ -7,11 +7,10 @@ Grabs the latest version of OpenPod from GitHub and updates the current version.
 
 # Triggered by the user from the web interface to update the current version.
 
-import re
 import os
 import sys
+import shutil
 import zipfile
-import subprocess
 
 import urllib.request
 import requests
@@ -23,51 +22,48 @@ from modules.rec_log import exception_log
 def update_pod():
     '''
     Steps through the update process.
+    1) Gets the latest version info from /pod/openpod/version/
+    2) Downloads the latest version zip.
+    3) Extracts the zip file.
+    4) Copies the files to the root directory.
+    5) Cleans up.
     '''
+
     try:
-        # Get the latest version file.
-        request_response = requests.get(
-            f"https://{op_config.get('url')}/updatehub/",
-            headers={'Authorization': f"Token {op_config.get('api_token')}"},
+        latest_version = requests.get(
+            f"https://{op_config.get('url')}/pod/openpod/version/",
             timeout=10
         )
+        latest_version = latest_version.json()
 
-        response_data = request_response.headers['content-disposition']
-        latest_version_file = re.findall("filename=(.+)", response_data)[0]
+        # Download the latest version zip.
+        zip_url = f"{op_config.get('OpenPod').get('repo')}/archive/{latest_version['hash']}.zip"
+        urllib.request.urlretrieve(zip_url, f"{latest_version['hash']}.zip")
 
-        # Download the latest version file.
-        opener = urllib.request.build_opener()
-        opener.addheaders = [('Authorization', f"Token {op_config.get('api_token')}")]
-        urllib.request.install_opener(opener)
-        urllib.request.urlretrieve(
-            f"https://{op_config.get('url')}/updatehub/", latest_version_file)
+        # Extract the zip file.
+        with zipfile.ZipFile(f"{latest_version['hash']}.zip", 'r') as zip_ref:
+            zip_ref.extractall(f"{latest_version['hash']}/")
 
-        new_version = re.findall(r"(.+?)(\.[^.]*$|$)", latest_version_file)[0][0]
-
-        with zipfile.ZipFile(f'{new_version}.zip', 'r') as zip_ref:
-            zip_ref.extractall(f'{new_version}/')
-
-        # Update the version number in the config file.
-        op_config.set('version', new_version)
-
-        # Remove the zip file.
-        if os.path.exists(f'{new_version}.zip'):
-            os.remove(f'{new_version}.zip')
+        # Copy the files to the root directory.
+        os.makedirs(f"/opt/OpenPod/versions/{latest_version['hash']}/", exist_ok=True)
+        shutil.move(
+            f"{latest_version['hash']}/OpenPod-{latest_version['hash']}/",
+            f"/opt/OpenPod/versions/{latest_version['hash']}/"
+        )
 
     except RuntimeError as err:
         exception_log.error("Unable to pull update with error: %s", err)
 
-    # Relaunch with new program if update was successful.
-    try:
-        # Kill process that should be triggered to re-open by bash script.
-        subprocess.call(['pkill', '-f', 'hub.py'])
-        subprocess.call(['pkill', '-f', 'HUB_Launcher.py'])
-    except RuntimeError as err:
-        exception_log.error("Could not kill program, trying to launch new version. Error: %s", err)
-
-        launch_location = f'/opt/RecursionHub/{new_version}/HUB_Launcher.py'
-        with subprocess.Popen(['nohup', 'python3', '-u', f'{launch_location}', '&'])as script:
-            print(script)
+    else:
+        # Update the version number in the config file.
+        op_config.set('version', latest_version['version'])
+        op_config.set(['OpenPod', 'commit'], latest_version['hash'])
 
     finally:
-        sys.exit()
+        # Clean Up
+        if os.path.exists(f"{latest_version['hash']}.zip"):
+            os.remove(f"{latest_version['hash']}.zip")
+
+        shutil.rmtree(f"{latest_version['hash']}/", ignore_errors=True)
+
+        sys.exit()  # Force OpenPod to restart.
