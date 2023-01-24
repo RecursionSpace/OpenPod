@@ -95,7 +95,6 @@ jobs:
           git push origin dev-release --force
 
       - name: Webhook
-        if: steps.remove-bloat.outputs.conclusion == 'success'
         uses: distributhor/workflow-webhook@v3
         env:
           webhook_url: "https://dev.recursion.space/webhooks/github/"
