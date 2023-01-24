@@ -84,8 +84,8 @@ jobs:
           git config user.email github-actions@github.com
           git fetch origin
 
-          git checkout master-ci
-          git pull -X theirs origin master-ci
+          git checkout dev-release
+          git reset --hard origin/master-ci
 
           rm -rf LICENSE
           rm -rf README.md
@@ -94,5 +94,5 @@ jobs:
 
           git add .
 
-          git diff-index --quiet HEAD || git commit -m "Sanitize dev-release"
+          git commit -m "Sanitize dev-release"
           git push origin dev-release --force
