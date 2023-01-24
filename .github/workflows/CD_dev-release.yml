@@ -86,7 +86,7 @@ jobs:
 
           git pull origin dev-release --rebase --autostash
 
-          git checkout origin/master-ci
+          git checkout master-ci
 
           git rm installer.sh
 
