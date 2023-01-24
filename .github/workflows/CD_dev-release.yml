@@ -85,7 +85,7 @@ jobs:
           git fetch origin
 
           git checkout dev-release
-          git merge master-ci --no-edit
+          git pull origin master-ci
 
           rm -rf LICENSE
           rm -rf README.md
