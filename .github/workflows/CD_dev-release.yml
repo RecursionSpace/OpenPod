@@ -83,7 +83,7 @@ jobs:
           git checkout dev-release
           git pull origin dev-release --rebase
 
-          git checkout master-ci installer.sh
+          git checkout origin/master-ci installer.sh
 
           git merge -X theirs origin/master-ci
 
