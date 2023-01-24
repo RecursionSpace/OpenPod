@@ -95,5 +95,5 @@ jobs:
 
           git add .
 
-          git commit -m "Sanitize dev-release"
+          git diff-index --quiet HEAD || git commit -m "Sanitize dev-release"
           git push origin dev-release --force
