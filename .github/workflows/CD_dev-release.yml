@@ -86,9 +86,13 @@ jobs:
 
           git pull origin dev-release --rebase --autostash
 
+          git checkout origin/master-ci
+
           git rm installer.sh
 
-          git merge -X theirs origin/master-ci --a
+          git checkout dev-release
+
+          git merge -X theirs master-ci --a
 
           rm -rf LICENSE
           rm -rf README.md
