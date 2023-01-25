@@ -1,6 +1,14 @@
 name: CI | Pylint
 
-on: [push]
+on:
+  push:
+    branches:
+      - "**"
+      - "!master-ci"
+      - "!dev-release"
+      - "!release"
+
+  workflow_dispatch:
 
 jobs:
   lint:
