@@ -11,7 +11,7 @@ def is_pi():
     '''
     Returns True if the host is a Raspberry Pi.
     '''
-    mcu = op_config.get_nested_value(['Hardware', 'controller'])
+    mcu = op_config.get('Hardware').get('controller')
 
     if mcu in PI_CONTROLLERS:
         return True
