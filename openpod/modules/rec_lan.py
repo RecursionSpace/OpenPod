@@ -8,14 +8,12 @@ import socket
 import threading
 import requests
 
-import settings
-
-from modules import op_gpio
+from modules import op_gpio, op_system
 from modules.rec_log import network_log
 
 
 # ------------ Triggers visual indicators based on network status. ----------- #
-def monitor_network(last_network_status=5, thread_delay=30.0):
+def monitor_network(last_network_status=5, thread_delay=30):
     '''
     Threaded: Yes
     Checks network connection, then updates visual indicators.
@@ -29,7 +27,7 @@ def monitor_network(last_network_status=5, thread_delay=30.0):
         else:
             network_status = last_network_status
 
-        if settings.IS_PI:
+        if op_system.is_pi():
             if network_status == 0:
                 op_gpio.no_network()
 
@@ -42,7 +40,7 @@ def monitor_network(last_network_status=5, thread_delay=30.0):
             if network_status == 3:
                 op_gpio.networked()
 
-        thread_delay = 10
+        thread_delay = 30  # Reset thread delay to 30 seconds.
 
     except UnboundLocalError as err:
         network_log.error('monitor_network error: %s', err)
@@ -153,7 +151,7 @@ def get_ip():
     '''
     if internet_on() is True:
         try:
-            public_ip = requests.get('https://api.ipify.org', timeout=30).text
+            public_ip = requests.get('https://api.ipify.org', timeout=60).text
 
         except requests.exceptions.RequestException as err:
             public_ip = f'Failed to get public IP with error: {err}'

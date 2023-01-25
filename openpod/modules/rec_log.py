@@ -14,9 +14,7 @@ import requests
 import simplejson as json
 # https://stackoverflow.com/questions/21663800/python-make-a-list-generator-json-serializable
 
-from modules import op_config
-
-import settings
+from modules import op_config, op_system
 
 try:
     from pip._internal.operations import freeze
@@ -28,7 +26,11 @@ except ImportError:
 # ---------------------------------------------------------------------------- #
 standard_format = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', '%y-%m-%d %H:%M:%S')
 logging.basicConfig()
-logging.getLogger().setLevel(logging.INFO)  # Sets default level to INFO for all logs
+
+if op_system.get_val('debug', False):
+    logging.getLogger().setLevel(logging.DEBUG)  # Sets default level to DEBUG for all logs
+else:
+    logging.getLogger().setLevel(logging.INFO)  # Sets default level to INFO for all logs
 
 console = logging.StreamHandler()
 console.setFormatter(standard_format)
@@ -39,9 +41,6 @@ console.setFormatter(standard_format)
 
 # ------------------------------- Exception Log ------------------------------ #
 exception_log = logging.getLogger('exception_log')
-
-if settings.DEBUG:
-    exception_log.setLevel(logging.DEBUG)
 
 try:
     exception_log_file = logging.FileHandler('/opt/OpenPod/logs/exception.log', mode='a')
@@ -55,9 +54,6 @@ exception_log.addHandler(console)
 # -------------------------- Recursion.Space API Log ------------------------- #
 log_api = logging.getLogger('log_api')
 
-if settings.DEBUG:
-    log_api.setLevel(logging.DEBUG)
-
 try:
     log_api_file = logging.FileHandler('/opt/OpenPod/logs/api.log', mode='a')
 except FileNotFoundError:
@@ -69,9 +65,6 @@ log_api.addHandler(console)
 
 # -------------------------------- Network Log ------------------------------- #
 network_log = logging.getLogger('network_log')
-
-if settings.DEBUG:
-    network_log.setLevel(logging.DEBUG)
 
 try:
     network_log_file = logging.FileHandler('/opt/OpenPod/logs/network.log', mode='a')
@@ -85,9 +78,6 @@ network_log.addHandler(console)
 # --------------------------------- XBee Log --------------------------------- #
 log_xbee = logging.getLogger('log_xbee')
 
-if settings.DEBUG:
-    log_xbee.setLevel(logging.DEBUG)
-
 try:
     xbee_log_file = logging.FileHandler('/opt/OpenPod/logs/xbee.log', mode='a')
 except FileNotFoundError:
@@ -100,9 +90,6 @@ log_xbee.addHandler(console)
 # --------------------------------- MQTT Log --------------------------------- #
 mqtt_log = logging.getLogger('mqtt_log')
 
-if settings.DEBUG:
-    mqtt_log.setLevel(logging.DEBUG)
-
 try:
     mqtt_log_file = logging.FileHandler('/opt/OpenPod/logs/mqtt.log', mode='a')
 except FileNotFoundError:
@@ -113,7 +100,7 @@ mqtt_log.addHandler(mqtt_log_file)
 mqtt_log.addHandler(console)
 
 
-# Logging configurations, use logfile for critial events, use transaction as print alternative
+# Logging configurations, use logfile for critical events, use transaction as print alternative
 # Console handler decides what information to also "print" based on logging level
 logfile = logging.getLogger('standardlog')
 
@@ -123,11 +110,6 @@ except FileNotFoundError:
     fileHandler = logging.FileHandler('tests/RecursionLog.log', mode='a')  # For CI
 
 fileHandler.setFormatter(standard_format)
-
-if settings.DEBUG:
-    logfile.setLevel(logging.DEBUG)
-else:
-    logfile.setLevel(logging.INFO)
 
 logfile.addHandler(fileHandler)
 logfile.addHandler(console)
@@ -184,7 +166,7 @@ def snapshot(public_ip, local_ip):
 
         system_data["system_json"] = system_json_file
 
-        system_data["PI"] = f"{settings.IS_PI}"
+        system_data["PI"] = op_system.is_pi()
 
         system_data['ip'] = {}
 

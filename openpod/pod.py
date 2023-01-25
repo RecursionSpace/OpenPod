@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""
+'''
 Recursion.Space
 Email: jmerrell@recursion.space
 Phone: 240-342-6671
-"""
+'''
 
 import sys
 import os.path  # Allows modules to access from directory above.
@@ -28,7 +28,6 @@ op_gpio.initializing()
 # ---------------------------------------------------------------------------- #
 try:
     rec_lan.monitor_network()  # Monitors the network connection while the program is running.
-
 except RuntimeError as err:
     exception_log.error(f"FATAL - Start Network Monitoring - Error: {err}")
 
@@ -60,7 +59,7 @@ begin_xbee = threading.Thread(target=rec_xbee.listing)
 begin_xbee.start()
 
 
-# Register HUB with Recursion
+# Register Pod with Recursion.Space
 if not op_config.get('pod_id', False):
     rec_api.register_pod()
 
