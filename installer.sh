@@ -29,7 +29,7 @@ Help()
 # ---------------------------------------------------------------------------- #
 #                                   Defaults                                   #
 # ---------------------------------------------------------------------------- #
-DEBUG=flase # -d
+DEBUG=false # -d
 REPO='https://github.com/RecursionSpace/OpenPod'
 
 # ---------------------------------------------------------------------------- #
@@ -51,11 +51,11 @@ while getopts ":hbdu" flags; do
   esac
 done
 
-if [ $DEBUG ]; then
+if [ "$DEBUG" = true ]; then
     BRANCH='dev-release'
     URL='dev.recursion.space'
     API_URL='dev.api.recursion.space'
-elif [ ! $DEBUG ]; then
+else
     BRANCH='release'
     URL='recursion.space'
     API_URL='api.recursion.space'
