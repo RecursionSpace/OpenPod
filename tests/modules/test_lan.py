@@ -20,9 +20,12 @@ class TestLan(unittest.TestCase):
         with patch('modules.rec_lan.test_network') as mocked_test_network:
             mocked_test_network.return_value = 0
 
-            with patch('modules.rec_lan.threading') as mocked_threading:
-                self.assertTrue(rec_lan.monitor_network())
-                mocked_threading.Timer.assert_called()
+            with patch('modules.op_system.is_pi') as mocked_is_pi:
+                mocked_is_pi.return_value = False
+
+                with patch('modules.rec_lan.threading') as mocked_threading:
+                    self.assertTrue(rec_lan.monitor_network())
+                    mocked_threading.Timer.assert_called()
 
     def test_test_network(self):
         '''
