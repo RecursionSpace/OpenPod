@@ -66,10 +66,10 @@ jobs:
           checkName: master -> master-ci
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - name: Checkout dev-release
+      - name: Checkout master-ci
         uses: actions/checkout@v3
         with:
-          ref: dev-release
+          ref: master-ci
           fetch-depth: 0
 
       - name: Remove Bloat
@@ -80,9 +80,10 @@ jobs:
           git config user.email github-actions@github.com
 
           git checkout dev-release
-          git pull origin dev-release
+          git reset --hard master-ci
+          git merge master-ci --no-edit
 
-          git merge origin/master-ci
+          git checkout master-ci
 
           rm -rf LICENSE
           rm -rf README.md
@@ -90,10 +91,15 @@ jobs:
           rm -rf tests
 
           git add .
-
           git diff-index --quiet HEAD || git commit -m "Merge master-ci into dev-release and remove unnecessary files"
 
-          git push origin dev-release
+          git checkout dev-release
+          git merge master-ci --no-edit
+
+          git add .
+          git diff-index --quiet HEAD || git commit -m "Merge master-ci into dev-release and remove unnecessary files"
+
+          git push origin dev-release --force
 
       - name: Webhook
         uses: distributhor/workflow-webhook@v3

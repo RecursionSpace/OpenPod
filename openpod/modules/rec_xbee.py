@@ -21,8 +21,6 @@ try:
 except serial.serialutil.SerialException as serial_err:
     log_xbee.error('Could not establish serial connection: %s', serial_err)
 
-# from settings import LED_IO, LED_STAT
-
 
 def receive():
     '''
