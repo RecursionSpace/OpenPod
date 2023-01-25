@@ -79,10 +79,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
 
-          git checkout dev-release
-          git pull origin dev-release
-
-          git merge origin/master-ci
+          git merge -X theirs origin/master-ci
 
           rm -rf LICENSE
           rm -rf README.md
