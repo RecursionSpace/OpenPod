@@ -27,7 +27,7 @@ except ImportError:
 standard_format = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', '%y-%m-%d %H:%M:%S')
 logging.basicConfig()
 
-if op_system.get_val('debug', False):
+if op_config.get('debug', False):
     logging.getLogger().setLevel(logging.DEBUG)  # Sets default level to DEBUG for all logs
 else:
     logging.getLogger().setLevel(logging.INFO)  # Sets default level to INFO for all logs
