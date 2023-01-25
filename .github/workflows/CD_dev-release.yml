@@ -81,7 +81,6 @@ jobs:
 
           git checkout dev-release
           git reset --hard master-ci
-          git merge master-ci --no-edit
 
           git checkout master-ci
 
@@ -91,7 +90,7 @@ jobs:
           rm -rf tests
 
           git add .
-          git diff-index --quiet HEAD || git commit -m "Merge master-ci into dev-release and remove unnecessary files"
+          git commit -m "Merge master-ci into dev-release and remove unnecessary files"
 
           git checkout dev-release
           git merge master-ci --no-edit
