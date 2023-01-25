@@ -206,10 +206,10 @@ sudo touch /opt/OpenPod/data/owners.json
 sudo touch /opt/OpenPod/data/permissions.json
 
 # ------------------------------- Hardware Info ------------------------------ #
-hw_controller=$(cat /proc/cpuinfo | grep Hardware | cut -d ' ' -f 2)
-hw_revision=$(cat /proc/cpuinfo | grep Revision | cut -d ' ' -f 2)
-hw_serial=$(cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2)
-hw_model=$(cat /proc/cpuinfo | grep Model | cut -d ' ' -f 2)
+hw_controller=$(grep Hardware < /proc/cpuinfo | cut -d ' ' -f 2)
+hw_revision=$(grep Revision < /proc/cpuinfo | cut -d ' ' -f 2)
+hw_serial=$(grep Serial < /proc/cpuinfo | cut -d ' ' -f 2)
+hw_model=$(grep Model < /proc/cpuinfo | cut -d ' ' -f 2)
 
 # -------------------------------- system.json ------------------------------- #
 sudo touch /opt/OpenPod/system.json
