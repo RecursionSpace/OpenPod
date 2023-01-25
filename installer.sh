@@ -175,8 +175,8 @@ fi
 # ---------------------------------------------------------------------------- #
 
 # -------------------------- Clear Previous Install -------------------------- #
-sudo rm -rf /opt/OpenPod
 sudo systemctl stop openpod.service
+sudo rm -rf /opt/OpenPod
 
 # ------------------------------- Clone OpenPod ------------------------------ #
 set -e # Exit when any command fails.
@@ -205,6 +205,12 @@ sudo touch /opt/OpenPod/data/nodes.json
 sudo touch /opt/OpenPod/data/owners.json
 sudo touch /opt/OpenPod/data/permissions.json
 
+# ------------------------------- Hardware Info ------------------------------ #
+hw_controller=$(grep Hardware < /proc/cpuinfo | cut -d ' ' -f 2)
+hw_revision=$(grep Revision < /proc/cpuinfo | cut -d ' ' -f 2)
+hw_serial=$(grep Serial < /proc/cpuinfo | cut -d ' ' -f 2)
+hw_model=$(grep Model < /proc/cpuinfo | cut -d ' ' -f 2)
+
 # -------------------------------- system.json ------------------------------- #
 sudo touch /opt/OpenPod/system.json
 serial_uuid=$(cat /proc/sys/kernel/random/uuid)
@@ -231,6 +237,12 @@ echo '{
         "repo": "'"$REPO"'",
         "branch": "'"$BRANCH"'",
         "commit": "'"$openpod_version"'"
+    },
+    "Hardware": {
+        "controller": "'"$hw_controller"'",
+        "revision": "'"$hw_revision"'",
+        "serial": "'"$hw_serial"'",
+        "model": "'"$hw_model"'"
     }
 }' > /opt/OpenPod/system.json
 
