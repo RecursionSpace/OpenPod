@@ -55,7 +55,7 @@ if [ $DEBUG ]; then
     BRANCH='dev-release'
     URL='dev.recursion.space'
     API_URL='dev.api.recursion.space'
-elif [ ! $DEBUG ]; then
+elif ! [ $DEBUG ]; then
     BRANCH='release'
     URL='recursion.space'
     API_URL='api.recursion.space'
