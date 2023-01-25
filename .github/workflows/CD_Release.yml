@@ -1,9 +1,9 @@
-# Continious Deployment - Production
+# Continuous Deployment - Production
 
 name:  Release - Version & Deploy
 on:
-  push:
-    branches: [ release ]
+  release:
+    types: [published]
 
   workflow_dispatch:
 

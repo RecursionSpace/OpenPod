@@ -265,4 +265,5 @@ sudo systemctl enable --now openpod.service
 sudo systemctl daemon-reload
 
 echo "- OpenPod is now installed -"
+echo "Serial: $serial"
 exit 0
