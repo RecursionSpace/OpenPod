@@ -1,0 +1,16 @@
+name: CI | Installer
+
+on: [push]
+
+jobs:
+  install:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run Installer
+      run: |
+        sudo chmod +x installer.sh
+        sudo ./installer.sh

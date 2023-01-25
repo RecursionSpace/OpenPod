@@ -1,0 +1,46 @@
+name: CI | E2E Integration
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!master-ci'
+      - '!release'
+
+  pull_request:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+            ssh-private-key: ${{ secrets.RECURSION_SPACE_ACCESS_TOKEN}}
+
+      - name: Setup Server
+        run: |
+          sudo apt-get update -y && sudo apt-get upgrade -y
+          sudo apt install software-properties-common -y
+          sudo add-apt-repository ppa:deadsnakes/ppa
+          sudo apt install python3.11 -y
+          cd /opt/
+
+          git clone --single-branch --branch release git@github.com:RecursionSpace/RecursionSpace.git
+
+          sudo apt-get install python3.11-venv -y
+          sudo python3.11 -m venv /opt/RecursionSpace/env
+          source /opt/RecursionSpace/env/bin/activate
+
+          /opt/RecursionSpace/env/bin/python3.11 -m pip install --upgrade pip
+
+          sudo pip install --no-input -U -r /opt/RecursionSpace/requirements.txt --no-cache-dir
+
+          cd /opt/RecursionSpace/
+          sudo python manage.py migrate --noinput

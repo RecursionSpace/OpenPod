@@ -1,19 +1,26 @@
-name: Script Check
+name: CI | Script Check
 
 on:
   push:
     branches:
+      - '**'
+      - 'master'
+      - '!master-ci'
+      - '!release'
+
+  pull_request:
+    branches:
       - master
-      - main
 
   workflow_dispatch:
+
 
 jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Run Shellcheck
         uses: azohra/shell-linter@latest

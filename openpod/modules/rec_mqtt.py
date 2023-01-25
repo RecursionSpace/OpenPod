@@ -9,12 +9,13 @@ import json
 import subprocess
 import paho.mqtt.client as mqtt
 
-from modules import rec_api, rec_xbee, rec_lookup
+from modules import op_config, op_ssh, rec_api, rec_xbee, rec_lookup
 from modules.rec_log import mqtt_log, exception_log, zip_send
-import settings
 import updater
 
 # The callback for when the client receives a CONNACK response from the server.
+
+
 def on_connect(client, userdata, flags, return_code):
     '''
     Action taken once a connection has been established.
@@ -32,13 +33,14 @@ def on_connect(client, userdata, flags, return_code):
 
 def on_message(client, userdata, message):
     '''
-    Handles messeges coming in via MQTT.
-    170 - Pairing un-paired Hub
-    186 - Pull New Data
-    202 - Install System Update
-    218 - Timezone Change
-    234 - Reboot Hub (Soft restart)
-    250  - Zip & Send Logs
+    Handles messages coming in via MQTT.
+    170 (AA) - Pairing un-paired Hub
+    171 (AB) - Pull SSH Keys
+    186 (BA) - Pull New Data
+    202 (CA) - Install System Update
+    218 (DA) - Timezone Change
+    234 (EA) - Reboot Hub (Soft restart)
+    250 (FA) - Zip & Send Logs
 
     Node Command - xxxxxxxxxxxxxxxx_##
     '''
@@ -49,6 +51,7 @@ def on_message(client, userdata, message):
     try:
         mqtt_actions = {
             170: rec_api.link_hub,
+            171: op_ssh.update_keys,
             186: rec_api.pull_data_dump,
             202: mqtt_start_update,
             218: rec_api.update_time_zone,
@@ -84,13 +87,15 @@ def on_message(client, userdata, message):
 
     mqtt_log.error("MQTT did not match action codes. Payload: %s", message.payload)
 
+    return False
+
 
 def mqtt_rx():
     '''
-    Esablish a connection to the Recursion.Space MQTT broker
+    Establish a connection to the Recursion.Space MQTT broker
     Define what happens when the following actions occur:
     - Connection to the MQTT broker is made.
-    - A message is recived.
+    - A message is received.
     '''
     mqtt_log.info('Connecting to MQTT broker')
 
@@ -98,8 +103,9 @@ def mqtt_rx():
     client.on_connect = on_connect
     client.on_message = on_message
 
-    client.connect(f"{settings.RECURSION_DOMAIN}", 1883, 60)
+    client.connect(f"{op_config.get('url')}", 1883, 60)
     client.loop_forever()
+
 
 def mqtt_start_update():
     '''
@@ -107,14 +113,13 @@ def mqtt_start_update():
     '''
     mqtt_log.info("UPDATE AVAILABLE - Triggered by the user.")
     try:
-        updater.update_hub()
+        updater.update_pod()
     except RuntimeError as err:
         exception_log.error("Error while updating, atempting as subprocess. %s", err)
-        with open('system.json', 'r+', encoding="UTF-8") as file:
-            system_data = json.load(file)
-            update_location = f'/opt/RecursionHub/{system_data.CurrentVersion}/updater.py'
-            with subprocess.Popen(['sudo', 'python3', f'{update_location}']) as script:
-                print(script)
+        update_location = f'/opt/OpenPod/{op_config.get("version")}/updater.py'
+        with subprocess.Popen(['sudo', 'python3', f'{update_location}']) as script:
+            print(script)
+
 
 def mqtt_restart_system():
     '''
