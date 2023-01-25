@@ -17,15 +17,16 @@ class TestLan(unittest.TestCase):
         '''
         Confirm that the network monitor is running.
         '''
-        with patch('modules.rec_lan.test_network') as mocked_test_network:
+        with (
+            patch('modules.rec_lan.test_network') as mocked_test_network,
+            patch('modules.op_system.is_pi') as mocked_is_pi,
+            patch('modules.rec_lan.threading') as mocked_threading
+        ):
             mocked_test_network.return_value = 0
+            mocked_is_pi.return_value = False
 
-            with patch('modules.op_system.is_pi') as mocked_is_pi:
-                mocked_is_pi.return_value = False
-
-                with patch('modules.rec_lan.threading') as mocked_threading:
-                    self.assertTrue(rec_lan.monitor_network())
-                    mocked_threading.Timer.assert_called()
+            self.assertTrue(rec_lan.monitor_network())
+            mocked_threading.Timer.assert_called()
 
     def test_test_network(self):
         '''
