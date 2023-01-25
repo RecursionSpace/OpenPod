@@ -66,10 +66,10 @@ jobs:
           checkName: master -> master-ci
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - name: Checkout dev-release
+      - name: Checkout master-ci
         uses: actions/checkout@v3
         with:
-          ref: dev-release
+          ref: master-ci
           fetch-depth: 0
 
       - name: Remove Bloat
@@ -78,8 +78,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-
-          git merge -X theirs origin/master-ci
 
           rm -rf LICENSE
           rm -rf README.md
