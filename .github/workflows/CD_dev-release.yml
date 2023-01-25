@@ -80,7 +80,7 @@ jobs:
           git config user.email github-actions@github.com
 
           git checkout dev-release
-          git reset --hard git reset --hard master-ci
+          git reset --hard master-ci
           git merge master-ci --no-edit
 
           git checkout master-ci
