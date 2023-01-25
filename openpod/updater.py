@@ -44,11 +44,11 @@ def update_pod():
             zip_ref.extractall()
 
         # Copy the files to the root directory.
-        os.makedirs(f"/opt/OpenPod/versions/{latest_version['hash']}/", exist_ok=True)
+        os.makedirs(f"/opt/OpenPod/versions/{latest_version['version']}/", exist_ok=True)
 
         shutil.copytree(
             f"OpenPod-{latest_version['hash']}/openpod",
-            f"/opt/OpenPod/versions/{latest_version['hash']}",
+            f"/opt/OpenPod/versions/{latest_version['version']}",
             dirs_exist_ok=True
         )
 
