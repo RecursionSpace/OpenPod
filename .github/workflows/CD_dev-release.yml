@@ -66,10 +66,10 @@ jobs:
           checkName: master -> master-ci
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - name: Checkout master-ci
+      - name: Checkout dev-release
         uses: actions/checkout@v3
         with:
-          ref: master-ci
+          ref: dev-release
           fetch-depth: 0
 
       - name: Remove Bloat
@@ -79,13 +79,22 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
 
+          git reset --hard master-ci
+
+          git checkout master-ci
+
           rm -rf LICENSE
           rm -rf README.md
           rm -rf docs
           rm -rf tests
 
           git add .
+          git diff-index --quiet HEAD || git commit -m "Merge master-ci into dev-release and remove unnecessary files"
 
+          git checkout dev-release
+          git merge master-ci --no-edit
+
+          git add .
           git diff-index --quiet HEAD || git commit -m "Merge master-ci into dev-release and remove unnecessary files"
 
           git push origin dev-release --force
