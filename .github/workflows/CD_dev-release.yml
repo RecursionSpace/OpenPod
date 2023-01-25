@@ -88,7 +88,7 @@ jobs:
 
           git diff-index --quiet HEAD || git commit -m "Merge master-ci into dev-release and remove unnecessary files"
 
-          git push origin dev-release
+          git push origin dev-release --force
 
       - name: Webhook
         uses: distributhor/workflow-webhook@v3
