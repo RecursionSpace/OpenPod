@@ -138,6 +138,34 @@ else
     echo "jq already installed, skipping..."
 fi
 
+# ---------------------------- Pillow Requirements --------------------------- #
+REQUIRED_PKG="libjpeg-dev"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+if [ "" = "$PKG_OK" ]; then
+    echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
+    sudo apt-get install libjpeg-dev -y
+else
+    echo "libjpeg-dev already installed, skipping..."
+fi
+
+REQUIRED_PKG="zlib1g-dev"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+if [ "" = "$PKG_OK" ]; then
+    echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
+    sudo apt-get install zlib1g-dev -y
+else
+    echo "zlib1g-dev already installed, skipping..."
+fi
+
+REQUIRED_PKG="libfreetype6-dev"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+if [ "" = "$PKG_OK" ]; then
+    echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG..."
+    sudo apt-get install libfreetype6-dev -y
+else
+    echo "libfreetype6-dev already installed, skipping..."
+fi
+
 # -------------------------------- Python 3.11 ------------------------------- #
 pytohn_version=$(python -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
 if [ "$pytohn_version" != "3.11" ]; then
