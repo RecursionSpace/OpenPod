@@ -9,6 +9,6 @@ pyserial==3.5
 python-dateutil==2.8.2
 pytimeparse==1.1.8
 pytz==2022.6
-requests==2.31.0
+requests==2.32.2
 RPi.GPIO==0.7.1
 simplejson==3.18.0
