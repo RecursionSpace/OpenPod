@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v3
 
       - name: Run Installer
         run: |
-          sudo /bin/bash install.sh
+          sudo /bin/bash installer.sh
