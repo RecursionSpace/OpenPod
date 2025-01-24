@@ -155,7 +155,7 @@ else
 fi
 
 # ---------------------------- Update System Time ---------------------------- #
-sudo timedatectl set-timezone UTC
+timedatectl set-timezone UTC
 
 
 # ---------------------------------------------------------------------------- #
@@ -165,6 +165,7 @@ install_if_needed build-essential
 install_if_needed chrony
 install_if_needed unzip
 install_if_needed jq
+install_if_needed git
 install_if_needed libjpeg-dev
 install_if_needed zlib1g-dev
 install_if_needed libfreetype6-dev
@@ -206,9 +207,13 @@ python${PYTHON_VERSION} -m venv "$VENV_DIR"
 $PYTHON_PATH -m pip install --upgrade pip
 $PYTHON_PATH -m pip install --no-input -U -r /opt/OpenPod/requirements.txt
 
+echo "==> OpenPod installed successfully."
+
 # ---------------------------- Create Directories ---------------------------- #
 mkdir -p /opt/OpenPod/logs
 mkdir -p /opt/OpenPod/data
+
+echo "==> OpenPod directories created."
 
 # ------------------------------- Create Files ------------------------------- #
 # Log Location
@@ -227,50 +232,46 @@ hw_revision=$(grep Revision /proc/cpuinfo | awk '{print $3}')
 hw_serial=$(grep Serial /proc/cpuinfo | awk '{print $3}')
 hw_model=$(grep Model /proc/cpuinfo | cut -d':' -f2 | sed 's/^\s*//')
 
-# -------------------------------- system.json ------------------------------- #
-system_file="/opt/OpenPod/system.json"
-touch "$system_file"
+# ------------------------------- openpod.toml ------------------------------- #
+config_file="/opt/OpenPod/openpod.toml"
+touch "$config_file"
 
-serial_uuid=$(cat /proc/sys/kernel/random/uuid)
-serial=${serial_uuid//-}
+uuid=$(cat /proc/sys/kernel/random/uuid)
 xbee_uuid=$(cat /proc/sys/kernel/random/uuid)
 openpod_version=$(git rev-parse HEAD)
 
-cat <<EOF > "$system_file"
-{
-  "uuid": "$serial_uuid",
-  "debug": $DEBUG,
-  "serial": "$serial",
-  "timezone": "UTC",
-  "url": "$URL",
-  "api_url": "$API_URL",
-  "XBEE": {
-    "KY": "$xbee_uuid",
-    "OP": false
-  },
-  "GPIO": {
-    "LED_IO": 23,
-    "LED_STAT": 17
-  },
-  "version": "$openpod_version",
-  "OpenPod": {
-    "repo": "$REPO",
-    "branch": "$BRANCH",
-    "commit": "$openpod_version"
-  },
-  "Hardware": {
-    "controller": "$hw_controller",
-    "revision": "$hw_revision",
-    "serial": "$hw_serial",
-    "model": "$hw_model"
-  }
-}
+cat <<EOF > "$config_file"
+uuid = "$uuid"
+debug = $DEBUG
+timezone = "UTC"
+url = "$URL"
+api_url = "$API_URL"
+
+[openpod]
+repo = "$REPO"
+branch = "$BRANCH"
+commit = "$openpod_version"
+version = "$openpod_version"
+
+[hardware]
+controller = "$hw_controller"
+revision = "$hw_revision"
+model = "$hw_model"
+serial = "$hw_serial"
+
+[xbee]
+ky = "$xbee_uuid"
+op = false
+
+[gpio]
+led_io = 23
+led_stat = 17
 EOF
 
 # --------------------------- Create Version Folder -------------------------- #
 mkdir -p /opt/OpenPod/versions/"$openpod_version"
-sudo cp -a /opt/OpenPod/openpod/. /opt/OpenPod/versions/"$openpod_version"/
-sudo rm -rf /opt/OpenPod/openpod
+cp -a /opt/OpenPod/openpod/. /opt/OpenPod/versions/"$openpod_version"/
+rm -rf /opt/OpenPod/openpod
 
 # --------------------------- Setup OpenPod Service -------------------------- #
 service_file="/etc/systemd/system/openpod.service"
@@ -285,8 +286,16 @@ Type=simple
 User=root
 WorkingDirectory=/opt/OpenPod
 
-ExecStart   =   /bin/bash -c "exec /opt/OpenPod/venv/bin/python \\
-                /opt/OpenPod/versions/\$(jq '.version' /opt/OpenPod/system.json | xargs)/pod.py"
+Environment="OPENPOD_VERSION=$(python${${PYTHON_VERSION} -c '
+import tomllib
+
+with open("/opt/OpenPod/openpod.toml", "rb") as f:
+    data = tomllib.load(f)
+print(data["openpod"]["version"])
+')"
+
+ExecStart=/opt/OpenPod/venv/bin/python /opt/OpenPod/versions/$OPENPOD_VERSION/pod.py
+
 
 Restart=always
 RestartSec=10

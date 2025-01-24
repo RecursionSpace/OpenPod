@@ -18,6 +18,12 @@ branch  = "release"
 commit  = "fd3c871ce75bb8f6c717c651ff0129d00af836a1"
 version = "fd3c871ce75bb8f6c717c651ff0129d00af836a1"
 
+[hardware]
+controller = "BCM2835"
+revision   = "abcd"
+serial     = "dcba"
+model      = "Raspberry Pi Model B Rev 2"
+
 [xbee]
 ky = "dd5e4b7d-44f0-4a53-b820-d7c4a66db09a"
 op = false
@@ -26,9 +32,5 @@ op = false
 led_io   = 23
 led_stat = 17
 
-[hardware]
-controller = "BCM2835"
-revision   = "abcd"
-serial     = "dcba"
-model      = "Raspberry Pi Model B Rev 2"
+
 ```

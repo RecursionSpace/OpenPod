@@ -17,6 +17,12 @@ DEFAULT_CONFIG = {
         "commit": "",
         "version": "",
     },
+    "hardware": {
+        "controller": "",
+        "revision": "",
+        "model": "",
+        "serial": ""
+    },
     "xbee": {
         "ky": "",
         "op": False,
@@ -24,12 +30,6 @@ DEFAULT_CONFIG = {
     "gpio": {
         "led_io": 23,
         "led_stat": 17,
-    },
-    "hardware": {
-        "controller": "",
-        "revision": "",
-        "model": "",
-        "serial": ""
     }
 }
 
@@ -49,7 +49,7 @@ def merge_defaults(user_config: dict, default_config: dict) -> dict:
     return user_config
 
 
-def validate_config(config: dict) -> None:
+def validate_config(config: dict) -> None:  # pylint: disable=too-many-branches
     """
     Manually validate the presence and types of nested fields in config.
     Raises ValueError for invalid or missing fields.
