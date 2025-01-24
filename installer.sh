@@ -202,7 +202,7 @@ git clone --single-branch --branch $BRANCH "${REPO}".git
 cd OpenPod
 
 # ----------------------------- Setup Environment ---------------------------- #
-$PYTHON_PATH -m venv /opt/OpenPod/venv
+python${PYTHON_VERSION} -m venv "$VENV_DIR"
 $PYTHON_PATH -m pip install --upgrade pip
 $PYTHON_PATH -m pip install --no-input -U -r /opt/OpenPod/requirements.txt
 
@@ -285,7 +285,7 @@ Type=simple
 User=root
 WorkingDirectory=/opt/OpenPod
 
-ExecStart   =   /bin/bash -c "exec /opt/OpenPod/env/bin/python3.11 \\
+ExecStart   =   /bin/bash -c "exec /opt/OpenPod/venv/bin/python \\
                 /opt/OpenPod/versions/\$(jq '.version' /opt/OpenPod/system.json | xargs)/pod.py"
 
 Restart=always
