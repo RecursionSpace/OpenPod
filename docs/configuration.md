@@ -6,29 +6,25 @@ The `openpod.toml` file contains the following sections:
 
 ```toml
 # Top-level settings
+uuid      = "b2cc95b91e8341f7b7bdfc4fa1ccf4a1"
 debug     = false
 timezone  = "UTC"
 url       = "recursion.space"
 api_url   = "api.recursion.space"
-
-# We group device-specific identifiers together:
-[device]
-uuid   = "b2cc95b91e8341f7b7bdfc4fa1ccf4a1"
-serial = "b2cc95b91e8341f7b7bdfc4fa1ccf4a1"
-
-[xbee]
-key            = "dd5e4b7d-44f0-4a53-b820-d7c4a66db09a"
-operating_mode = false
-
-[gpio]
-led_io   = 23
-led_stat = 17
 
 [openpod]
 repo    = "https://github.com/RecursionSpace/OpenPod"
 branch  = "release"
 commit  = "fd3c871ce75bb8f6c717c651ff0129d00af836a1"
 version = "fd3c871ce75bb8f6c717c651ff0129d00af836a1"
+
+[xbee]
+ky = "dd5e4b7d-44f0-4a53-b820-d7c4a66db09a"
+op = false
+
+[gpio]
+led_io   = 23
+led_stat = 17
 
 [hardware]
 controller = "BCM2835"
