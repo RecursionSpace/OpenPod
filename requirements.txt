@@ -1,7 +1,7 @@
 adafruit-circuitpython-rgb-display==3.10.19
 config==0.5.1
 paho-mqtt==1.6.1
-Pillow==9.4.0
+Pillow==10.3.0
 pubsub==0.1.2
 PyJWT==2.6.0
 Pypubsub==4.0.3
