@@ -60,6 +60,9 @@ BRANCH=""   # -b
 URL=""      # -u
 REPO='https://github.com/RecursionSpace/OpenPod'
 
+PYTHON_VERSION='3.11'
+VENV_DIR='/opt/OpenPod/venv'
+PYTHON_PATH="$VENV_DIR/bin/python"
 # ---------------------------------------------------------------------------- #
 #                                    Options                                   #
 # ---------------------------------------------------------------------------- #
@@ -173,7 +176,7 @@ if ! python3.11 --version &>/dev/null; then
   echo "Installing Python 3.11..."
   add-apt-repository ppa:deadsnakes/ppa -y
   apt-get update -y
-  apt-get install -y python3.11 python3.11-dev python3.11-venv
+  apt-get install -y python${PYTHON_VERSION} python${PYTHON_VERSION}-dev python${PYTHON_VERSION}-venv
 else
   echo "Python 3.11 is already installed."
   # still ensure dev and venv
@@ -199,9 +202,9 @@ git clone --single-branch --branch $BRANCH "${REPO}".git
 cd OpenPod
 
 # ----------------------------- Setup Environment ---------------------------- #
-python3.11 -m venv /opt/OpenPod/env
-source /opt/OpenPod/env/bin/activate
-pip install --no-input -U -r /opt/OpenPod/requirements.txt
+$PYTHON_PATH -m venv /opt/OpenPod/venv
+$PYTHON_PATH -m pip install --upgrade pip
+$PYTHON_PATH -m pip install --no-input -U -r /opt/OpenPod/requirements.txt
 
 # ---------------------------- Create Directories ---------------------------- #
 mkdir -p /opt/OpenPod/logs
