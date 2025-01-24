@@ -204,7 +204,7 @@ cd OpenPod
 # ----------------------------- Setup Environment ---------------------------- #
 python${PYTHON_VERSION} -m venv "$VENV_DIR"
 $PYTHON_PATH -m pip install --upgrade pip
-$PYTHON_PATH -m pip install --no-input -U -r /opt/OpenPod/requirements.txt
+$PYTHON_PATH -m pip install --no-input -U -r /opt/OpenPod/requirements.txt | grep "something"
 
 # ---------------------------- Create Directories ---------------------------- #
 mkdir -p /opt/OpenPod/logs
