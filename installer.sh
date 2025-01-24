@@ -164,7 +164,6 @@ timedatectl set-timezone UTC
 install_if_needed build-essential
 install_if_needed chrony
 install_if_needed unzip
-install_if_needed jq
 install_if_needed git
 install_if_needed libjpeg-dev
 install_if_needed zlib1g-dev
@@ -286,7 +285,7 @@ Type=simple
 User=root
 WorkingDirectory=/opt/OpenPod
 
-Environment="OPENPOD_VERSION=$(python${${PYTHON_VERSION} -c '
+Environment="OPENPOD_VERSION=$(python${PYTHON_VERSION} -c '
 import tomllib
 
 with open("/opt/OpenPod/openpod.toml", "rb") as f:
