@@ -55,7 +55,7 @@ wget -qO- https://openpod.recursion.space | sudo bash /dev/stdin [options] [argu
 To point to a bash script on GitHub, you can use:
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/RecursionSpace/OpenPod/master/installer.sh | sudo bash
+wget -qO- https://raw.githubusercontent.com/RecursionSpace/OpenPod/master/installer.sh | sudo bash /dev/stdin [options] [arguments]
 ```
 
 | Option Flag | Description               | Example                                                                            |

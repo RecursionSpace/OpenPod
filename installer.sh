@@ -205,29 +205,22 @@ cd OpenPod
 python${PYTHON_VERSION} -m venv "$VENV_DIR"
 $PYTHON_PATH -m pip install --upgrade pip
 $PYTHON_PATH -m pip install --no-input -U -r /opt/OpenPod/requirements.txt
-
-echo "==> OpenPod installed successfully."
+rm -rf /opt/OpenPod/requirements.txt
 
 # ---------------------------- Create Directories ---------------------------- #
 mkdir -p /opt/OpenPod/logs
 mkdir -p /opt/OpenPod/data
-
-echo "==> OpenPod directories created."
 
 # ------------------------------- Create Files ------------------------------- #
 # Log Location
 touch /opt/OpenPod/logs/RecursionLog.log
 touch /opt/OpenPod/logs/System.Snapshot
 
-echo "==> OpenPod files created."
-
 # Data Location
 touch /opt/OpenPod/data/dump.json
 touch /opt/OpenPod/data/nodes.json
 touch /opt/OpenPod/data/owners.json
 touch /opt/OpenPod/data/permissions.json
-
-echo "==> OpenPod data files created."
 
 # ------------------------------- Hardware Info ------------------------------ #
 hw_controller=$(grep Hardware /proc/cpuinfo | awk '{print $3}' || echo "unknown")
@@ -277,10 +270,13 @@ led_io = 23
 led_stat = 17
 EOF
 
-# --------------------------- Create Version Folder -------------------------- #
-mkdir -p /opt/OpenPod/versions/"$openpod_version"
-cp -a /opt/OpenPod/openpod/. /opt/OpenPod/versions/"$openpod_version"/
+# ------------------------- Create Release Directory ------------------------- #
+mkdir -p /opt/OpenPod/releases/"$openpod_version"
+cp -a /opt/OpenPod/openpod/. /opt/OpenPod/releases/"$openpod_version"/
 rm -rf /opt/OpenPod/openpod
+
+# ------------------------------ Symlink Release ----------------------------- #
+ln -s /opt/OpenPod/releases/"$openpod_version" /opt/OpenPod/current
 
 # --------------------------- Setup OpenPod Service -------------------------- #
 service_file="/etc/systemd/system/openpod.service"
@@ -303,9 +299,7 @@ with open("/opt/OpenPod/openpod.toml", "rb") as f:
 print(data["openpod"]["version"])
 ')"
 
-ExecStart = /opt/OpenPod/venv/bin/python \
-            /opt/OpenPod/versions/\$OPENPOD_VERSION/pod.py
-
+ExecStart=/opt/OpenPod/venv/bin/python /opt/OpenPod/current/pod.py
 
 Restart = always
 RestartSec = 10
