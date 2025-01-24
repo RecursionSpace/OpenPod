@@ -171,7 +171,7 @@ install_if_needed software-properties-common
 # -------------------------------- Python 3.11 ------------------------------- #
 if ! python3.11 --version &>/dev/null; then
   echo "Installing Python 3.11..."
-  yes '' | add-apt-repository ppa:deadsnakes/ppa
+  add-apt-repository ppa:deadsnakes/ppa -y
   apt-get update -y
   apt-get install -y python3.11 python3.11-dev python3.11-venv
 else

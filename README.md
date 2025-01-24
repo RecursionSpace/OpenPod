@@ -16,7 +16,8 @@
 
 - [OpenPod](#openpod)
   - [What is OpenPod?](#what-is-openpod)
-  - [Installation](#installation)
+  - [Documentation](#documentation)
+  - [Quick Start](#quick-start)
 - [Software Design](#software-design)
 - [Development](#development)
 - [MQTT](#mqtt)
@@ -30,9 +31,18 @@
 
 The “Pod” is the physical extension of the Recursion.Space system for a facility. The Pod allows for door/egress and equipment control nodes. Additionally, the Pod acts as a local backup in an internet outage for users to continue accessing their facility. The Pod has a direct internet connection then uses a wireless method to communicate with nodes. A single facility can have multiple Pods, but each Pod can only be linked to one facility.
 
-*Note: Versioning follows the [Semantic Versioning 2.0.0 standard](https://semver.org/)*
+_Note: Versioning follows the [Semantic Versioning 2.0.0 standard](https://semver.org/)_
 
-## Installation
+## Documentation
+
+For detailed installation instructions, configuration options, custom commands, and more, head over to our [Docs folder](./docs/). Key guides include:
+
+1. [Installation Guide](./docs/installation.md)
+2. [Configuration](./docs/configuration.md)
+3. [Usage](./docs/usage.md)
+4. [Commands](./docs/commands.md)
+
+## Quick Start
 
 OpenPod is designed to communicate with hardware over a local mesh network using [XBee module](https://www.digi.com/products/embedded-systems/digi-xbee/rf-modules/2-4-ghz-rf-modules/xbee3-zigbee-3). While OpenPod can be installed on any computer running Ubuntu, most installations are done on a [Raspberry Pi](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/). To prepare a Raspbery Pi for OpenPod checkout the [Pi Setup Guide](docs/pi_setup.md).
 
@@ -43,7 +53,7 @@ sudo wget -qO- https://openpod.recursion.space | bash /dev/stdin [options] [argu
 ```
 
 | Option Flag | Description               | Example                                                                            |
-|:-----------:|---------------------------|------------------------------------------------------------------------------------|
+| :---------: | ------------------------- | ---------------------------------------------------------------------------------- |
 |     -h      | Help                      | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -h                       |
 |     -d      | Enable Debug Installation | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -d                       |
 |     -b      | Alternative Branch        | sudo wget -qO- openpod.recursion.space \| bash /dev/stdin -b dev-release           |
@@ -55,9 +65,9 @@ sudo wget -qO- https://openpod.recursion.space | bash /dev/stdin [options] [argu
 
 The embedded code manages the communication between the API server and the node communication, acting as a middleman. There needs to be minimal factory configuration to make deployable units quickly.
 
-1) Assume the Pod is plug and play internet connection. (DHCP)
-2) Pods can self-generate ID and register it with the central system.
-3) Users enter an ID to link the physical Pod with the web interface.
+1. Assume the Pod is plug and play internet connection. (DHCP)
+2. Pods can self-generate ID and register it with the central system.
+3. Users enter an ID to link the physical Pod with the web interface.
 
 Pod communicates to the web API via hook notifications, and a return confirmation is sent back.
 
@@ -84,7 +94,7 @@ The MQTT protocol is used for server to Pod communication, allowing the Pod to l
 Communication to Pods is accomplished from quick commands represented by a hexadecimal number.
 
 | Command Number | Command               |
-|----------------|-----------------------|
+| -------------- | --------------------- |
 | AA (170)       | Facility ID Available |
 | BA (186)       | Pull User Dump        |
 | CA (202)       | Update Available      |
@@ -96,9 +106,9 @@ Communication to Pods is accomplished from quick commands represented by a hexad
 
 The end-user triggers updates via the web server to run them with minimal interruption. An MQTT message is sent to the Pod to initiate the updating process. The update is a zip file downloaded from the [server](https://stackoverflow.com/questions/38697529/how-to-return-generated-file-download-with-django-rest-framework).
 
-1) Download zip file from server and store in the update folder.
-2) Unzip contents of a zip file
-3) Run Launcher
+1. Download zip file from server and store in the update folder.
+2. Unzip contents of a zip file
+3. Run Launcher
 
 First, commit and push the latest changes to git to prepare an update. Using WinSCP, download the 0_1_0 folder with the newest code. Rename the downloaded folder to match the latest version number. Zip the folder's CONTENTS, so there is no second directory folder with a matching name inside the zip file folder. Clean up all extra copies of the old folder. Update the latest version name using the recursion admin panel, then update their devices.
 
@@ -117,7 +127,7 @@ The Recursion System uses several logging points to be used both for troubleshoo
 
 ```json
 {
-    "local_ip": "xx.xx.xx.xx",
+  "local_ip": "xx.xx.xx.xx"
 }
 ```
 
