@@ -230,10 +230,10 @@ touch /opt/OpenPod/data/permissions.json
 echo "==> OpenPod data files created."
 
 # ------------------------------- Hardware Info ------------------------------ #
-hw_controller=$(grep Hardware < /proc/cpuinfo | cut -d ' ' -f 2)
-hw_revision=$(grep Revision < /proc/cpuinfo | cut -d ' ' -f 2)
-hw_serial=$(grep Serial < /proc/cpuinfo | cut -d ' ' -f 2)
-hw_model=$(grep Model < /proc/cpuinfo | cut -d ' ' -f 2)
+hw_controller=$(grep Hardware /proc/cpuinfo | awk '{print $3}' || echo "unknown")
+hw_revision=$(grep Revision /proc/cpuinfo | awk '{print $3}' || echo "unknown")
+hw_model=$(grep Model /proc/cpuinfo | cut -d':' -f2 | sed 's/^\s*//' || echo "unknown")
+hw_serial=$(grep Serial /proc/cpuinfo | awk '{print $3}' || echo "unknown")
 
 echo "==> Hardware Info:"
 echo "    Controller: $hw_controller"
