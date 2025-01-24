@@ -219,17 +219,27 @@ echo "==> OpenPod directories created."
 touch /opt/OpenPod/logs/RecursionLog.log
 touch /opt/OpenPod/logs/System.Snapshot
 
+echo "==> OpenPod files created."
+
 # Data Location
 touch /opt/OpenPod/data/dump.json
 touch /opt/OpenPod/data/nodes.json
 touch /opt/OpenPod/data/owners.json
 touch /opt/OpenPod/data/permissions.json
 
+echo "==> OpenPod data files created."
+
 # ------------------------------- Hardware Info ------------------------------ #
 hw_controller=$(grep Hardware /proc/cpuinfo | awk '{print $3}')
 hw_revision=$(grep Revision /proc/cpuinfo | awk '{print $3}')
-hw_serial=$(grep Serial /proc/cpuinfo | awk '{print $3}')
 hw_model=$(grep Model /proc/cpuinfo | cut -d':' -f2 | sed 's/^\s*//')
+hw_serial=$(grep Serial /proc/cpuinfo | awk '{print $3}')
+
+echo "==> Hardware Info:"
+echo "    Controller: $hw_controller"
+echo "    Revision: $hw_revision"
+echo "    Model: $hw_model"
+echo "    Serial: $hw_serial"
 
 # ------------------------------- openpod.toml ------------------------------- #
 config_file="/opt/OpenPod/openpod.toml"
@@ -276,16 +286,16 @@ rm -rf /opt/OpenPod/openpod
 service_file="/etc/systemd/system/openpod.service"
 cat <<EOF > "$service_file"
 [Unit]
-Description=OpenPod | Recursion.Space
-After=network.target
-StartLimitIntervalSec=0
+Description = OpenPod | Recursion.Space
+After = network.target
+StartLimitIntervalSec = 0
 
 [Service]
-Type=simple
-User=root
-WorkingDirectory=/opt/OpenPod
+Type = simple
+User = root
+WorkingDirectory = /opt/OpenPod
 
-Environment="OPENPOD_VERSION=$(python${PYTHON_VERSION} -c '
+Environment = "OPENPOD_VERSION=$(python${PYTHON_VERSION} -c '
 import tomllib
 
 with open("/opt/OpenPod/openpod.toml", "rb") as f:
@@ -293,14 +303,15 @@ with open("/opt/OpenPod/openpod.toml", "rb") as f:
 print(data["openpod"]["version"])
 ')"
 
-ExecStart=/opt/OpenPod/venv/bin/python /opt/OpenPod/versions/\$OPENPOD_VERSION/pod.py
+ExecStart = /opt/OpenPod/venv/bin/python \
+            /opt/OpenPod/versions/\$OPENPOD_VERSION/pod.py
 
 
-Restart=always
-RestartSec=10
+Restart = always
+RestartSec = 10
 
 [Install]
-WantedBy=multi-user.target
+WantedBy = multi-user.target
 EOF
 
 systemctl daemon-reload
