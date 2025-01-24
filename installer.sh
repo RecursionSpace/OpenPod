@@ -293,7 +293,7 @@ with open("/opt/OpenPod/openpod.toml", "rb") as f:
 print(data["openpod"]["version"])
 ')"
 
-ExecStart=/opt/OpenPod/venv/bin/python /opt/OpenPod/versions/$OPENPOD_VERSION/pod.py
+ExecStart=/opt/OpenPod/venv/bin/python /opt/OpenPod/versions/\$OPENPOD_VERSION/pod.py
 
 
 Restart=always
@@ -308,5 +308,5 @@ systemctl enable openpod.service
 systemctl start openpod.service
 
 echo "==> OpenPod is now installed."
-echo "    Serial: $serial"
+echo "    UUID: $uuid"
 exit 0
