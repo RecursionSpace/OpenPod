@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 '''
 Recursion.Space
 Email: jmerrell@recursion.space
@@ -13,8 +12,12 @@ import config
 import requests
 from pubsub import pub
 
+import pod_config
 from modules import op_config, op_gpio, op_ssh, rec_log, rec_mqtt, rec_xbee, rec_api, rec_lan
 from modules.rec_log import exception_log, zip_send
+
+
+settings = pod_config.load_config()
 
 # --------------------------- Visualization Threads --------------------------- #
 threading.Thread(target=op_gpio.led_stat_thread).start()
@@ -35,7 +38,7 @@ except RuntimeError as err:
 # Not sure if the next section is required.
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
-Version = op_config.get('version', None)
+Version = settings['openpod']['version']
 
 # Inserts path to reference then starts importing modules.
 sys.path.insert(0, f"./{Version}")
@@ -66,7 +69,7 @@ if not op_config.get('pod_id', False):
 
 # ------------------------------- TEMP SOLUTION ------------------------------ #
 try:
-    URL = f'https://{op_config.get("url")}/pod/obtaintoken/{op_config.get("serial")}/'
+    URL = f'https://{settings["url"]}/pod/obtaintoken/{settings["uuid"]}/'
     response = requests.get(URL, timeout=10)
 
     if response.status_code == 201:
@@ -76,7 +79,7 @@ except Exception as err:                                # pylint: disable=W0703
     print(err)
 # ------------------------------- TEMP SOLUTION ------------------------------ #
 
-if op_config.get('debug', False):
+if settings['debug']:
     rec_log.publog("debug", "*** DEBUG Enabled ***")
 
 rec_log.publog("info", f"Version: {Version}")

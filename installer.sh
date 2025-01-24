@@ -63,6 +63,7 @@ REPO='https://github.com/RecursionSpace/OpenPod'
 PYTHON_VERSION='3.11'
 VENV_DIR='/opt/OpenPod/venv'
 PYTHON_PATH="$VENV_DIR/bin/python"
+
 # ---------------------------------------------------------------------------- #
 #                                    Options                                   #
 # ---------------------------------------------------------------------------- #
@@ -290,14 +291,6 @@ StartLimitIntervalSec = 0
 Type = simple
 User = root
 WorkingDirectory = /opt/OpenPod
-
-Environment = "OPENPOD_VERSION=$(python${PYTHON_VERSION} -c '
-import tomllib
-
-with open("/opt/OpenPod/openpod.toml", "rb") as f:
-    data = tomllib.load(f)
-print(data["openpod"]["version"])
-')"
 
 ExecStart=/opt/OpenPod/venv/bin/python /opt/OpenPod/current/pod.py
 

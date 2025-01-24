@@ -1,3 +1,7 @@
+# OpenPod Specific
+openpod.toml
+system.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
