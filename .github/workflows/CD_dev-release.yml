@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Wait on check
-        uses: fountainhead/action-wait-for-check@v1.1.0
+        uses: fountainhead/action-wait-for-check@v1.2.0
         id: wait-for-build
 
         with:
@@ -59,7 +59,7 @@ jobs:
           fetch-depth: 0
 
       - name: Wait on Merge
-        uses: fountainhead/action-wait-for-check@v1.1.0
+        uses: fountainhead/action-wait-for-check@v1.2.0
         id: wait-for-merge
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
