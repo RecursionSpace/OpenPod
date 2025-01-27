@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Wait on check
         uses: fountainhead/action-wait-for-check@v1.1.0
@@ -53,7 +53,7 @@ jobs:
 
     steps:
       - name: Checkout master-ci
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: master-ci
           fetch-depth: 0
@@ -67,7 +67,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Checkout master-ci
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: master-ci
           fetch-depth: 0
